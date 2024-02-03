@@ -2,14 +2,13 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { Loader, Page } from "../../components";
-import { useContext } from "react";
-import { AppContext } from "../../context";
 import { base_url } from "../../utils/url";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const ForgotPassword = () => {
   const navigate = useNavigate();
-  const { setOtpData } = useContext(AppContext);
+  const user = useSelector(state => state.user);
   const [email, setEmail] = useState("");
   const [toggleBtn, setToggleBtn] = useState(false);
   const [params] = useSearchParams();
@@ -48,7 +47,6 @@ const ForgotPassword = () => {
 
       if (json.success) {
         const data = json.success;
-        setOtpData(data);
 
         console.log("data", data);
 

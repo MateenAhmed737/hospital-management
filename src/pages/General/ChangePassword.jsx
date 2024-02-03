@@ -2,14 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Navigate } from "react-router-dom";
 import { Loader, Page } from "../../components";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { base_url } from "../../utils/url";
-import { useContext } from "react";
-import { AppContext } from "../../context";
-import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const ChangePassword = () => {
   const navigate = useNavigate();
-  const { user, otpData } = useContext(AppContext);
+  const user = useSelector(state => state.user);
   const [toggleBtn, setToggleBtn] = useState(false);
   const [newPassword, setNewPassword] = useState({
     isVisible: false,
@@ -43,50 +40,50 @@ const ChangePassword = () => {
     setConfirmPassword((prev) => ({ ...prev, isVisible: !prev.isVisible }));
 
   const handleSubmit = async (e) => {
-    const url = `${base_url}/company-reset-password/${
-      user ? user?.id : otpData?.data?.id
-    }`;
-    e.preventDefault();
-    setToggleBtn(true);
-    console.log("otpData", otpData);
+    // const url = `${base_url}/company-reset-password/${
+    //   user ? user?.id : otpData?.data?.id
+    // }`;
+    // e.preventDefault();
+    // setToggleBtn(true);
+    // console.log("otpData", otpData);
 
-    try {
-      let formdata = new FormData();
-      const role =
-        (user?.role || otpData?.data?.role) === "1"
-          ? "Company"
-          : "Project Manager";
+    // try {
+    //   let formdata = new FormData();
+    //   const role =
+    //     (user?.role || otpData?.data?.role) === "1"
+    //       ? "Company"
+    //       : "Project Manager";
 
-      formdata.append("type", role);
-      formdata.append("password", newPassword.value);
-      formdata.append("password_confirmation", confirmPassword.value);
+    //   formdata.append("type", role);
+    //   formdata.append("password", newPassword.value);
+    //   formdata.append("password_confirmation", confirmPassword.value);
 
-      let requestOptions = {
-        headers: {
-          Accept: "application/json",
-        },
-        method: "POST",
-        body: formdata,
-        redirect: "follow",
-      };
+    //   let requestOptions = {
+    //     headers: {
+    //       Accept: "application/json",
+    //     },
+    //     method: "POST",
+    //     body: formdata,
+    //     redirect: "follow",
+    //   };
 
-      const res = await fetch(url, requestOptions);
-      const json = await res.json();
-      console.log("data =============>", json);
+    //   const res = await fetch(url, requestOptions);
+    //   const json = await res.json();
+    //   console.log("data =============>", json);
 
-      if (json.success) {
-        toast.success("Password changed successfully!");
-        setTimeout(() => {
-          navigate("/login");
-        }, 2000);
-      } else {
-        toast.error(json?.message);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setToggleBtn(false);
-    }
+    //   if (json.success) {
+    //     toast.success("Password changed successfully!");
+    //     setTimeout(() => {
+    //       navigate("/login");
+    //     }, 2000);
+    //   } else {
+    //     toast.error(json?.message);
+    //   }
+    // } catch (err) {
+    //   console.error(err);
+    // } finally {
+    //   setToggleBtn(false);
+    // }
   };
 
   useEffect(() => {
@@ -103,7 +100,7 @@ const ChangePassword = () => {
     };
   }, []);
 
-  if (!user && !otpData) {
+  if (!user) {
     return <Navigate to="/forgot-password" />;
   }
 

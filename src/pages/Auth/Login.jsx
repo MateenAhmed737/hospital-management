@@ -6,17 +6,14 @@ import { base_url } from "../../utils/url";
 import { Button, Page } from "../../components";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { userActions } from "../../store/slices";
-
-const roles = {
-  1: "Staff",
-  2: "Admin",
-  3: "Facility",
-};
+import { appActions, userActions } from "../../store/slices";
+import { defaultRoutes, roles } from "../../constants/data";
+import { useAppState } from "../../hooks";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { homeRoute } = useAppState();
   const user = useSelector((state) => state.user);
   const [email, setEmail] = useState("staff@gmail.com");
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -28,7 +25,7 @@ const Login = () => {
   console.log("user", user);
 
   if (user) {
-    return <Navigate to="/dashboard" replace />;
+    return <Navigate to={homeRoute} replace />;
   }
 
   const handleChange = (e) => {
@@ -76,13 +73,15 @@ const Login = () => {
         data.isStaff = data.role_id === "1";
         data.isAdmin = data.role_id === "2";
         data.isFacility = data.role_id === "3";
-        delete data.role_id;
+
+        const homeRoute = defaultRoutes[data.role_id];
 
         toast.success("Login successful!", { duration: 2000 });
         dispatch(userActions.set(data));
+        dispatch(appActions.set({ key: "homeRoute", value: homeRoute }));
 
         setTimeout(() => {
-          navigate("/dashboard");
+          navigate(homeRoute);
         }, 2000);
       } else {
         toast.error(
@@ -105,7 +104,7 @@ const Login = () => {
       containerStyles="!h-screen !w-screen flex justify-center items-center"
     >
       <main className="w-full max-w-sm mx-4">
-        <section className="w-full overflow-hidden bg-white border rounded-lg shadow-2xl pb-9">
+        <section className="w-full pb-5 overflow-hidden bg-white border rounded-lg shadow-2xl">
           <div className="px-6">
             <h1 className="my-5 text-xl font-bold text-center text-primary-600">
               Hospital Management
@@ -149,20 +148,34 @@ const Login = () => {
                   )}
                 </div>
               </div>
+
               <div className="w-full text-right text-[11px] font-medium mb-3 mt-2">
                 <Link
                   to={"/forgot-password"}
-                  className="hover:text-primary-400 hover:underline"
+                  className="text-primary-400 hover:text-primary-500 hover:underline"
                 >
+                  {" "}
                   Forgot Password?
                 </Link>
               </div>
+
               <Button
                 loading={toggleBtn}
                 type="submit"
                 title={toggleBtn ? "Logging in" : "Login"}
                 extraStyles={toggleBtn ? "!py-2 !w-full" : "!py-3 !w-full"}
               />
+
+              <div className="w-full text-center text-nowrap text-[11px] font-medium mt-3">
+                Don't have an account?
+                {" "}
+                <Link
+                  to="/register"
+                  className="text-primary-400 hover:text-primary-500 hover:underline"
+                >
+                  Register
+                </Link>
+              </div>
             </form>
           </div>
         </section>

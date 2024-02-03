@@ -1,9 +1,8 @@
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdLock, MdLogout } from "react-icons/md";
 import { FaChevronDown, FaUser } from "react-icons/fa";
 import { RiEdit2Fill } from "react-icons/ri";
-import { AppContext } from "../context";
 import { image_base_url } from "../utils/url";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../store/slices/userSlice";
@@ -30,11 +29,9 @@ const Account = ({ toggle, setSingleToggle }) => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
-  const isCompnay = user?.role === "1";
-  const name = isCompnay
-    ? user?.company_name
+  const name = user?.isFacility
+    ? user?.name
     : `${user?.firstname} ${user?.lastname}`;
-  const role = isCompnay ? "Company" : "Project Manager";
 
   const logout = useCallback(() => {
     dispatch(userActions.set(null));
@@ -78,7 +75,9 @@ const Account = ({ toggle, setSingleToggle }) => {
         )}
         <p className="flex flex-col text-xs font-medium capitalize whitespace-nowrap">
           {name}
-          <span className="text-[10px] font-normal capitalize">{role}</span>
+          <span className="text-[10px] font-normal capitalize">
+            {user?.role}
+          </span>
         </p>
         <FaChevronDown className={`text-sm ${toggle ? "rotate-180" : ""}`} />
       </div>

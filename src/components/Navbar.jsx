@@ -57,8 +57,8 @@ const NavItem = ({ data }) => {
         to={data.path}
         className={({ isActive }) => {
           return `${
-            isActive ? "text-blue-500 font-semibold" : "text-[#091A35]"
-          } flex items-center hover:text-blue-500 my-4`;
+            isActive ? "text-primary-500 font-semibold" : "text-[#091A35]"
+          } flex items-center hover:text-primary-500 my-4`;
         }}
       >
         {/* <img className="w-4" src={data.icon} alt="icon" /> */}
@@ -74,7 +74,7 @@ const NavItem = ({ data }) => {
   return (
     <>
       <div
-        className="flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-blue-500"
+        className="flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-primary-500"
         onClick={() => setToggle(!toggle)}
       >
         {/* <img className="w-4" src={data.icon} alt="icon" /> */}
@@ -121,8 +121,8 @@ const NavItem = ({ data }) => {
 //     : ({ isActive }) => {
 //         return `flex items-center my-4 ${
 //           isActive
-//             ? "text-blue-500 font-medium"
-//             : "text-[#091A35] hover:text-blue-500 hover:font-medium"
+//             ? "text-primary-500 font-medium"
+//             : "text-[#091A35] hover:text-primary-500 hover:font-medium"
 //         }`;
 //       };
 

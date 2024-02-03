@@ -1,12 +1,13 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import { Button, Page, TextArea } from "../../components";
-import { AppContext } from "../../context";
 import { base_url } from "../../utils/url";
 import { getInputType } from "../../utils";
+import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 
 const EditProfile = () => {
-  const { user, setUser } = useContext(AppContext);
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
   //* console.log("user", user);
   const [state, setState] = useState(user);
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -18,15 +19,7 @@ const EditProfile = () => {
       e !== "created_at" &&
       e !== "password" &&
       e !== "role" &&
-      e !== "status" &&
-      e !== "sin_number" &&
-      e !== "discount" &&
-      e !== "gst" &&
-      e !== "GST" &&
-      e !== "package" &&
-      e !== "company_id" &&
-      e !== "salary" &&
-      e !== "privilage"
+      e !== "status"
   );
 
   console.log("user ==>", user);
@@ -65,7 +58,7 @@ const EditProfile = () => {
       if (json.success) {
         let data = json.success.data;
 
-        setUser(data);
+        dispatch(data);
         localStorage.setItem("user", JSON.stringify(data));
         console.log("Response =============>", data);
         toast.success("Profile updated successfully!");

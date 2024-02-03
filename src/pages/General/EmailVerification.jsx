@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { ConfirmationCodeFeilds, Loader, Page } from "../../components";
-import { useContext } from "react";
-import { AppContext } from "../../context";
 import { base_url } from "../../utils/url";
 import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 const EmailVerification = () => {
   const navigate = useNavigate();
-  const { otpData, setOtpData } = useContext(AppContext);
+  const user = useSelector(state => state.user);
   const [state, setState] = useState(null);
   const [counter, setCounter] = useState(600);
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -16,7 +15,6 @@ const EmailVerification = () => {
   const minutes = Math.floor(counter / 60);
   const seconds = counter % 60;
 
-  console.log("otpData", otpData);
   const onChange = (val) => {
     setState(val);
   };
@@ -27,11 +25,6 @@ const EmailVerification = () => {
 
     try {
       let formdata = new FormData();
-      formdata.append(
-        "type",
-        otpData?.role === "1" ? "Company" : "Project Manager"
-      );
-      formdata.append("email", otpData?.email);
 
       let requestOptions = {
         headers: {
@@ -50,7 +43,6 @@ const EmailVerification = () => {
 
       if (json.success) {
         const data = json.success;
-        setOtpData(data);
 
         console.log("data", data);
 
@@ -76,15 +68,15 @@ const EmailVerification = () => {
 
     // * console.log("state", state);
 
-    if (otpData.OTP == state) {
-      toast.success("Email verification completed!", { duration: 2000 });
-      setTimeout(() => {
-        navigate("/change-password");
-      }, 2000);
-    } else {
-      setToggleBtn(false);
-      toast.error("OTP doesn't match! Please try again.", { duration: 1500 });
-    }
+    // if (otpData.OTP == state) {
+    //   toast.success("Email verification completed!", { duration: 2000 });
+    //   setTimeout(() => {
+    //     navigate("/change-password");
+    //   }, 2000);
+    // } else {
+    //   setToggleBtn(false);
+    //   toast.error("OTP doesn't match! Please try again.", { duration: 1500 });
+    // }
   };
 
   const config = {
@@ -114,9 +106,7 @@ const EmailVerification = () => {
     };
   }, []);
 
-  return otpData === null ? (
-    <Navigate to={"/login"} />
-  ) : (
+  return (
     <Page title="Email Verification" extraClasses="pt-10 h-screen">
       <main className="flex justify-center w-full h-full p-3 font-poppins">
         <div className="w-full max-w-md p-4">
@@ -124,7 +114,7 @@ const EmailVerification = () => {
 
           <p className="mb-3 text-xs">
             We have sent one-time password to{" "}
-            <span className="font-semibold">{otpData.email}</span>
+            <span className="font-semibold">{}</span>
           </p>
 
           <form onSubmit={handleSubmit}>

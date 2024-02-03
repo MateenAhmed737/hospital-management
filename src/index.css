@@ -3,6 +3,17 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -37,6 +48,12 @@ svg {
   border-radius: 10px;
   background: #3b82f6;
   /* -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.5); */
+}
+
+.p-inputtext {
+  /* height: 25px; */
+  padding: 6px 0 6px 8px !important;
+  font-size: 15px;
 }
 
 SELECT {

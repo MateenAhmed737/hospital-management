@@ -36,6 +36,8 @@ export const DropdownField = ({
   required = false,
   getValue = getOption,
   emptySelection = true,
+  disabled = false,
+  styles = "",
 }) => {
   const name = title.replace(/_/g, " ").toLowerCase();
   const handleChange = (e) => {
@@ -54,11 +56,12 @@ export const DropdownField = ({
         </label>
       )}
       <select
-        required={required}
+        id={name}
         value={state}
         onChange={handleChange}
-        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
-        id={name}
+        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 ${styles}`}
+        required={required}
+        disabled={disabled}
       >
         {emptySelection && (
           <option className="text-sm" value="">

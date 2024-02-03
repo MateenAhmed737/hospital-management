@@ -1,4 +1,3 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
 import {
   BrowserRouter,
   Routes,
@@ -15,33 +14,29 @@ import {
   ForgotPassword,
   EmailVerification,
   AccessDenied,
+  Register,
 } from "../pages";
-// import { base_url } from "../utils/url";
+import { Home } from "../pages/Staff";
 import { useSelector } from "react-redux";
-// import { userActions } from "../store/slices";
+import { useAppState } from "../hooks";
 
 // Router component handles the routing of the application
 const Router = () => {
+  const { homeRoute, loading } = useAppState();
   const user = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(false);
-  console.log("user", user);
-  // const role =
-  //   user?.role_id === "1"
-  //     ? "Staff"
-  //     : user?.role_id === "2"
-  //     ? "Admin"
-  //     : "Facility";
 
-  // const { default: Dashboard } = require(`../pages/${role}/Dashboard`);
-  // const { default: TasksList } = require(`../pages/${role}/TasksList`);
-  // const { default: Workers } = require(`../pages/${role}/Workers`);
-  // const { default: Sellers } = require(`../pages/${role}/Sellers`);
-  // const { default: Tasks } = require(`../pages/${role}/Tasks`);
-  // const { default: Jobs } = require(`../pages/${role}/Jobs`);
+  console.log("user", user);
+  const role = user?.role;
+
+  const page = (path) => {
+    const page = require(path);
+    return page?.default || "";
+  };
+
+  const Dashboard = (user?.isAdmin || user?.isFacility) && page(`../pages/${role}/Dashboard`);
 
   const privateRoute = (Page) => (user ? <Page /> : <AccessDenied />);
-  const publicRoute = (Page) =>
-    user ? <Navigate to="/dashboard" /> : <Page />;
+  const publicRoute = (Page) => (user ? <Navigate to={homeRoute} /> : <Page />);
 
   // const login = useCallback(async (email, password) => {
   //   setLoading(true);
@@ -105,11 +100,21 @@ const Router = () => {
             element={user ? <Layout /> : <Navigate to="/login" replace />}
           >
             <Route path="/edit-profile" element={privateRoute(EditProfile)} />
-            <Route path="/dashboard" element={privateRoute(AccessDenied)} />
+
+            {/* For Admins (2) and Facalities (3) */}
+            <Route element={<Auth allowedRoles={["2", "3"]} />}>
+              <Route path="/dashboard" element={privateRoute(Dashboard)} />
+            </Route>
+
+            {/* For Staff (1) */}
+            <Route element={<Auth allowedRoles={["1"]} />}>
+              <Route path="/home" element={privateRoute(Home)} />
+            </Route>
           </Route>
 
           <Route path="*" element={<Page404 />} />
-          <Route index path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route index path="/register" element={<Register />} />
           <Route path="/change-password" element={<ChangePassword />} />
           <Route
             path="/forgot-password"
