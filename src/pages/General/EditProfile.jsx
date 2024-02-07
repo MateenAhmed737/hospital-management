@@ -1,45 +1,39 @@
 import React, { useState } from "react";
-import { Button, Page, TextArea } from "../../components";
+import { Button, DropdownField, Page } from "../../components";
 import { base_url } from "../../utils/url";
-import { getInputType } from "../../utils";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
+import { countries, roles, states } from "../../constants/data";
+import { userActions } from "../../store/slices/userSlice";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
-  //* console.log("user", user);
-  const [state, setState] = useState(user);
-  const [toggleBtn, setToggleBtn] = useState(false);
+  const user = useSelector((state) => state.user);
+  const [state, setState] = useState({ ...user, about: "" });
+  const [loading, setLoading] = useState(false);
 
-  const keys = Object.keys(state).filter(
-    (e) =>
-      e !== "id" &&
-      e !== "updated_at" &&
-      e !== "created_at" &&
-      e !== "password" &&
-      e !== "role" &&
-      e !== "status"
-  );
+  const { profile_image } = state;
 
   console.log("user ==>", user);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setToggleBtn(true);
+    setLoading(true);
 
     try {
-      const url = `${base_url}/edit-company/${user.id}`;
+      const url = `${base_url}/update-user/${user.id}`;
       let formdata = new FormData();
-      formdata.append(
-        "type",
-        user.role === "1" ? "Company" : "Project Manager"
-      );
-      console.log("type", user.role === "1" ? "Company" : "Project Manager");
+
       Object.keys(state)
         .filter((e) => e !== "role")
         .forEach((key) => {
-          formdata.append(key, state[key]);
-          console.log(key, state[key]);
+          if (key === "type") {
+            formdata.append("type_of_staff", state[key]);
+            console.log("type_of_staff", state[key]);
+          } else {
+            formdata.append(key, state[key]);
+            console.log(key, state[key]);
+          }
         });
 
       let requestOptions = {
@@ -57,9 +51,12 @@ const EditProfile = () => {
       console.log("json", json);
       if (json.success) {
         let data = json.success.data;
+        data.role = roles[data.role_id];
+        data.isStaff = data.role_id === "1";
+        data.isAdmin = data.role_id === "2";
+        data.isFacility = data.role_id === "3";
 
-        dispatch(data);
-        localStorage.setItem("user", JSON.stringify(data));
+        dispatch(userActions.set(data));
         console.log("Response =============>", data);
         toast.success("Profile updated successfully!");
       } else {
@@ -68,7 +65,7 @@ const EditProfile = () => {
     } catch (err) {
       console.error(err);
     } finally {
-      setToggleBtn(false);
+      setLoading(false);
     }
   };
 
@@ -76,33 +73,35 @@ const EditProfile = () => {
     const key = e.target.name;
     const value = e.target.value;
 
-    setState({ ...state, [key]: value });
-    // if (key === "profile_image") {
-    //   const file = e.target.files[0];
-
-    //   setImage(URL.createObjectURL(file));
-    //   setState({ ...state, profile_image: file });
-    // } else {
-    // }
+    if (key === "profile_image") {
+      const file = e.target.files[0];
+      setState({ ...state, profile_image: file });
+    } else {
+      setState({ ...state, [key]: value });
+    }
   };
 
   return (
     <Page title="Edit Profile" enableHeader>
-      <main className="max-w-2xl pb-10 mx-2 mt-10 sm:mx-auto">
+      <main className="max-w-xl p-6 mx-auto space-y-4 md:space-y-6">
         <form
+          className="grid grid-cols-1 space-y-2 gap-x-2 !text-sm sm:grid-cols-2"
           onSubmit={handleSubmit}
-          className="grid grid-cols-1 gap-6 sm:grid-cols-2"
         >
-          {/* <div className="col-span-2">
-            <label className="block text-sm font-medium text-center text-gray-700">
-              Photo
-            </label>
-            <div className="flex flex-col items-center mt-1 text-xs">
-              <div className="inline-block w-12 h-12 overflow-hidden bg-gray-100 rounded-full">
-                {image || state.profile_image ? (
+          <div className="col-span-2">
+            <div className="flex flex-col items-center justify-center text-xs">
+              <div
+                className="inline-block w-20 h-20 mb-2 -mt-2 overflow-hidden bg-gray-100 rounded-full cursor-pointer"
+                onClick={() => document.getElementById("profile_image").click()}
+              >
+                {profile_image ? (
                   <img
                     className="w-full h-full text-gray-300"
-                    src={image || image_base_url + state.profile_image}
+                    src={
+                      typeof profile_image === "string"
+                        ? profile_image
+                        : URL.createObjectURL(profile_image)
+                    }
                     alt="profile"
                   />
                 ) : (
@@ -115,6 +114,7 @@ const EditProfile = () => {
                   </svg>
                 )}
               </div>
+
               <input
                 id="profile_image"
                 type="file"
@@ -123,74 +123,126 @@ const EditProfile = () => {
                 name="profile_image"
                 onChange={handleChange}
               />
-              <button
-                onClick={() => document.getElementById("profile_image").click()}
-                type="button"
-                className="bg-white py-1.5 px-3 mt-2 border border-gray-300 rounded-md shadow-sm leading-4 font-medium text-gray-700 hover:bg-gray-50"
-              >
-                Change
-              </button>
             </div>
-          </div> */}
-
-          {keys.map((key) =>
-            key.includes("address") ? (
-              <TextArea
-                {...{
-                  elem: key,
-                  state: state[key],
-                  setState: (val) => setState({ ...state, [key]: val }),
-                }}
-              />
-            ) : (
-              <div className="col-span-2 sm:col-span-1">
-                <label
-                  htmlFor={key}
-                  className="block text-xs font-medium text-gray-700 capitalize"
-                >
-                  {key.replaceAll("_", " ")}
-                </label>
-                <div className="mt-1">
-                  <input
-                    type={getInputType(key)}
-                    name={key}
-                    id={key}
-                    value={state[key]}
-                    onChange={handleChange}
-                    className="p-2.5 w-full text-xs shadow-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                  />
-                </div>
-              </div>
-            )
-          )}
-          {/* <div className="col-span-2">
-            <label
-              htmlFor="email"
-              className="block text-xs font-medium text-gray-700"
-            >
-              Email
-            </label>
-            <div className="mt-1">
-              <input
-                type="tel"
-                name="email"
-                id="email"
-                value={state.email}
-                onChange={handleChange}
-                className="p-2.5 w-full text-xs shadow-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-                placeholder="+021 656 4848 315"
-              />
-            </div>
-          </div> */}
-
-          <div className="col-span-2 text-right">
-            <Button
-              type="submit"
-              isLoading={toggleBtn}
-              title={toggleBtn ? "Updating" : "Update"}
-              extraStyles={toggleBtn ? "!py-2 !w-full" : "!py-3 !w-full"}
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="text"
+              name="first_name"
+              id="first_name"
+              onChange={handleChange}
+              value={state.first_name}
+              className="relative top-0 w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="First Name"
             />
           </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="text"
+              name="last_name"
+              id="last_name"
+              onChange={handleChange}
+              value={state.last_name}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Last Name"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="email"
+              name="email"
+              id="email"
+              onChange={handleChange}
+              value={state.email}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Email"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="tel"
+              name="phone"
+              id="phone"
+              onChange={handleChange}
+              value={state.phone}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Phone Number"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="text"
+              name="Address_line_1"
+              id="Address_line_1"
+              onChange={handleChange}
+              value={state.Address_line_1}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Address line 1"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="text"
+              name="Address_line_2"
+              id="Address_line_2"
+              onChange={handleChange}
+              value={state.Address_line_2}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Address line 2"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <DropdownField
+              title="country"
+              label={false}
+              arr={countries}
+              state={state.country}
+              setState={(e) => setState({ ...state, country: e })}
+              getOption={(val) => val.name}
+              styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <DropdownField
+              title={state.country ? "state" : "country to select state"}
+              label={false}
+              arr={states[state.country] || []}
+              state={state.state}
+              setState={(e) => setState({ ...state, state: e })}
+              getOption={(val) => val}
+              styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+              disabled={!state.country}
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <input
+              type="number"
+              name="zip_code"
+              id="zip_code"
+              onChange={handleChange}
+              value={state.zip_code}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Zip code"
+              maxLength={5}
+            />
+          </div>
+          <div className="col-span-2">
+            <textarea
+              name="about"
+              rows="8"
+              onChange={handleChange}
+              value={state.about}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="About..."
+            ></textarea>
+          </div>
+
+          <Button
+            type="submit"
+            title="Update"
+            extraStyles={`w-full !py-3 !mt-4 col-span-2`}
+            loading={loading}
+          />
         </form>
       </main>
     </Page>

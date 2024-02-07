@@ -1,3 +1,4 @@
-import Home from "./Home";
+import Dashboard from "./Dashboard";
+import UpcomingShifts from "./UpcomingShifts";
 
-export { Home };
+export { Dashboard, UpcomingShifts };

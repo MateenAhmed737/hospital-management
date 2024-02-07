@@ -1,6 +1,6 @@
 import React from "react";
 
-const Loader = ({ extraStyles, loaderColor = "fill-primary-500" }) => {
+const Loader = ({ extraStyles, loaderColor = "!fill-primary-500" }) => {
   return (
     <div
       role="status"

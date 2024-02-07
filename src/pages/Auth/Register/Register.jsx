@@ -8,7 +8,6 @@ import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { countries, states } from "../../../constants/data";
 import VerifyOTP from "./VerifyOTP";
-import { useAppState } from "../../../hooks";
 
 const roles = {
   1: "Staff",
@@ -40,7 +39,6 @@ const initialState = {
 };
 
 const Register = () => {
-  const { homeRoute } = useAppState();
   const user = useSelector((state) => state.user);
 
   const [step, setStep] = useState(1);
@@ -158,7 +156,7 @@ const Register = () => {
   }, []);
 
   if (user) {
-    return <Navigate to={homeRoute} replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   return (

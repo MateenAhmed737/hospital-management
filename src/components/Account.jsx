@@ -31,7 +31,7 @@ const Account = ({ toggle, setSingleToggle }) => {
 
   const name = user?.isFacility
     ? user?.name
-    : `${user?.firstname} ${user?.lastname}`;
+    : `${user?.first_name} ${user?.last_name}`;
 
   const logout = useCallback(() => {
     dispatch(userActions.set(null));
@@ -41,12 +41,12 @@ const Account = ({ toggle, setSingleToggle }) => {
   const arr = [
     {
       title: "Change Password",
-      icon: <MdLock className="text-base text-blue-500" />,
+      icon: <MdLock className="text-base text-primary-500" />,
       clickHandler: () => navigate("/change-password"),
     },
     {
       title: "Edit Profile",
-      icon: <RiEdit2Fill className="text-base text-blue-500" />,
+      icon: <RiEdit2Fill className="text-base text-primary-500" />,
       clickHandler: () => navigate("/edit-profile"),
     },
     {
@@ -65,7 +65,7 @@ const Account = ({ toggle, setSingleToggle }) => {
         {user.profile_image ? (
           <img
             className="w-[35px] h-[35px] rounded-full text-xs bg-gray-100"
-            src={image_base_url + user.profile_image}
+            src={user.profile_image}
             alt="profile"
           />
         ) : (
@@ -93,7 +93,7 @@ const Account = ({ toggle, setSingleToggle }) => {
                   : indx === 0
                   ? "mb-0"
                   : "my-0"
-              } rounded-md p-2 py-1.5 cursor-pointer text-gray-800 hover:bg-blue-300/40 hover:text-black`}
+              } rounded-md p-2 py-1.5 cursor-pointer text-gray-800 hover:bg-primary-300/40 hover:text-black`}
             >
               {elem.icon}
               <span className="ml-2 whitespace-nowrap">{elem.title}</span>

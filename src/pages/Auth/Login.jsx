@@ -6,14 +6,12 @@ import { base_url } from "../../utils/url";
 import { Button, Page } from "../../components";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
-import { appActions, userActions } from "../../store/slices";
-import { defaultRoutes, roles } from "../../constants/data";
-import { useAppState } from "../../hooks";
+import { userActions } from "../../store/slices";
+import { roles } from "../../constants/data";
 
 const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { homeRoute } = useAppState();
   const user = useSelector((state) => state.user);
   const [email, setEmail] = useState("staff@gmail.com");
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -25,7 +23,7 @@ const Login = () => {
   console.log("user", user);
 
   if (user) {
-    return <Navigate to={homeRoute} replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   const handleChange = (e) => {
@@ -74,14 +72,11 @@ const Login = () => {
         data.isAdmin = data.role_id === "2";
         data.isFacility = data.role_id === "3";
 
-        const homeRoute = defaultRoutes[data.role_id];
-
         toast.success("Login successful!", { duration: 2000 });
         dispatch(userActions.set(data));
-        dispatch(appActions.set({ key: "homeRoute", value: homeRoute }));
 
         setTimeout(() => {
-          navigate(homeRoute);
+          navigate("/dashboard");
         }, 2000);
       } else {
         toast.error(

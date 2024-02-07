@@ -26,7 +26,7 @@ const Navbar = ({ toggle, setToggle }) => {
           </button>
 
           {/* <img className="w-2/3 mb-10" src={Logo} alt="Hospital Management logo" /> */}
-          <h1>Hospital Management</h1>
+          <h1 className="text-sm">Hospital Management</h1>
 
           {navigation.map((data) => (
             <NavItem key={data.title} data={data} />

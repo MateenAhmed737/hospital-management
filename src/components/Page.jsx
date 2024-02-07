@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Account from "./Account";
-import Notifications from "./Notifications";
-import { useSelector } from "react-redux";
+// import Notifications from "./Notifications";
 
 const Page = ({
   title,
@@ -10,12 +9,9 @@ const Page = ({
   children,
   enableHeader,
 }) => {
-  const user = useSelector((state) => state.user);
   const initialState = { account: false, notifications: false };
-  const [notifications, setNotifications] = useState(null);
+  // const [notifications, setNotifications] = useState(null);
   const [toggle, setToggle] = useState(initialState);
-
-  const type = user?.role === "1" ? "Company" : "Project Manager";
 
   const setSingleToggle = (key, value) =>
     setToggle({ ...initialState, [key]: value });
@@ -43,7 +39,7 @@ const Page = ({
           <h1 className={styles.heading}>{title}</h1>
 
           <div className="flex items-center space-x-3">
-            <Notifications
+            {/* <Notifications
               {...{
                 toggle,
                 setSingleToggle,
@@ -52,7 +48,7 @@ const Page = ({
                 userId: user?.id,
                 role: type,
               }}
-            />
+            /> */}
             <Account
               toggle={toggle.account}
               setSingleToggle={setSingleToggle}

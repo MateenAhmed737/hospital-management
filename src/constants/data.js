@@ -22,7 +22,7 @@ export const roles = {
 
 // Default routes by roles
 export const defaultRoutes = {
-  1: "/home",
+  1: "/dashboard",
   2: "/dashboard",
   3: "/dashboard",
 };

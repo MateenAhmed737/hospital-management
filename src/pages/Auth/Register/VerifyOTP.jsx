@@ -58,7 +58,6 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
         data.isStaff = data.role_id === "1";
         data.isAdmin = data.role_id === "2";
         data.isFacility = data.role_id === "3";
-        delete data.role_id;
 
         toast.success("Account registered successfully!", { duration: 2000 });
 

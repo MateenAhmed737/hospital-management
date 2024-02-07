@@ -15,28 +15,23 @@ import {
   EmailVerification,
   AccessDenied,
   Register,
+  UpcomingShifts,
 } from "../pages";
-import { Home } from "../pages/Staff";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
 
 // Router component handles the routing of the application
 const Router = () => {
-  const { homeRoute, loading } = useAppState();
+  const { loading } = useAppState();
   const user = useSelector((state) => state.user);
 
   console.log("user", user);
   const role = user?.role;
 
-  const page = (path) => {
-    const page = require(path);
-    return page?.default || "";
-  };
-
-  const Dashboard = (user?.isAdmin || user?.isFacility) && page(`../pages/${role}/Dashboard`);
+  const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
 
   const privateRoute = (Page) => (user ? <Page /> : <AccessDenied />);
-  const publicRoute = (Page) => (user ? <Navigate to={homeRoute} /> : <Page />);
+  const publicRoute = (Page) => (user ? <Navigate to="/" /> : <Page />);
 
   // const login = useCallback(async (email, password) => {
   //   setLoading(true);
@@ -99,16 +94,15 @@ const Router = () => {
             path="/"
             element={user ? <Layout /> : <Navigate to="/login" replace />}
           >
+            <Route path="/dashboard" element={privateRoute(Dashboard)} />
             <Route path="/edit-profile" element={privateRoute(EditProfile)} />
 
-            {/* For Admins (2) and Facalities (3) */}
-            <Route element={<Auth allowedRoles={["2", "3"]} />}>
-              <Route path="/dashboard" element={privateRoute(Dashboard)} />
-            </Route>
+            {/* For Staff (1), Admins (2) and Facalities (3) */}
+            <Route element={<Auth allowedRoles={["1", "2", "3"]} />}></Route>
 
             {/* For Staff (1) */}
             <Route element={<Auth allowedRoles={["1"]} />}>
-              <Route path="/home" element={privateRoute(Home)} />
+              <Route path="/upcoming-shifts" element={privateRoute(UpcomingShifts)} />
             </Route>
           </Route>
 
@@ -134,7 +128,7 @@ const Router = () => {
 const Auth = ({ allowedRoles }) => {
   const user = useSelector((state) => state.user);
   const isAllowed = allowedRoles.find(
-    (role) => user?.role?.toLowerCase() === role?.toLowerCase()
+    (role) => user?.role_id?.toLowerCase() === role?.toLowerCase()
   );
 
   // Check if the user role is allowed and render the protected routes

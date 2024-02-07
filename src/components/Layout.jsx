@@ -2,18 +2,16 @@ import React, { useLayoutEffect, useState } from "react";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import Navbar from "./Navbar";
 import { FaBars } from "react-icons/fa";
-import { useAppState } from "../hooks";
 
 const Layout = () => {
   const [toggle, setToggle] = useState(false);
-  const { homeRoute } = useAppState();
   const location = useLocation();
 
   useLayoutEffect(() => {
     setToggle(false);
   }, [location]);
 
-  if (window.location.pathname === "/") return <Navigate to={homeRoute} />;
+  if (window.location.pathname === "/") return <Navigate to="/dashboard" />;
 
   return (
     <div className="relative flex h-screen font-poppins">
