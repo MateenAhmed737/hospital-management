@@ -3,7 +3,7 @@ import { GiSandsOfTime } from "react-icons/gi";
 import { FaCheck, FaClipboardList, FaFileInvoiceDollar } from "react-icons/fa";
 import { GoHomeFill } from "react-icons/go";
 import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
-import { FaPersonDigging } from "react-icons/fa6";
+import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
 import { BsFillPersonFill, BsPersonBadgeFill } from "react-icons/bs";
 import {
   MdCoPresent,
@@ -117,6 +117,22 @@ export const navLinks = {
       id: 1,
       path: "/dashboard",
       title: "dashboard",
+    },
+    {
+      icon: <FaListCheck className="text-lg" />,
+      id: 2,
+      path: "/shifts",
+      title: "shifts",
+      items: [
+        {
+          title: "Recent",
+          path: "/shifts"
+        },
+        {
+          title: "Completed",
+          path: "/shifts/completed"
+        },
+      ]
     },
   ],
 };

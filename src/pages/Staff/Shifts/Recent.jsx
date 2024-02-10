@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Empty, JobCard, Loader, Page } from "../../components";
-import { base_url } from "../../utils/url";
+import { Empty, JobCard, Loader, Page } from "../../../components";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { base_url } from "../../../utils/url";
 
-const getShifts = `${base_url}/upcomming-shift/`;
+const getShifts = `${base_url}/pending-shift/`;
 
-const UpcomingShifts = () => {
+const Recent = () => {
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -32,14 +34,17 @@ const UpcomingShifts = () => {
   }, [user]);
 
   return (
-    <Page title="Upcoming Shifts" enableHeader>
+    <Page title="Recent Shifts" enableHeader>
       <main className="relative min-h-[70vh]">
         {loading ? (
           <Loader />
         ) : data.length ? (
           <div className="flex flex-col space-y-2">
             {data.map((shift) => (
-              <JobCard {...shift} />
+              <JobCard
+                {...shift}
+                onClick={() => navigate(`/upcoming-shifts/${shift.id}`)}
+              />
             ))}
           </div>
         ) : (
@@ -50,4 +55,4 @@ const UpcomingShifts = () => {
   );
 };
 
-export default UpcomingShifts;
+export default Recent;

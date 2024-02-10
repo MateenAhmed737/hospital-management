@@ -1,3 +1,4 @@
 import JobCard from "./JobCard";
+import MessageCard from "./MessageCard";
 
-export { JobCard };
+export { JobCard, MessageCard };

@@ -38,6 +38,15 @@ export const convertPropsToObject = (neededProps) =>
     )
   );
 
+export const convertTime = (time) => {
+  console.log('time', time)
+  if (!time) return "";
+  const [hours, minutes] = time.split(":");
+  const ampm = hours >= 12 ? "PM" : "AM";
+  const hours12 = hours % 12 || 12;
+  return `${hours12}:${minutes} ${ampm}`;
+};
+
 export const parseJson = (value) => {
   let copy = typeof value === "string" ? JSON.parse(value) : value;
   return typeof copy === "string" ? JSON.parse(copy) : copy;

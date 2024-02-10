@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { JobCard, Loader, Page } from "../../components";
+import { JobCard, Loader, Page, Empty } from "../../components";
 import { fetchData } from "../../utils";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
@@ -7,13 +7,13 @@ import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
 import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
-import EmptyImg from "../../assets/images/empty.png";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;
 const getShifts = `${base_url}/upcomming-shift/`;
 const Dashboard = () => {
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [analytics, setAnalytics] = useState({});
@@ -69,8 +69,8 @@ const Dashboard = () => {
     fetchTodayJob();
   }, [user, fetchShifts, fetchTodayJob]);
 
-  console.log('todayJob', todayJob)
-  console.log('upcomingShifts.data', upcomingShifts.data)
+  console.log("todayJob", todayJob);
+  console.log("upcomingShifts.data", upcomingShifts.data);
 
   return (
     <Page title="Dashboard" enableHeader headerStyles="!mb-4">
@@ -80,20 +80,22 @@ const Dashboard = () => {
         </div>
       ) : (
         <main>
-          <div className="flex flex-col mb-4">
-            <h2 className="text-sm font-medium text-gray-600">
-              Your today's shift
-            </h2>
-            {todayJob.loading ? (
-              <div className="relative w-full min-h-[10vh]">
-                <Loader />
-              </div>
-            ) : (
+          {!todayJob.loading && !!todayJob.data.length && (
+            <div className="flex flex-col mb-4">
+              <h2 className="text-sm font-medium text-gray-600">
+                Your today's shift
+              </h2>
               <div className="flex flex-col mt-2 space-y-3">
-              {todayJob.data.map((shift) => <JobCard {...shift} title={shift.facility.shift.title} country={shift.facility.shift.country} start_time={shift.facility.shift.start_time} />)}
+                {todayJob.data.map((item) => (
+                  <JobCard
+                    data={item}
+                    {...item.facility.shift}
+                    facility={item.facility}
+                  />
+                ))}
               </div>
-            )}
-          </div>
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-2">
             <div className="grid grid-cols-1 gap-2">
@@ -147,15 +149,11 @@ const Dashboard = () => {
                   <Loader />
                 </div>
               ) : !upcomingShifts.loading && !upcomingShifts.data.length ? (
-                <img
-                  src={EmptyImg}
-                  className="w-full max-w-xs mx-auto mt-8"
-                  alt="no upcoming shifts"
-                />
+                <Empty title="No shifts found!" />
               ) : (
                 upcomingShifts.data
-                  .slice(0, 4)
-                  .map((shift) => <JobCard {...shift} />)
+                  .slice(-4)
+                  .map((shift) => <JobCard {...shift} data={shift} />)
               )}
             </div>
           </div>

@@ -16,6 +16,11 @@ import {
   AccessDenied,
   Register,
   UpcomingShifts,
+  Shift,
+  Recent,
+  Completed,
+  Inbox,
+  Chat,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -102,7 +107,19 @@ const Router = () => {
 
             {/* For Staff (1) */}
             <Route element={<Auth allowedRoles={["1"]} />}>
-              <Route path="/upcoming-shifts" element={privateRoute(UpcomingShifts)} />
+              <Route path="/shifts">
+                <Route index element={privateRoute(Recent)} />
+                <Route path="/shifts/completed" element={privateRoute(Completed)} />
+                <Route path="/shifts/:id" element={privateRoute(Shift)} />
+              </Route>
+              <Route path="/upcoming-shifts">
+                <Route index element={privateRoute(UpcomingShifts)} />
+                <Route path="/upcoming-shifts/:id" element={privateRoute(Shift)} />
+              </Route>
+              <Route path="/messages">
+                <Route index element={privateRoute(Inbox)} />
+                <Route path="/messages/:id" element={privateRoute(Chat)} />
+              </Route>
             </Route>
           </Route>
 

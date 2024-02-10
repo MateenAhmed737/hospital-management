@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { navLinks } from "../constants/data";
 import { VscClose } from "react-icons/vsc";
 import { useSelector } from "react-redux";
@@ -25,33 +25,23 @@ const Navbar = ({ toggle, setToggle }) => {
             <VscClose />
           </button>
 
-          {/* <img className="w-2/3 mb-10" src={Logo} alt="Hospital Management logo" /> */}
           <h1 className="text-sm">Hospital Management</h1>
 
           {navigation.map((data) => (
             <NavItem key={data.title} data={data} />
           ))}
         </div>
-
-        {/* <div>
-          {bottomNavItems.map((data, indx) => (
-            <BottomNavItem
-              key={data.title}
-              {...data}
-              isLast={bottomNavItems.length - 1 === indx}
-            />
-          ))}
-        </div> */}
       </nav>
     </>
   );
 };
 
 const NavItem = ({ data }) => {
+  const location = useLocation();
   const [toggle, setToggle] = useState(false);
 
   // if Nav item is a link
-  if (data.path) {
+  if (!data.items) {
     return (
       <NavLink
         to={data.path}
@@ -61,7 +51,6 @@ const NavItem = ({ data }) => {
           } flex items-center hover:text-primary-500 my-4`;
         }}
       >
-        {/* <img className="w-4" src={data.icon} alt="icon" /> */}
         {data.icon}
         <span className="ml-2 text-xs capitalize">
           {data.title.replaceAll("_", " ")}
@@ -74,10 +63,11 @@ const NavItem = ({ data }) => {
   return (
     <>
       <div
-        className="flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-primary-500"
+        className={`flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-primary-500 ${
+          location.pathname.includes(data.path) ? "!text-primary-500" : ""
+        }`}
         onClick={() => setToggle(!toggle)}
       >
-        {/* <img className="w-4" src={data.icon} alt="icon" /> */}
         {data.icon}
         <span className="ml-2 text-xs capitalize">
           {data.title.replaceAll("_", " ")}
@@ -86,7 +76,7 @@ const NavItem = ({ data }) => {
       <div
         className={`${toggle ? "block" : "hidden"} relative ml-[26px] text-xs`}
       >
-        <div className="absolute left-[3px] bg-[#909090] w-0.5 h-full -z-10" />
+        <div className="absolute left-[1px] bg-[#909090] w-0.5 h-full -z-10" />
         {data.items.map(({ path, title }) => {
           return (
             <NavLink
@@ -103,7 +93,7 @@ const NavItem = ({ data }) => {
                   window.location.pathname === path
                     ? "bg-[#909090] scale-110"
                     : "bg-[#D9D9D9]"
-                } group-hover:bg-[#909090] group-hover:scale-125 rounded-full transition-all duration-300 w-2 h-2 mr-2 my-2`}
+                } group-hover:bg-[#909090] relative right-0.5 group-hover:scale-125 rounded-full transition-all duration-300 w-2 h-2 mr-1 my-2`}
               />
               {title}
             </NavLink>
@@ -113,30 +103,5 @@ const NavItem = ({ data }) => {
     </>
   );
 };
-
-// const BottomNavItem = ({ title, path, icon, handleClick, isLast }) => {
-//   const Element = isLast ? "button" : NavLink;
-//   const className = isLast
-//     ? "flex items-center hover:font-medium text-red-500 hover:text-red-600"
-//     : ({ isActive }) => {
-//         return `flex items-center my-4 ${
-//           isActive
-//             ? "text-primary-500 font-medium"
-//             : "text-[#091A35] hover:text-primary-500 hover:font-medium"
-//         }`;
-//       };
-
-//   return (
-//     <Element
-//       to={isLast ? undefined : path}
-//       onClick={isLast ? handleClick : undefined}
-//       className={className}
-//     >
-//       {/* <img className="w-4" src={data.icon} alt="icon" /> */}
-//       {icon}
-//       <span className="ml-3 text-xs">{title}</span>
-//     </Element>
-//   );
-// };
 
 export default Navbar;
