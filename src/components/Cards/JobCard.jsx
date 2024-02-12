@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { convertTime } from "../../utils";
 import { ShiftModal } from "../Modals";
 
-const JobCard = ({ facility, title, opening_date, start_time, data }) => {
+const JobCard = ({ facility, title, opening_date, start_time, data, disableBids = false, shift }) => {
   const [shiftModal, setShiftModal] = useState(false);
 
   return (
@@ -29,7 +29,8 @@ const JobCard = ({ facility, title, opening_date, start_time, data }) => {
         <ShiftModal
           shiftModal={shiftModal}
           setShiftModal={setShiftModal}
-          data={{...data, facility}}
+          data={{...data, ...shift, facility}}
+          disableBids={disableBids}
         />
       )}
     </>

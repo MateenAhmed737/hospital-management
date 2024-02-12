@@ -1,15 +1,18 @@
+import { toast } from "react-hot-toast";
 import React, { useEffect, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
-import { convertTime, fetchData } from "../../utils";
+import { convertTime } from "../../utils";
 import { base_url } from "../../utils/url";
 import { Loader } from "../Loaders";
 import Empty from "../Empty";
+import { useSelector } from "react-redux";
 
-const getBitData = `${base_url}/get-bits-users/`;
+const getBitData = `${base_url}/get-bits-users`;
+const storeBid = `${base_url}/store-bit`;
 
-const ShiftModal = ({ shiftModal, setShiftModal, data }) => {
+const ShiftModal = ({ shiftModal, setShiftModal, data, disableBids }) => {
   const [tab, setTab] = useState(0);
   const [placeBidsModal, setPlaceBidsModal] = useState(false);
   const [viewOtherBids, setViewOtherBids] = useState(false);
@@ -38,6 +41,7 @@ const ShiftModal = ({ shiftModal, setShiftModal, data }) => {
     input:
       "min-h-[37px] w-[300px] shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500/50 focus:border-blue-600 block p-2.5",
     createButton: `!w-1/2 !rounded-md !py-2.5`,
+    footerCloseButton: `!w-full !rounded-md !py-2.5`,
   };
 
   const handleBackdropClick = (e) => {
@@ -124,6 +128,12 @@ const ShiftModal = ({ shiftModal, setShiftModal, data }) => {
                     {new Date(data.created_at).toLocaleString()}
                   </td>
                 </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Service type:</th>
+                  <td className="text-xs text-gray-700">
+                    {data.service_type }
+                  </td>
+                </tr>
               </tbody>
             </table>
           )}
@@ -151,17 +161,27 @@ const ShiftModal = ({ shiftModal, setShiftModal, data }) => {
           )}
         </div>
         <div className={styles.footer}>
-          <button
-            onClick={() => setViewOtherBids(true)}
-            className="mx-auto text-xs text-gray-600 hover:underline"
-          >
-            View other bids
-          </button>
-          <Button
-            title="Place Bids"
-            handleClick={() => setPlaceBidsModal(true)}
-            extraStyles={styles.createButton}
-          />
+          {disableBids ? (
+            <Button
+              title="Close"
+              handleClick={close}
+              extraStyles={styles.footerCloseButton}
+            />
+          ) : (
+            <>
+              <button
+                onClick={() => setViewOtherBids(true)}
+                className="mx-auto text-xs text-gray-600 hover:underline"
+              >
+                View other bids
+              </button>
+              <Button
+                title="Place Bids"
+                handleClick={() => setPlaceBidsModal(true)}
+                extraStyles={styles.createButton}
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -181,14 +201,50 @@ const ShiftModal = ({ shiftModal, setShiftModal, data }) => {
 };
 
 const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
+  const user = useSelector((state) => state.user);
   const [bid, setBid] = useState(0.0);
   const [description, setDescription] = useState("");
+  const [loading, setLoading] = useState(false);
   const facility = data.facility;
 
   console.log("data", data);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+
+    const formdata = new FormData();
+    formdata.append("price", bid);
+    formdata.append("description", description);
+
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formdata,
+      redirect: "follow",
+    };
+
+    fetch(`${storeBid}/${user.id}/${data.id}`, requestOptions)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          toast.success("Bid placed successfully!");
+          setBid(0.0);
+          setDescription("");
+          setPlaceBidsModal(false);
+        } else if (json?.message?.includes("Bit already exists")) {
+          toast.error("Bid already exists.");
+          setBid(0.0);
+          setDescription("");
+          setPlaceBidsModal(false);
+        } else if (json?.error) {
+          toast.error(json?.error?.[0]?.message || json?.error?.message);
+        }
+      })
+      .catch((error) => toast.error(error?.[0]?.message || error?.message))
+      .finally(() => setLoading(false));
   };
 
   const close = () => setPlaceBidsModal(false);
@@ -211,7 +267,7 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
       "text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-base p-1.5 ml-auto inline-flex items-center",
     input:
       "min-h-[37px] w-[300px] shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500/50 focus:border-blue-600 block p-2.5",
-    createButton: `!w-full !rounded-md !py-2.5`,
+    createButton: `!w-full !rounded-md ${loading ? "!py-2" : "!py-3"}`,
   };
 
   const handleBackdropClick = (e) => {
@@ -288,6 +344,7 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
             type="submit"
             title="Bid This Job"
             extraStyles={styles.createButton}
+            loading={loading}
           />
         </div>
       </form>
@@ -299,8 +356,6 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
   const [bids, setBids] = useState([]);
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
-
-  console.log("data", data);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -337,11 +392,23 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
 
   useEffect(() => {
     if (viewOtherBids) {
-      fetchData({
-        url: getBitData + data.id,
-        setIsLoading: setLoading,
-        callback: (data) => setBids(data),
-      });
+      const fetchBids = () => {
+        setLoading(true);
+
+        fetch(`${getBitData}/${data.id}`)
+          .then((res) => res.json())
+          .then((json) => {
+            if (json.success) {
+              const data = json.success.data || [];
+              console.log("data", data);
+              setBids(data);
+            }
+          })
+          .catch((error) => console.error(error))
+          .finally(() => setLoading(false));
+      };
+
+      fetchBids();
     }
   }, [data.id, viewOtherBids]);
 
@@ -380,13 +447,41 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
             <span>All results</span>
             <span>{bids.length} bits found</span>
           </div>
-          <div className="relative flex flex-col items-center min-h-[150px]">
-            <br />
+          <div
+            className={
+              "relative flex flex-col min-h-[150px] " +
+              (loading ? "items-center justify-center" : "justify-start")
+            }
+          >
             {loading ? (
               <Loader />
             ) : bids.length ? (
               bids.map((item) => (
-                <p className="mt-1 ml-4 text-gray-600">{item.detail}</p>
+                <div className="flex items-center w-full mt-3 space-x-2">
+                  <img
+                    src={item.profile_image}
+                    className="w-[40px] h-[40px] object-cover object-center rounded-full"
+                    alt="profile"
+                  />
+                  <div className="w-11/12">
+                    <div className="flex items-center justify-between">
+                      <span className="text-sm font-semibold text-gray-800 capitalize">
+                        {item.user_name}
+                      </span>
+                      <span className="text-sm font-medium text-gray-800 capitalize">
+                        ${item.price}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs text-gray-600">
+                        {item.description}
+                      </span>
+                      <span className="text-xs text-gray-600">
+                        {new Date(item.created_at).toLocaleDateString()}
+                      </span>
+                    </div>
+                  </div>
+                </div>
               ))
             ) : (
               <Empty title="No bids found!" noMargin />

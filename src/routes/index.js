@@ -109,13 +109,15 @@ const Router = () => {
             <Route element={<Auth allowedRoles={["1"]} />}>
               <Route path="/shifts">
                 <Route index element={privateRoute(Recent)} />
-                <Route path="/shifts/completed" element={privateRoute(Completed)} />
-                <Route path="/shifts/:id" element={privateRoute(Shift)} />
+                <Route
+                  path="/shifts/completed"
+                  element={privateRoute(Completed)}
+                />
               </Route>
-              <Route path="/upcoming-shifts">
-                <Route index element={privateRoute(UpcomingShifts)} />
-                <Route path="/upcoming-shifts/:id" element={privateRoute(Shift)} />
-              </Route>
+              <Route
+                path="/upcoming-shifts"
+                element={privateRoute(UpcomingShifts)}
+              /> 
               <Route path="/messages">
                 <Route index element={privateRoute(Inbox)} />
                 <Route path="/messages/:id" element={privateRoute(Chat)} />

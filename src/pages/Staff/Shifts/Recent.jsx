@@ -21,6 +21,7 @@ const Recent = () => {
 
         if (json.success) {
           const data = json.success.data || [];
+          console.log('data', data)
           setData(data);
         }
       } catch (error) {

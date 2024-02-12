@@ -7,7 +7,7 @@ const getShifts = `${base_url}/upcomming-shift/`;
 
 const UpcomingShifts = () => {
   const user = useSelector((state) => state.user);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [data, setData] = useState([]);
 
   useEffect(() => {
@@ -19,6 +19,7 @@ const UpcomingShifts = () => {
 
         if (json.success) {
           const data = json.success.data || [];
+          console.log('data', data)
           setData(data);
         }
       } catch (error) {
@@ -39,7 +40,7 @@ const UpcomingShifts = () => {
         ) : data.length ? (
           <div className="flex flex-col space-y-2">
             {data.map((shift) => (
-              <JobCard {...shift} />
+              shift.id !== 81 && <JobCard data={shift} {...shift} facility={shift.facility} />
             ))}
           </div>
         ) : (
