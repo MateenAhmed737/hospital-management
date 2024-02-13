@@ -1,5 +1,6 @@
 import CompletedJobCard from "./CompletedJobCard";
-import JobCard from "./JobCard";
+import RecentJobCard from "./RecentJobCard";
 import MessageCard from "./MessageCard";
+import JobCard from "./JobCard";
 
-export { JobCard, MessageCard, CompletedJobCard };
+export { JobCard, MessageCard, CompletedJobCard, RecentJobCard };

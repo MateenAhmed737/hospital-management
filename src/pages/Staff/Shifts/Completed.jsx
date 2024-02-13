@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { CompletedJobCard, Empty, JobCard, Loader, Page } from "../../../components";
+import {
+  CompletedJobCard,
+  Empty,
+  JobCard,
+  Loader,
+  Page,
+} from "../../../components";
 import { base_url } from "../../../utils/url";
 import { useSelector } from "react-redux";
 
@@ -40,10 +46,7 @@ const Completed = () => {
         ) : data.length ? (
           <div className="flex flex-col space-y-2">
             {data.map((shift) => (
-              <CompletedJobCard
-                {...shift}
-                disableBids
-              />
+              <CompletedJobCard {...shift} />
             ))}
           </div>
         ) : (

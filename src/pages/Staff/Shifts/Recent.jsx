@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Empty, JobCard, Loader, Page } from "../../../components";
+import { Empty, JobCard, Loader, Page, RecentJobCard } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { base_url } from "../../../utils/url";
@@ -12,6 +12,7 @@ const Recent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
+  console.log('data', data)
   useEffect(() => {
     const fetchShifts = async () => {
       setLoading(true);
@@ -21,7 +22,6 @@ const Recent = () => {
 
         if (json.success) {
           const data = json.success.data || [];
-          console.log('data', data)
           setData(data);
         }
       } catch (error) {
@@ -42,9 +42,8 @@ const Recent = () => {
         ) : data.length ? (
           <div className="flex flex-col space-y-2">
             {data.map((shift) => (
-              <JobCard
+              <RecentJobCard
                 {...shift}
-                onClick={() => navigate(`/upcoming-shifts/${shift.id}`)}
               />
             ))}
           </div>

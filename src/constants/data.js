@@ -7,6 +7,7 @@ import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
 import { BsFillPersonFill, BsPersonBadgeFill } from "react-icons/bs";
 import {
   MdCoPresent,
+  MdMessage,
   MdOutlinePlaylistAddCheck,
   MdSubscriptions,
 } from "react-icons/md";
@@ -133,6 +134,12 @@ export const navLinks = {
           path: "/shifts/completed"
         },
       ]
+    },
+    {
+      id: 2,
+      icon: <MdMessage className="text-lg" />,
+      title: "messages",
+      path: "/messages",
     },
   ],
 };

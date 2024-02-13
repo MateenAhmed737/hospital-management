@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { ShiftModal } from "../Modals";
 import { convertTime } from "../../utils";
 
-const CompletedJobCard = (data) => {
+const RecentJobCard = (data) => {
   const [shiftModal, setShiftModal] = useState(false);
 
   return (
@@ -63,4 +63,4 @@ const CompletedJobCard = (data) => {
   );
 };
 
-export default CompletedJobCard;
+export default RecentJobCard;

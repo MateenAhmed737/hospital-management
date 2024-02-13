@@ -12,10 +12,21 @@ import { useSelector } from "react-redux";
 const getBitData = `${base_url}/get-bits-users`;
 const storeBid = `${base_url}/store-bit`;
 
-const ShiftModal = ({ shiftModal, setShiftModal, data, disableBids }) => {
+const ShiftModal = ({
+  shiftModal,
+  setShiftModal,
+  data,
+  disableBids,
+  isTodaysShift,
+  setTodayJob
+}) => {
   const [tab, setTab] = useState(0);
   const [placeBidsModal, setPlaceBidsModal] = useState(false);
   const [viewOtherBids, setViewOtherBids] = useState(false);
+  const [status, setStatus] = useState(
+    data?.job_status !== "CheckIn" ? "Check in" : "CheckOut"
+  );
+  const [loading, setLoading] = useState(false);
   const facility = data.facility;
 
   console.log("data", data);
@@ -42,6 +53,33 @@ const ShiftModal = ({ shiftModal, setShiftModal, data, disableBids }) => {
       "min-h-[37px] w-[300px] shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500/50 focus:border-blue-600 block p-2.5",
     createButton: `!w-1/2 !rounded-md !py-2.5`,
     footerCloseButton: `!w-full !rounded-md !py-2.5`,
+  };
+
+  const handleCheck = async () => {
+    setLoading(true);
+    try {
+      const url = `${base_url}/user-job-status/${data.id}`;
+      const formdata = new FormData();
+
+      formdata.append("status", status);
+
+      const res = await fetch(url, {
+        method: "post",
+        body: formdata,
+      });
+      if (res.status) {
+        setTodayJob((prev) => ({ ...prev, reload: true }));
+        toast.success("Check in successful!");
+        close();
+      } else {
+        toast.error("Try again later!");
+      }
+    } catch (error) {
+      toast.error("Server side Error");
+      console.error("check_job_status catch error", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleBackdropClick = (e) => {
@@ -130,9 +168,7 @@ const ShiftModal = ({ shiftModal, setShiftModal, data, disableBids }) => {
                 </tr>
                 <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
                   <th className="px-2 py-1.5 font-semibold">Service type:</th>
-                  <td className="text-xs text-gray-700">
-                    {data.service_type }
-                  </td>
+                  <td className="text-xs text-gray-700">{data.service_type}</td>
                 </tr>
               </tbody>
             </table>
@@ -161,7 +197,18 @@ const ShiftModal = ({ shiftModal, setShiftModal, data, disableBids }) => {
           )}
         </div>
         <div className={styles.footer}>
-          {disableBids ? (
+          {isTodaysShift ? (
+            <Button
+              title={(() => {
+                const sp = status.split("");
+                sp.splice(5, 0, " ");
+                return sp;
+              })()}
+              loading={loading}
+              handleClick={handleCheck}
+              extraStyles={styles.footerCloseButton}
+            />
+          ) : disableBids ? (
             <Button
               title="Close"
               handleClick={close}

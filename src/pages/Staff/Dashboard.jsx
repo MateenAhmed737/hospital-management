@@ -7,17 +7,20 @@ import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
 import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;
 const getShifts = `${base_url}/upcomming-shift/`;
 const Dashboard = () => {
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [analytics, setAnalytics] = useState({});
-  const [todayJob, setTodayJob] = useState({ loading: true, data: [] });
+  const [todayJob, setTodayJob] = useState({
+    loading: true,
+    data: [],
+    reload: true,
+  });
   const [upcomingShifts, setUpcomingShifts] = useState({
     loading: true,
     data: [],
@@ -53,7 +56,7 @@ const Dashboard = () => {
     } catch (error) {
       console.error(error);
     } finally {
-      setTodayJob((prev) => ({ ...prev, loading: false }));
+      setTodayJob((prev) => ({ ...prev, loading: false, reload: false }));
     }
   }, [user]);
 
@@ -66,10 +69,15 @@ const Dashboard = () => {
     });
 
     fetchShifts();
-    fetchTodayJob();
-  }, [user, fetchShifts, fetchTodayJob]);
+  }, [user, fetchShifts]);
 
-  console.log("todayJob", todayJob);
+  useEffect(() => {
+    if (todayJob.reload) {
+      fetchTodayJob();
+    }
+  }, [todayJob.reload, fetchTodayJob]);
+
+  console.log("todayJob", todayJob.data);
   console.log("upcomingShifts.data", upcomingShifts.data);
 
   return (
@@ -91,6 +99,9 @@ const Dashboard = () => {
                     data={item}
                     {...item.facility.shift}
                     facility={item.facility}
+                    shift={item.facility.shift}
+                    setTodayJob={setTodayJob}
+                    isTodaysShift
                   />
                 ))}
               </div>
