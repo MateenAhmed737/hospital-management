@@ -21,6 +21,9 @@ import {
   Completed,
   Inbox,
   Chat,
+  AllOffers,
+  FavJobs,
+  RecentJobs,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -37,56 +40,6 @@ const Router = () => {
 
   const privateRoute = (Page) => (user ? <Page /> : <AccessDenied />);
   const publicRoute = (Page) => (user ? <Navigate to="/" /> : <Page />);
-
-  // const login = useCallback(async (email, password) => {
-  //   setLoading(true);
-  //   let json = null;
-
-  //   try {
-  //     let formdata = new FormData();
-  //     formdata.append("email", email);
-  //     formdata.append("password", password);
-
-  //     let requestOptions = {
-  //       headers: {
-  //         Accept: "application/json",
-  //       },
-  //       method: "POST",
-  //       body: formdata,
-  //       redirect: "follow",
-  //     };
-
-  //     const res = await fetch(`${base_url}/user-login`, requestOptions);
-  //     json = await res.json();
-
-  //     if (json.success) {
-  //       let data = json.success.data;
-
-  //       userActions.set(data);
-  //     } else {
-  //       localStorage.clear();
-  //       userActions.set(null);
-  //     }
-  //   } catch (err) {
-  //     console.error(err);
-  //     localStorage.clear();
-  //     userActions.set(null);
-  //   } finally {
-  //     setLoading(false);
-  //   }
-  // }, []);
-
-  // useEffect(() => {
-  //   const user_data = JSON.parse(localStorage.getItem("user"));
-
-  //   if (user_data) {
-  //     login(user_data.email, user_data.password);
-  //   } else {
-  //     setTimeout(() => {
-  //       setLoading(false);
-  //     }, 500);
-  //   }
-  // }, [login]);
 
   return (
     <>
@@ -113,11 +66,42 @@ const Router = () => {
                   path="/shifts/completed"
                   element={privateRoute(Completed)}
                 />
+                <Route
+                  path="/shifts/all"
+                  element={privateRoute(AllOffers)}
+                />
               </Route>
               <Route
                 path="/upcoming-shifts"
                 element={privateRoute(UpcomingShifts)}
               /> 
+                <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+                <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
+              <Route path="/messages">
+                <Route index element={privateRoute(Inbox)} />
+                <Route path="/messages/:id" element={privateRoute(Chat)} />
+              </Route>
+            </Route>
+
+            {/* For Facility (3) */}
+            <Route element={<Auth allowedRoles={["3"]} />}>
+              <Route path="/shifts">
+                <Route index element={privateRoute(Recent)} />
+                <Route
+                  path="/shifts/completed"
+                  element={privateRoute(Completed)}
+                />
+                <Route
+                  path="/shifts/all"
+                  element={privateRoute(AllOffers)}
+                />
+              </Route>
+              <Route
+                path="/upcoming-shifts"
+                element={privateRoute(UpcomingShifts)}
+              /> 
+                <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+                <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
                 <Route index element={privateRoute(Inbox)} />
                 <Route path="/messages/:id" element={privateRoute(Chat)} />

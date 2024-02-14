@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { ShiftModal } from "../Modals";
 import { convertTime } from "../../utils";
+import { useNavigate } from "react-router-dom";
 
 const CompletedJobCard = (data) => {
+  const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
 
   return (
@@ -42,7 +44,7 @@ const CompletedJobCard = (data) => {
               Shift Timing: {convertTime(data.start_time)}
             </span>
             <button
-              onClick={() => console.log(true)}
+              onClick={() => navigate("/messages/" + data.facility.id)}
               className="text-sm font-semibold text-primary-500 hover:text-primary-700"
             >
               Chat

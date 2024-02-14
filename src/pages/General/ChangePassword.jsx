@@ -122,7 +122,7 @@ const ChangePassword = () => {
               >
                 New Password
               </label>
-              <div className="flex items-center shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 w-full">
+              <div className="flex items-center shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full">
                 <input
                   type={newPassword.isVisible ? "text" : "password"}
                   name="newPassword"
@@ -133,16 +133,16 @@ const ChangePassword = () => {
                   placeholder="Password"
                   required={true}
                 />
-                <div className="w-8 text-lg text-blue-500">
+                <div className="w-8 text-lg text-primary-500">
                   {newPassword.isVisible ? (
                     <AiFillEye
                       onClick={toggleNewPassword}
-                      className="text-blue-500 cursor-pointer"
+                      className="cursor-pointer text-primary-500"
                     />
                   ) : (
                     <AiFillEyeInvisible
                       onClick={toggleNewPassword}
-                      className="text-blue-500 cursor-pointer"
+                      className="cursor-pointer text-primary-500"
                     />
                   )}
                 </div>
@@ -155,7 +155,7 @@ const ChangePassword = () => {
               >
                 Confirm Password
               </label>
-              <div className="flex items-center shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 w-full">
+              <div className="flex items-center shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 w-full">
                 <input
                   type={confirmPassword.isVisible ? "text" : "password"}
                   name="confirmPassword"
@@ -166,16 +166,16 @@ const ChangePassword = () => {
                   placeholder="Password"
                   required={true}
                 />
-                <div className="w-8 text-lg text-blue-500">
+                <div className="w-8 text-lg text-primary-500">
                   {confirmPassword.isVisible ? (
                     <AiFillEye
                       onClick={toggleConfirmPassword}
-                      className="text-blue-500 cursor-pointer"
+                      className="cursor-pointer text-primary-500"
                     />
                   ) : (
                     <AiFillEyeInvisible
                       onClick={toggleConfirmPassword}
-                      className="text-blue-500 cursor-pointer"
+                      className="cursor-pointer text-primary-500"
                     />
                   )}
                 </div>
@@ -184,14 +184,14 @@ const ChangePassword = () => {
 
             <button
               type="submit"
-              className="flex justify-center items-center w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-200 font-medium rounded-lg text-xs px-5 py-2.5 mt-2 text-center disabled:bg-blue-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
+              className="flex justify-center items-center w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-200 font-medium rounded-lg text-xs px-5 py-2.5 mt-2 text-center disabled:bg-primary-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
               disabled={toggleBtn}
             >
               {toggleBtn ? (
                 <>
                   <Loader
                     extraStyles="!static !inset-auto !block !scale-50 !bg-transparent !saturate-100"
-                    loaderColor={toggleBtn ? "fill-blue-300" : ""}
+                    loaderColor={toggleBtn ? "fill-primary-300" : ""}
                   />
                   Changing
                 </>

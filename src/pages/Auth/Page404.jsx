@@ -16,8 +16,8 @@ export default function Page404() {
           </p>
 
           <Link
-            to="/"
-            className="px-5 py-2 text-blue-100 rounded-md bg-blue-500 hover:bg-blue-600"
+            to="/dashboard"
+            className="px-5 py-2 text-white rounded-md bg-primary-500 hover:bg-primary-600"
           >
             Go home
           </Link>

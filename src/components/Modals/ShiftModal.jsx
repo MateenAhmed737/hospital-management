@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
-import { convertTime } from "../../utils";
+import { convertTime, parseJson } from "../../utils";
 import { base_url } from "../../utils/url";
 import { Loader } from "../Loaders";
 import Empty from "../Empty";
@@ -28,6 +28,8 @@ const ShiftModal = ({
   );
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
+
+  let details = parseJson(data.job_details);
 
   console.log("data", data);
 
@@ -184,7 +186,7 @@ const ShiftModal = ({
               <p className="text-gray-600">{data.description}</p>
 
               <p className="mt-4 text-sm font-semibold">Job Detail</p>
-              {data.job_details.map((item) => (
+              {details.map((item) => (
                 // use summary tag
                 <details className="mt-1.5 mb-3">
                   <summary className="font-semibold text-gray-900">

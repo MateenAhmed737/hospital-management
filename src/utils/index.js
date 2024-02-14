@@ -39,7 +39,6 @@ export const convertPropsToObject = (neededProps) =>
   );
 
 export const convertTime = (time) => {
-  console.log('time', time)
   if (!time) return "";
   const [hours, minutes] = time.split(":");
   const ampm = hours >= 12 ? "PM" : "AM";

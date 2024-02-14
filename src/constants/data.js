@@ -1,6 +1,6 @@
 import React from "react";
 import { GiSandsOfTime } from "react-icons/gi";
-import { FaCheck, FaClipboardList, FaFileInvoiceDollar } from "react-icons/fa";
+import { FaCheck, FaClipboardList, FaFileInvoiceDollar, FaHeart, FaList } from "react-icons/fa";
 import { GoHomeFill } from "react-icons/go";
 import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
 import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
@@ -133,10 +133,26 @@ export const navLinks = {
           title: "Completed",
           path: "/shifts/completed"
         },
+        {
+          title: "All Offers",
+          path: "/shifts/all"
+        },
       ]
     },
     {
       id: 2,
+      icon: <FaList className="text-base" />,
+      title: "recent_jobs",
+      path: "/recent-jobs",
+    },
+    {
+      id: 3,
+      icon: <FaHeart className="text-base" />,
+      title: "favourite_jobs",
+      path: "/favourite-jobs",
+    },
+    {
+      id: 4,
       icon: <MdMessage className="text-lg" />,
       title: "messages",
       path: "/messages",

@@ -13,7 +13,7 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [email, setEmail] = useState("staff@gmail.com");
+  const [email, setEmail] = useState("frzamn64ml@gmail.com");
   const [toggleBtn, setToggleBtn] = useState(false);
   const [password, setPassword] = useState({
     isVisible: false,
