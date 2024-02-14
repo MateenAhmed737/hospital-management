@@ -1,16 +1,13 @@
 import React, { useState } from "react";
-import { ShiftModal } from "../Modals";
-import { convertTime } from "../../utils";
+import { FacilityShiftModal } from "../../Modals/Facility";
+import { convertTime } from "../../../utils";
 
-const JobCard = ({
+const ShiftCard = ({
   data,
   title,
-  shift,
-  facility,
   opening_date,
   disableBids = false,
-  isTodaysShift = false,
-  setTodayJob
+  setData
 }) => {
   const [shiftModal, setShiftModal] = useState(false);
 
@@ -22,7 +19,7 @@ const JobCard = ({
       >
         <div className="flex items-center">
           <img
-            src={facility.profile_image}
+            src={data.profile_image}
             className="rounded-md w-11 h-11"
             alt="facility profile"
           />
@@ -37,17 +34,16 @@ const JobCard = ({
         </span>
       </button>
       {shiftModal && (
-        <ShiftModal
+        <FacilityShiftModal
           shiftModal={shiftModal}
           setShiftModal={setShiftModal}
-          data={{ ...data, ...shift, facility }}
           disableBids={disableBids}
-          isTodaysShift={isTodaysShift}
-          setTodayJob={setTodayJob}
+          data={data}
+          setData={setData} 
         />
       )}
     </>
   );
 };
 
-export default JobCard;
+export default ShiftCard;

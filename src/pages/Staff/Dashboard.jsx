@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { JobCard, Loader, Page, Empty } from "../../components";
+import { Loader, Page, Empty } from "../../components";
 import { fetchData } from "../../utils";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
 import { Link } from "react-router-dom";
+import { JobCard } from "../../components/Cards/Staff";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;

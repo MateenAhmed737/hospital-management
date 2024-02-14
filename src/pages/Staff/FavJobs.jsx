@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Empty, Loader, Page, RecentJobCard } from "../../components";
+import { Empty, Loader, Page } from "../../components";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
+import { RecentJobCard } from "../../components/Cards/Staff";
 
 const getShifts = `${base_url}/get-book-marked-shifts/`;
 
@@ -36,7 +37,7 @@ const FavJobs = () => {
   return (
     <Page title="Favourite Jobs" enableHeader>
       <div className="flex items-center justify-between mt-2 text-xs">
-        <span className="ml-1 font-medium">Search Result</span>
+        <span className="ml-1 font-medium">All Result</span>
         <span>{data?.length} jobs found</span>
       </div>
 

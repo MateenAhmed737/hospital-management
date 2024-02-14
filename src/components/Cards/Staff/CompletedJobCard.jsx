@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { ShiftModal } from "../Modals";
-import { convertTime } from "../../utils";
+import { ShiftModal } from "../../Modals";
+import { convertTime } from "../../../utils";
 import { useNavigate } from "react-router-dom";
 
 const CompletedJobCard = (data) => {

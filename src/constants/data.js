@@ -13,6 +13,7 @@ import {
 } from "react-icons/md";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RxLapTimer } from "react-icons/rx";
+import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 
 // Roles
 export const roles = {
@@ -88,28 +89,36 @@ export const navLinks = {
       title: "dashboard",
     },
     {
-      icon: <BsFillPersonFill className="-ml-0.5 text-xl" />,
+      icon: <FaListCheck className="text-lg" />,
       id: 2,
-      path: "/sellers",
-      title: "sellers",
+      path: "/fc-shifts",
+      title: "shifts",
+      items: [
+        {
+          title: "All",
+          path: "/fc-shifts"
+        },
+        {
+          title: "OnGoing",
+          path: "/fc-shifts/on-going"
+        },
+        {
+          title: "Completed",
+          path: "/fc-shifts/completed"
+        },
+      ]
     },
+    // {
+    //   id: 3,
+    //   icon: <IoCheckmarkDoneCircleOutline className="text-xl -ml-0.5" />,
+    //   title: "check_in/check_out",
+    //   path: "/check_in_outs",
+    // },
     {
-      icon: <FaPersonDigging className="text-xl" />,
-      id: 3,
-      path: "/workers",
-      title: "workers",
-    },
-    {
-      icon: <IoMdBriefcase className="text-xl" />,
       id: 4,
-      path: "/jobs",
-      title: "jobs",
-    },
-    {
-      icon: <FaClipboardList className="text-xl" />,
-      id: 5,
-      path: "/tasks-list",
-      title: "tasks_list",
+      icon: <MdMessage className="text-lg" />,
+      title: "messages",
+      path: "/messages",
     },
   ],
   Staff: [

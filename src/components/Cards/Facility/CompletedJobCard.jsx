@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { ShiftModal } from "../Modals";
-import { convertTime } from "../../utils";
+import { ShiftModal } from "../../Modals";
+import { convertTime } from "../../../utils";
 import { useNavigate } from "react-router-dom";
-import { HiMiniBuildingOffice } from "react-icons/hi2";
 
-const RecentJobCard = (data) => {
+const CompletedJobCard = (data) => {
   const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
 
@@ -13,17 +12,11 @@ const RecentJobCard = (data) => {
       <div className="p-2 py-1.5 bg-gray-100 border rounded-md">
         <div className="flex items-center justify-between p-1">
           <div className="flex items-center">
-            {data.facility?.profile_image ? (
-              <img
-                src={data.facility?.profile_image}
-                className="rounded-md w-11 h-11"
-                alt="facility profile"
-              />
-            ) : (
-              <div className="flex items-center justify-center bg-gray-200 rounded-md size-11">
-                <HiMiniBuildingOffice className="text-2xl text-gray-400" />
-              </div>
-            )}
+            <img
+              src={data.facility.profile_image}
+              className="rounded-md w-11 h-11"
+              alt="facility profile"
+            />
 
             <p className="flex flex-col items-start ml-2">
               <span className="text-sm font-semibold">{data.title}</span>
@@ -72,4 +65,4 @@ const RecentJobCard = (data) => {
   );
 };
 
-export default RecentJobCard;
+export default CompletedJobCard;

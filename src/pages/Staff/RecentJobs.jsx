@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Empty, Loader, Page, ShiftModal } from "../../components";
-import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
 import { BiSearch } from "react-icons/bi";
@@ -13,7 +12,6 @@ import moment from "moment";
 const getShifts = `${base_url}/recent-bits/`;
 
 const RecentJobs = () => {
-  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -97,14 +95,13 @@ const RecentJobs = () => {
 };
 
 const RecentJob = (data) => {
-  const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
 
   const handleBookmark = () => {};
 
   return (
     <div className="relative">
-      <button className="absolute top-2 right-2" onClick={handleBookmark}>
+      <button className="absolute text-primary-500 top-2 right-2" onClick={handleBookmark}>
         <FaBookmark />
       </button>
       <button

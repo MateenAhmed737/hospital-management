@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Empty, JobCard, Loader, Page, RecentJobCard } from "../../../components";
+import { Empty, Loader, Page } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { base_url } from "../../../utils/url";
+import { RecentJobCard } from "../../../components/Cards/Staff";
 
 const getShifts = `${base_url}/pending-shift/`;
 

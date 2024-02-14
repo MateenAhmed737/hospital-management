@@ -16,17 +16,20 @@ import {
   AccessDenied,
   Register,
   UpcomingShifts,
-  Shift,
   Recent,
   Completed,
-  Inbox,
-  Chat,
   AllOffers,
   FavJobs,
   RecentJobs,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
+import {
+  FacilityCompletedShifts,
+  OnGoingFacilityShifts,
+  AllFacilityShifts,
+  CheckInOuts,
+} from "../pages/Facility";
 
 // Router component handles the routing of the application
 const Router = () => {
@@ -37,6 +40,14 @@ const Router = () => {
   const role = user?.role;
 
   const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
+  const Inbox =
+    user &&
+    (user?.isStaff || user?.isFacility) &&
+    require("../pages/" + role + "/Inbox/Inbox").default;
+  const Chat =
+    user &&
+    (user?.isStaff || user?.isFacility) &&
+    require("../pages/" + role + "/Inbox/Chat").default;
 
   const privateRoute = (Page) => (user ? <Page /> : <AccessDenied />);
   const publicRoute = (Page) => (user ? <Navigate to="/" /> : <Page />);
@@ -56,7 +67,12 @@ const Router = () => {
             <Route path="/edit-profile" element={privateRoute(EditProfile)} />
 
             {/* For Staff (1), Admins (2) and Facalities (3) */}
-            <Route element={<Auth allowedRoles={["1", "2", "3"]} />}></Route>
+            <Route element={<Auth allowedRoles={["1", "3"]} />}>
+              <Route path="/messages">
+                <Route index element={privateRoute(Inbox)} />
+                <Route path="/messages/:id" element={privateRoute(Chat)} />
+              </Route>
+            </Route>
 
             {/* For Staff (1) */}
             <Route element={<Auth allowedRoles={["1"]} />}>
@@ -66,17 +82,14 @@ const Router = () => {
                   path="/shifts/completed"
                   element={privateRoute(Completed)}
                 />
-                <Route
-                  path="/shifts/all"
-                  element={privateRoute(AllOffers)}
-                />
+                <Route path="/shifts/all" element={privateRoute(AllOffers)} />
               </Route>
               <Route
                 path="/upcoming-shifts"
                 element={privateRoute(UpcomingShifts)}
-              /> 
-                <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
-                <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
+              />
+              <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+              <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
                 <Route index element={privateRoute(Inbox)} />
                 <Route path="/messages/:id" element={privateRoute(Chat)} />
@@ -85,27 +98,27 @@ const Router = () => {
 
             {/* For Facility (3) */}
             <Route element={<Auth allowedRoles={["3"]} />}>
-              <Route path="/shifts">
-                <Route index element={privateRoute(Recent)} />
+              <Route path="/fc-shifts">
+                <Route index element={privateRoute(AllFacilityShifts)} />
                 <Route
-                  path="/shifts/completed"
-                  element={privateRoute(Completed)}
+                  path="/fc-shifts/completed"
+                  element={privateRoute(FacilityCompletedShifts)}
                 />
                 <Route
-                  path="/shifts/all"
-                  element={privateRoute(AllOffers)}
+                  path="/fc-shifts/on-going"
+                  element={privateRoute(OnGoingFacilityShifts)}
                 />
               </Route>
               <Route
                 path="/upcoming-shifts"
                 element={privateRoute(UpcomingShifts)}
-              /> 
-                <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
-                <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
-              <Route path="/messages">
-                <Route index element={privateRoute(Inbox)} />
-                <Route path="/messages/:id" element={privateRoute(Chat)} />
-              </Route>
+              />
+              {/* <Route
+                path="/check_in_outs"
+                element={privateRoute(CheckInOuts)}
+              /> */}
+              <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+              <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
             </Route>
           </Route>
 

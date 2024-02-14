@@ -1,14 +1,17 @@
 import React from "react";
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import { Loader, Page } from "../../components";
 import { base_url } from "../../utils/url";
+import { appActions } from "../../store/slices/appSlice";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
 
 const ForgotPassword = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
+  const [role, setRole] = useState("");
   const [email, setEmail] = useState("");
   const [toggleBtn, setToggleBtn] = useState(false);
   const [params] = useSearchParams();
@@ -27,8 +30,8 @@ const ForgotPassword = () => {
 
     try {
       let formdata = new FormData();
-      formdata.append("type", isCompany ? "Company" : "Project Manager");
       formdata.append("email", email);
+      formdata.append("role_id", role);
 
       let requestOptions = {
         headers: {
@@ -40,7 +43,7 @@ const ForgotPassword = () => {
       };
 
       const res = await fetch(
-        `${base_url}/company-forgot-password`,
+        `${base_url}/user-forgot-password`,
         requestOptions
       );
       json = await res.json();
@@ -49,6 +52,7 @@ const ForgotPassword = () => {
         const data = json.success;
 
         console.log("data", data);
+        dispatch(appActions.set({ otpData: data }));
 
         navigate("/email-verification");
       } else {
@@ -90,20 +94,29 @@ const ForgotPassword = () => {
               id="email"
               onChange={handleChange}
               value={email}
-              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 outline-none transition-all duration-300"
               placeholder="example@gmail.com"
               required={true}
             />
+            <select
+              value={role}
+              onChange={(e) => setRole(e.target.value)}
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 mb-2.5 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 outline-none transition-all duration-300"
+            >
+              <option value="">Select role</option>
+              <option value="1">Staff</option>
+              <option value="3">Facility</option>
+            </select>
 
             <button
               type="submit"
-              className="flex justify-center items-center w-full text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center disabled:bg-blue-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
+              className="flex justify-center items-center w-full text-white bg-primary-500 hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-xs px-5 py-2.5 text-center disabled:bg-primary-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
               disabled={toggleBtn}
             >
               {toggleBtn && (
                 <Loader
                   extraStyles="!static !inset-auto !block !scale-50 !bg-transparent !saturate-100"
-                  loaderColor={toggleBtn ? "fill-blue-300" : ""}
+                  loaderColor={toggleBtn ? "fill-primary-300" : ""}
                 />
               )}
               Next

@@ -8,6 +8,7 @@ import { useSelector } from "react-redux";
 const EmailVerification = () => {
   const navigate = useNavigate();
   const user = useSelector(state => state.user);
+  const appData = useSelector(state => state.app);
   const [state, setState] = useState(null);
   const [counter, setCounter] = useState(600);
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -66,17 +67,17 @@ const EmailVerification = () => {
     e.preventDefault();
     setToggleBtn(true);
 
-    // * console.log("state", state);
+    console.log("state", state);
 
-    // if (otpData.OTP == state) {
-    //   toast.success("Email verification completed!", { duration: 2000 });
-    //   setTimeout(() => {
-    //     navigate("/change-password");
-    //   }, 2000);
-    // } else {
-    //   setToggleBtn(false);
-    //   toast.error("OTP doesn't match! Please try again.", { duration: 1500 });
-    // }
+    if (appData.otpData.OTP == state) {
+      toast.success("Email verification completed!", { duration: 2000 });
+      setTimeout(() => {
+        navigate("/change-password");
+      }, 2000);
+    } else {
+      setToggleBtn(false);
+      toast.error("OTP doesn't match! Please try again.", { duration: 1500 });
+    }
   };
 
   const config = {
@@ -130,7 +131,7 @@ const EmailVerification = () => {
             {counter === 0 && (
               <button
                 onClick={handleResend}
-                className="block mx-auto text-[11px] mt-2 text-blue-500 hover:underline font-medium text-center"
+                className="block mx-auto text-[11px] mt-2 text-primary-500 hover:underline font-medium text-center"
               >
                 Resend
               </button>
@@ -139,13 +140,13 @@ const EmailVerification = () => {
             <button
               type="submit"
               id="continue"
-              className="flex items-center justify-center w-full px-5 py-3 mt-3.5 text-xs font-medium text-center text-white bg-blue-500 rounded-lg hover:bg-blue-600 focus:ring-4 focus:outline-none focus:ring-blue-300 disabled:bg-blue-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
+              className="flex items-center justify-center w-full px-5 py-3 mt-3.5 text-xs font-medium text-center text-white bg-primary-500 rounded-lg hover:bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 disabled:bg-primary-300 disabled:saturate-30 disabled:py-1 disabled:cursor-not-allowed"
               disabled={toggleBtn}
             >
               {toggleBtn && (
                 <Loader
                   extraStyles="!static !inset-auto !block !scale-50 !bg-transparent !saturate-100"
-                  loaderColor={toggleBtn ? "fill-blue-300" : ""}
+                  loaderColor={toggleBtn ? "fill-primary-300" : ""}
                 />
               )}
               Continue

@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Empty, JobCard, Loader, Page } from "../../components";
+import { Empty, Loader, Page } from "../../components";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
+import { JobCard } from "../../components/Cards/Staff";
 
 const getShifts = `${base_url}/upcomming-shift/`;
 

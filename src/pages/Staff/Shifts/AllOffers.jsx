@@ -1,9 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Empty, Loader, Page, RecentJobCard } from "../../../components";
+import { Empty, Loader, Page } from "../../../components";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { base_url } from "../../../utils/url";
 import { BiSearch } from "react-icons/bi";
+import { RecentJobCard } from "../../../components/Cards/Staff";
 
 const getShifts = `${base_url}/get-country-wise-shifts/`;
 
@@ -71,7 +72,7 @@ const AllOffers = () => {
       </div>
 
       <main
-        className={`relative min-h-[80vh] pt-5 ${
+        className={`relative min-h-[80vh] py-5 space-y-2 ${
           loading ? "flex justify-center items-center" : ""
         }`}
       >

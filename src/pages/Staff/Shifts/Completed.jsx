@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from "react";
 import {
-  CompletedJobCard,
   Empty,
-  JobCard,
   Loader,
   Page,
 } from "../../../components";
 import { base_url } from "../../../utils/url";
 import { useSelector } from "react-redux";
+import {CompletedJobCard} from "../../../components/Cards/Staff";
 
 const getShifts = `${base_url}/approved-shift/`;
 

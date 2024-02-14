@@ -30,7 +30,7 @@ const Account = ({ toggle, setSingleToggle }) => {
   const user = useSelector((state) => state.user);
 
   const name = user?.isFacility
-    ? user?.name
+    ? user?.facility_name
     : `${user?.first_name} ${user?.last_name}`;
 
   const logout = useCallback(() => {
@@ -74,7 +74,7 @@ const Account = ({ toggle, setSingleToggle }) => {
           </div>
         )}
         <p className="flex flex-col text-xs font-medium capitalize whitespace-nowrap">
-          {name}
+          <div className="truncate max-w-[125px]">{name}</div>
           <span className="text-[10px] font-normal capitalize">
             {user?.role}
           </span>
