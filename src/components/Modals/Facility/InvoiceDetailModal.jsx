@@ -11,7 +11,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
   const fcData = data?.[user.isAdmin ? "user" : "facility"];
   const profileImage = fcData?.profile_image;
 
-  const close = () => setInvoiceModal({ isOpen: false, data: null });
+  const close = () => setInvoiceModal((prev) => ({ ...prev, isOpen: false }));
 
   const styles = {
     modal: {

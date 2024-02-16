@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { getInputType } from "../../utils";
-import { DropdownField, TextArea, UploadField } from "../Fields";
+import { DropdownField, MultiSelectField, TextArea, UploadField } from "../Fields";
 import toast from "react-hot-toast";
 import moment from "moment/moment";
 
@@ -14,6 +14,7 @@ const EditModal = ({
   excludeFields = ["id"],
   textAreaFields = ["address"],
   appendableFields = ["address"],
+  multiSelectFields = [],
   dropdownFields = [],
   uploadFields = [],
   inputFields = [],
@@ -29,6 +30,7 @@ const EditModal = ({
 
   const uploadKeys = uploadFields.map((e) => e.key);
   const dropdownKeys = dropdownFields.map((e) => e.key);
+  const multiSelectKeys = multiSelectFields.map((e) => e.key);
   const inputKeys = inputFields.map((e) => e.key);
 
   const keys =
@@ -50,12 +52,12 @@ const EditModal = ({
         );
         key = typeof key === "object" ? key.from : key.replace(/^_/, "");
 
-        console.log(key, state[item]);
         if (appendableKeys.includes(key)) {
           const data = appendableFields?.[appendableKeys.indexOf(key)];
-          data?.appendFunc(key, state[item], formdata);
+          data?.appendFunc(key, state[item], formdata, state);
         } else {
           formdata.append(key, state[item]);
+          console.log(key, state[item]);
         }
       });
 
@@ -179,6 +181,24 @@ const EditModal = ({
 
               return (
                 <DropdownField
+                  {...{
+                    ...data,
+                    state: state[elem],
+                    setState: (val) => setValue(elem, val),
+                    required,
+                    arr,
+                  }}
+                />
+              );
+            } else if (multiSelectKeys.includes(elem)) {
+              const index = multiSelectKeys.indexOf(elem);
+              const data = index !== -1 ? multiSelectFields[index] : {};
+
+              const arr =
+                typeof data.arr === "function" ? data.arr(state) : data.arr;
+
+              return (
+                <MultiSelectField
                   {...{
                     ...data,
                     state: state[elem],

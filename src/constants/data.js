@@ -13,20 +13,18 @@ import {
 import { GoHomeFill } from "react-icons/go";
 import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
 import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
-import { BsFillPersonFill, BsPersonBadgeFill } from "react-icons/bs";
+import { BsPersonBadgeFill } from "react-icons/bs";
 import {
   MdCoPresent,
+  MdLock,
   MdMessage,
   MdOutlinePlaylistAddCheck,
-  MdSubscriptions,
 } from "react-icons/md";
-import { AiFillDollarCircle } from "react-icons/ai";
 import { RxLapTimer } from "react-icons/rx";
 import {
   IoCheckmarkDoneCircleOutline,
   IoClipboardOutline,
 } from "react-icons/io5";
-import InvoicesIcon from "../assets/images/TabIcon/bottleNonActive.png";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 
 // Roles
@@ -43,6 +41,14 @@ export const defaultRoutes = {
   3: "/dashboard",
 };
 
+export const permissions = [
+  { label: "Service", key: "Service", value: "Manage Service" },
+  { label: "Staff", key: "Staff", value: "Manage Staff" },
+  { label: "Facility", key: "Facility", value: "Manage Facility" },
+  { label: "Admin", key: "Admin", value: "Manage Admin" },
+  { label: "Invoice", key: "Invoice", value: "Manage Invoice" },
+];
+
 // NavLinks
 export const navLinks = {
   Admin: [
@@ -51,6 +57,12 @@ export const navLinks = {
       id: 1,
       path: "/dashboard",
       title: "dashboard",
+    },
+    {
+      icon: <MdLock className="-ml-0.5 text-xl" />,
+      id: 3,
+      path: "/manage-roles",
+      title: "manage_roles",
     },
     {
       icon: <FaUserTie className="-ml-0.5 text-xl" />,
@@ -64,18 +76,18 @@ export const navLinks = {
       path: "/manage-staff",
       title: "manage_staff",
     },
-    // {
-    //   icon: <HiMiniBuildingOffice className="-ml-0.5 text-xl" />,
-    //   id: 3,
-    //   path: "/manage-facility",
-    //   title: "manage_facility",
-    // },
-    // {
-    //   icon: <FaBriefcaseMedical className="text-lg" />,
-    //   id: 4,
-    //   path: "/service-types",
-    //   title: "service_types",
-    // },
+    {
+      icon: <HiMiniBuildingOffice className="-ml-0.5 text-xl" />,
+      id: 3,
+      path: "/manage-facility",
+      title: "manage_facility",
+    },
+    {
+      icon: <FaBriefcaseMedical className="text-lg" />,
+      id: 4,
+      path: "/service-types",
+      title: "service_types",
+    },
     {
       icon: <IoClipboardOutline className="text-lg" />,
       id: 4,

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import Actions from "../Actions";
-import { image_base_url } from "../../utils/url";
+// import { image_base_url } from "../../utils/url";
 
 const CommonTable = ({
   state,
@@ -116,7 +116,7 @@ const CommonTable = ({
                         className="px-6 py-4 text-xs text-center whitespace-nowrap md:whitespace-normal"
                       >
                         <img
-                          src={image_base_url + data[key]}
+                          src={data[key]}
                           alt={key}
                           className="object-cover object-center h-10 mx-auto origin-center"
                         />

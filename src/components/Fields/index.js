@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useMemo, useState } from "react";
+import { MultiSelect } from "react-multi-select-component";
 
 export const TextArea = (props) => {
   const { elem, state, setState, gridCols = 2, required = false } = props;
@@ -141,6 +142,36 @@ export const DateField = ({
         onChange={(e) => setState(e.target.value)}
         className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
         required={required}
+      />
+    </div>
+  );
+};
+
+export const MultiSelectField = ({
+  keyName,
+  state,
+  setState,
+  gridCols,
+  arr,
+  title,
+  ...props
+}) => {
+  console.log('state', state)
+  return (
+    <div>
+      <label
+        className="block mb-2 text-xs font-medium text-gray-900 capitalize"
+        htmlFor={title}
+      >
+        {title.replaceAll("_", " ")}
+      </label>
+      <MultiSelect
+        options={arr}
+        value={state}
+        onChange={setState}
+        className="block w-full text-xs text-gray-900 rounded-lg cursor-pointer"
+        labelledBy="Select"
+        {...props}
       />
     </div>
   );

@@ -13,6 +13,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../utils/url";
 import { modifyData } from "../utils";
+import toast from "react-hot-toast";
 
 const Actions = ({
   id,
@@ -30,6 +31,7 @@ const Actions = ({
   setPaymentModal,
   setMarkReceivedModal,
   setNotificationModal,
+  hasEditAccess,
   blockUrl,
   deleteUrl,
 }) => {
@@ -320,7 +322,11 @@ const Actions = ({
       element = (
         <td className="self-center px-6 py-2 pt-4 text-lg text-center">
           <button
-            onClick={() => setEditModal({ isOpen: true, data })}
+            onClick={() =>
+              hasEditAccess
+                ? setEditModal({ isOpen: true, data })
+                : toast.error("You don't have access to edit on this page!")
+            }
             className="font-medium text-gray-600 hover:text-gray-800"
           >
             <MdModeEdit />

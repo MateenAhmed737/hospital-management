@@ -52,6 +52,8 @@ const Invoices = () => {
     data: null,
   });
 
+  const hasAddAccess = user?.permissions?.add?.includes("Invoice");
+
   const createModalProps = {
     title: "Create Invoice",
     createUrl: createUrl + user.id,
@@ -129,7 +131,7 @@ const Invoices = () => {
         </div>
 
         {/* Create New */}
-        {user.isAdmin && (
+        {user.isAdmin && hasAddAccess && (
           <div className="flex items-center justify-between p-3 mt-5 rounded-md bg-primary-100">
             <span className="text-sm font-semibold">Create New Invoice</span>
             <button

@@ -32,9 +32,12 @@ import {
   CheckInOuts,
 } from "../pages/Facility";
 import {
-  ManageAdmins
+  ManageAdmins,
+  ManageFacility,
+  ServiceTypes,
+  ManageStaff,
+  Roles,
 } from "../pages/Admin";
-import ManageStaff from "../pages/Admin/ManageStaff";
 
 // Router component handles the routing of the application
 const Router = () => {
@@ -113,9 +116,16 @@ const Router = () => {
                 element={privateRoute(ManageAdmins)}
               />
               <Route path="/manage-staff" element={privateRoute(ManageStaff)} />
-              {/* <Route path="/manage-facility" element={privateRoute(ManageFacility)} /> */}
-              {/* <Route path="/service-types" element={privateRoute(ManageServiceTypes)} /> */}
+              <Route
+                path="/manage-facility"
+                element={privateRoute(ManageFacility)}
+              />
+              <Route
+                path="/service-types"
+                element={privateRoute(ServiceTypes)}
+              />
               <Route path="/invoices" element={privateRoute(Invoices)} />
+              <Route path="/manage-roles" element={privateRoute(Roles)} />
             </Route>
 
             {/* For Facility (3) */}

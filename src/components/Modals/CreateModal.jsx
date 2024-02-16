@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import { getInputType } from "../../utils";
-import { DropdownField, TextArea, UploadField } from "../Fields";
+import { DropdownField, MultiSelectField, TextArea, UploadField } from "../Fields";
 
 import Button from "../Buttons/Button";
 import toast from "react-hot-toast";
@@ -14,6 +14,7 @@ const CreateModal = ({
   gridCols = 2,
   excludeFields = ["id"],
   textAreaFields = ["address"],
+  multiSelectFields = [],
   appendableFields = [],
   dropdownFields = [],
   uploadFields = [],
@@ -31,6 +32,7 @@ const CreateModal = ({
 
   const uploadKeys = uploadFields.map((e) => e.key);
   const dropdownKeys = dropdownFields.map((e) => e.key);
+  const multiSelectKeys = multiSelectFields.map((e) => e.key);
   const inputKeys = inputFields.map((e) => e.key);
 
   const keys = Object.keys(state).filter((e) => !excludeFields.includes(e));
@@ -51,13 +53,13 @@ const CreateModal = ({
         );
         key = typeof key === "object" ? key.from : key.replace(/^_/, "");
 
-        console.log(key, state[item]);
-
+        
         if (appendableKeys.includes(key)) {
           const data = appendableFields?.[appendableKeys.indexOf(key)];
-          data?.appendFunc(key, state[item], formdata);
+          data?.appendFunc(key, state[item], formdata, state);
         } else {
-          formdata.append(key, state[item]);
+        formdata.append(key, state[item]);
+          console.log(key, state[item]);
         }
       });
 
@@ -171,6 +173,24 @@ const CreateModal = ({
                     required: data?.hasOwnProperty("required")
                       ? data.required
                       : required,
+                  }}
+                />
+              );
+            } else if (multiSelectKeys.includes(elem)) {
+              const index = multiSelectKeys.indexOf(elem);
+              const data = index !== -1 ? multiSelectFields[index] : {};
+
+              const arr =
+                typeof data.arr === "function" ? data.arr(state) : data.arr;
+
+              return (
+                <MultiSelectField
+                  {...{
+                    ...data,
+                    state: state[elem],
+                    setState: (val) => setValue(elem, val),
+                    required,
+                    arr,
                   }}
                 />
               );

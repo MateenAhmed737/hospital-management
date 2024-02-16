@@ -8,6 +8,7 @@ const ViewModal = ({
   longFields = [],
   linkFields = [],
   imageFields = [],
+  dollarFields = [],
 }) => {
   const data = viewModal.data;
   const keys = Object.keys(data).filter((e) => !excludeFields.includes(e));
@@ -80,6 +81,8 @@ const ViewModal = ({
                           >
                             {data[elem]}
                           </a>
+                        ) : dollarFields.includes(elem) ? (
+                          "$" + Number(data[elem] || 0).toFixed(2)
                         ) : elem?.toLowerCase().includes("date/time") ? (
                           new Date(data[elem]).toLocaleString()
                         ) : imageFields.includes(elem) ? (
