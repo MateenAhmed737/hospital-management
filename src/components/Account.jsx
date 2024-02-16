@@ -31,6 +31,8 @@ const Account = ({ toggle, setSingleToggle }) => {
 
   const name = user?.isFacility
     ? user?.facility_name
+    : user?.isAdmin
+    ? user?.name
     : `${user?.first_name} ${user?.last_name}`;
 
   const logout = useCallback(() => {

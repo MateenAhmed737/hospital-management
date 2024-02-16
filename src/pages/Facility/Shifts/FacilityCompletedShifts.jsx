@@ -18,7 +18,7 @@ const FacilityCompletedShifts = () => {
         fetch(getShifts + user?.id)
           .then((res) => res.json())
           .then((res) => {
-            const data = res.success.data || [];
+            const data = res.success.data.completed_shifts || [];
             setShifts({ loading: false, data });
           })
           .catch((err) => console.error(err))

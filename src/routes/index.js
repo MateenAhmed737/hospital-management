@@ -21,6 +21,7 @@ import {
   AllOffers,
   FavJobs,
   RecentJobs,
+  Invoices,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -30,6 +31,10 @@ import {
   AllFacilityShifts,
   CheckInOuts,
 } from "../pages/Facility";
+import {
+  ManageAdmins
+} from "../pages/Admin";
+import ManageStaff from "../pages/Admin/ManageStaff";
 
 // Router component handles the routing of the application
 const Router = () => {
@@ -74,6 +79,11 @@ const Router = () => {
               </Route>
             </Route>
 
+            {/* For Staff (1), Admins (2) and Facalities (3) */}
+            <Route element={<Auth allowedRoles={["2", "3"]} />}>
+              <Route path="/invoices" element={privateRoute(Invoices)} />
+            </Route>
+
             {/* For Staff (1) */}
             <Route element={<Auth allowedRoles={["1"]} />}>
               <Route path="/shifts">
@@ -96,6 +106,18 @@ const Router = () => {
               </Route>
             </Route>
 
+            {/* For Admins (2) */}
+            <Route element={<Auth allowedRoles={["2"]} />}>
+              <Route
+                path="/manage-admin"
+                element={privateRoute(ManageAdmins)}
+              />
+              <Route path="/manage-staff" element={privateRoute(ManageStaff)} />
+              {/* <Route path="/manage-facility" element={privateRoute(ManageFacility)} /> */}
+              {/* <Route path="/service-types" element={privateRoute(ManageServiceTypes)} /> */}
+              <Route path="/invoices" element={privateRoute(Invoices)} />
+            </Route>
+
             {/* For Facility (3) */}
             <Route element={<Auth allowedRoles={["3"]} />}>
               <Route path="/fc-shifts">
@@ -113,10 +135,10 @@ const Router = () => {
                 path="/upcoming-shifts"
                 element={privateRoute(UpcomingShifts)}
               />
-              {/* <Route
+              <Route
                 path="/check_in_outs"
                 element={privateRoute(CheckInOuts)}
-              /> */}
+              />
               <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
             </Route>

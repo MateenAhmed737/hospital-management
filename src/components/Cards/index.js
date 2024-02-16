@@ -1,3 +1,4 @@
+import InvoiceCard from "./InvoiceCard";
 import MessageCard from "./MessageCard";
 
-export { MessageCard };
+export { MessageCard, InvoiceCard };

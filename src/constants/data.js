@@ -1,6 +1,15 @@
 import React from "react";
 import { GiSandsOfTime } from "react-icons/gi";
-import { FaCheck, FaClipboardList, FaFileInvoiceDollar, FaHeart, FaList } from "react-icons/fa";
+import {
+  FaBriefcaseMedical,
+  FaCheck,
+  FaClipboardList,
+  FaFileInvoiceDollar,
+  FaHeart,
+  FaList,
+  FaUser,
+  FaUserTie,
+} from "react-icons/fa";
 import { GoHomeFill } from "react-icons/go";
 import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
 import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
@@ -13,7 +22,12 @@ import {
 } from "react-icons/md";
 import { AiFillDollarCircle } from "react-icons/ai";
 import { RxLapTimer } from "react-icons/rx";
-import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
+import {
+  IoCheckmarkDoneCircleOutline,
+  IoClipboardOutline,
+} from "react-icons/io5";
+import InvoicesIcon from "../assets/images/TabIcon/bottleNonActive.png";
+import { HiMiniBuildingOffice } from "react-icons/hi2";
 
 // Roles
 export const roles = {
@@ -39,46 +53,34 @@ export const navLinks = {
       title: "dashboard",
     },
     {
-      icon: <AiFillDollarCircle className="-ml-0.5 text-xl" />,
-      id: 2,
-      title: "Invoices",
-      path: "/invoices",
-    },
-    {
-      icon: <MdCoPresent className="text-xl" />,
+      icon: <FaUserTie className="-ml-0.5 text-xl" />,
       id: 3,
-      path: "/project-managers",
-      title: "project_managers",
+      path: "/manage-admin",
+      title: "manage_admin",
     },
     {
-      icon: <BsFillPersonFill className="-ml-0.5 text-xl" />,
+      icon: <FaUser className="-ml-0.5 text-xl" />,
+      id: 3,
+      path: "/manage-staff",
+      title: "manage_staff",
+    },
+    // {
+    //   icon: <HiMiniBuildingOffice className="-ml-0.5 text-xl" />,
+    //   id: 3,
+    //   path: "/manage-facility",
+    //   title: "manage_facility",
+    // },
+    // {
+    //   icon: <FaBriefcaseMedical className="text-lg" />,
+    //   id: 4,
+    //   path: "/service-types",
+    //   title: "service_types",
+    // },
+    {
+      icon: <IoClipboardOutline className="text-lg" />,
       id: 4,
-      path: "/sellers",
-      title: "sellers",
-    },
-    {
-      icon: <FaPersonDigging className="text-xl" />,
-      id: 5,
-      path: "/workers",
-      title: "workers",
-    },
-    {
-      icon: <IoMdBriefcase className="text-xl" />,
-      id: 6,
-      path: "/jobs",
-      title: "jobs",
-    },
-    {
-      icon: <FaClipboardList className="text-xl" />,
-      id: 7,
-      path: "/tasks-list",
-      title: "tasks_list",
-    },
-    {
-      icon: <MdSubscriptions className="text-xl" />,
-      id: 7,
-      path: "/billing-and-transactions",
-      title: "billing_and_transactions",
+      path: "/invoices",
+      title: "invoices",
     },
   ],
   Facility: [
@@ -96,26 +98,32 @@ export const navLinks = {
       items: [
         {
           title: "All",
-          path: "/fc-shifts"
+          path: "/fc-shifts",
         },
         {
           title: "OnGoing",
-          path: "/fc-shifts/on-going"
+          path: "/fc-shifts/on-going",
         },
         {
           title: "Completed",
-          path: "/fc-shifts/completed"
+          path: "/fc-shifts/completed",
         },
-      ]
+      ],
     },
-    // {
-    //   id: 3,
-    //   icon: <IoCheckmarkDoneCircleOutline className="text-xl -ml-0.5" />,
-    //   title: "check_in/check_out",
-    //   path: "/check_in_outs",
-    // },
+    {
+      id: 3,
+      icon: <IoCheckmarkDoneCircleOutline className="text-xl -ml-0.5" />,
+      title: "check_in/check_out",
+      path: "/check_in_outs",
+    },
     {
       id: 4,
+      icon: <IoClipboardOutline className="text-lg" />,
+      title: "invoices",
+      path: "/invoices",
+    },
+    {
+      id: 5,
       icon: <MdMessage className="text-lg" />,
       title: "messages",
       path: "/messages",
@@ -136,17 +144,17 @@ export const navLinks = {
       items: [
         {
           title: "Recent",
-          path: "/shifts"
+          path: "/shifts",
         },
         {
           title: "Completed",
-          path: "/shifts/completed"
+          path: "/shifts/completed",
         },
         {
           title: "All Offers",
-          path: "/shifts/all"
+          path: "/shifts/all",
         },
-      ]
+      ],
     },
     {
       id: 2,
@@ -990,7 +998,14 @@ export const states = {
     "Juzur Hawar",
     "Sitrah",
   ],
-  Bangladesh: ["Barisal", "Chittagong", "Dhaka", "Khulna", "Rajshahi", "Sylhet"],
+  Bangladesh: [
+    "Barisal",
+    "Chittagong",
+    "Dhaka",
+    "Khulna",
+    "Rajshahi",
+    "Sylhet",
+  ],
   Barbados: [
     "Christ Church",
     "Saint Andrew",

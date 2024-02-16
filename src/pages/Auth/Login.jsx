@@ -72,14 +72,12 @@ const Login = () => {
         data.isAdmin = data.role_id === "2";
         data.isFacility = data.role_id === "3";
 
-        if (!data.isAdmin) {
-          toast.success("Login successful!", { duration: 2000 });
-          dispatch(userActions.set(data));
+        toast.success("Login successful!", { duration: 2000 });
+        dispatch(userActions.set(data));
 
-          setTimeout(() => {
-            navigate("/dashboard");
-          }, 2000);
-        }
+        setTimeout(() => {
+          navigate("/dashboard");
+        }, 2000);
       } else {
         toast.error(
           json.error.message === "Incorrect Credential"

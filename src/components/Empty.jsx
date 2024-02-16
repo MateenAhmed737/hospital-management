@@ -9,7 +9,7 @@ const Empty = ({ title = "No data found!", noMargin = false }) => {
         className={"w-full max-w-xs mx-auto" + (noMargin ? "" : " mt-8")}
         alt={title}
       />
-      <span className="text-primary-500">{title}</span>
+      <span className="text-sm text-primary-500">{title}</span>
     </div>
   );
 };

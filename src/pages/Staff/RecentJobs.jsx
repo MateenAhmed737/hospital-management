@@ -10,6 +10,7 @@ import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
 
 const getShifts = `${base_url}/recent-bits/`;
+const bookmark = `${base_url}/book-marked-shifts/`;
 
 const RecentJobs = () => {
   const user = useSelector((state) => state.user);
@@ -85,7 +86,7 @@ const RecentJobs = () => {
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          filteredData.map((item) => <RecentJob {...item} />)
+          filteredData.map((item) => <RecentJob {...item} user={user} />)
         ) : (
           <Empty title="No shifts found!" />
         )}
@@ -97,11 +98,26 @@ const RecentJobs = () => {
 const RecentJob = (data) => {
   const [shiftModal, setShiftModal] = useState(false);
 
-  const handleBookmark = () => {};
+  const handleBookmark = () => {
+  //   fetch(bookmark + data.id, {
+  //     method: "POST",
+  //   })
+  //     .then((res) => res.json())
+  //     .then((res) => {
+  //       console.log('res', res)
+        // if (res.success) {
+        //   console.log(res.success.data);
+        // }
+      // })
+      // .catch((err) => console.error(err));
+  };
 
   return (
     <div className="relative">
-      <button className="absolute text-primary-500 top-2 right-2" onClick={handleBookmark}>
+      <button
+        className="absolute text-primary-500 top-2 right-2"
+        onClick={handleBookmark}
+      >
         <FaBookmark />
       </button>
       <button
