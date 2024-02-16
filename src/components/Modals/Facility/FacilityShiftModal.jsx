@@ -180,7 +180,7 @@ const FacilityShiftModal = ({
               <p className="text-gray-600">{data?.description}</p>
 
               <p className="mt-4 text-sm font-semibold">Job Detail</p>
-              {details.map((item) => (
+              {details?.map((item) => (
                 // use summary tag
                 <details className="mt-1.5 mb-3">
                   <summary className="font-semibold text-gray-900">
@@ -422,7 +422,7 @@ const BidsModal = ({ bidsModal, setBidsModal }) => {
   );
 };
 
-const BoostShiftModal = ({ boostModal, setBoostModal, data }) => {
+export const BoostShiftModal = ({ boostModal, setBoostModal, data }) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [budget, setBudget] = useState(0);

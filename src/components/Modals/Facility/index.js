@@ -1,3 +1,4 @@
 import FacilityShiftModal from "./FacilityShiftModal";
+import InvoiceDetailsModal from "./InvoiceDetailModal";
 
-export { FacilityShiftModal };
+export { FacilityShiftModal, InvoiceDetailsModal };

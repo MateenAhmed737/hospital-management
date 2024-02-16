@@ -5,6 +5,7 @@ import ImagesViewer from "./ImagesViewer";
 import ViewModal from "./ViewModal";
 import NotificationModal from "./NotificationModal";
 import ShiftModal from "./ShiftModal";
+export * from "./Facility";
 
 export {
   AddNewModal,

@@ -22,6 +22,7 @@ export const getInputType = (key) => {
     str.includes("code") ||
     str.includes("work_budget") ||
     str.includes("salary") ||
+    str.includes("vat") ||
     str.includes("costing") ||
     str.includes("sin_number")
   ) {

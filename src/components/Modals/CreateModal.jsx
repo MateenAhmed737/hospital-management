@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import { getInputType } from "../../utils";
 import { DropdownField, TextArea, UploadField } from "../Fields";
@@ -7,6 +7,7 @@ import Button from "../Buttons/Button";
 import toast from "react-hot-toast";
 
 const CreateModal = ({
+  title = "Create",
   createUrl,
   createModal,
   setCreateModal,
@@ -135,7 +136,7 @@ const CreateModal = ({
     >
       <form onSubmit={handleSubmit} className={styles.content}>
         <div className={styles.header}>
-          <h2 className="text-lg font-semibold">Create</h2>
+          <h2 className="text-lg font-semibold">{title}</h2>
           <button type="button" onClick={close} className={styles.closeButton}>
             <VscClose />
           </button>

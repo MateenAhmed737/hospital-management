@@ -7,6 +7,7 @@ const Button = ({
   type = "button",
   extraStyles = "",
   loading,
+  isLoading,
   disabled = false,
   children,
 }) => {
@@ -17,7 +18,7 @@ const Button = ({
       type={type}
       disabled={disabled || loading}
     >
-      {loading && <Loader extraStyles={"w-6 h-6 !bg-transparent !static"} />}
+      {(isLoading || loading) && <Loader extraStyles={"w-6 h-6 !bg-transparent !static"} />}
       {title}
       {children}
     </button>

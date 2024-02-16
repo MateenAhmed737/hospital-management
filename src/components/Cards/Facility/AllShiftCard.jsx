@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { FacilityShiftModal } from "../../Modals/Facility";
 import { convertTime } from "../../../utils";
+import { BoostShiftModal } from "../../Modals/Facility/FacilityShiftModal";
 
 const AllShiftCard = ({
   data,
@@ -9,8 +10,12 @@ const AllShiftCard = ({
   disableBids = false,
   disableDetail = false,
   setData,
+  enableBoost = false,
 }) => {
   const [shiftModal, setShiftModal] = useState(false);
+  const [boostModal, setBoostModal] = useState(false);
+
+  const canBoostShift = enableBoost && data?.boost_status === "No";
 
   return (
     <>
@@ -37,17 +42,27 @@ const AllShiftCard = ({
 
           <div className="flex items-center justify-between mt-3">
             <span className="text-xs">Shift Date: {data.opening_date}</span>
-            {!disableDetail && <button
-              onClick={() => setShiftModal(true)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Details
-            </button>}
+            {!disableDetail && (
+              <button
+                onClick={() => setShiftModal(true)}
+                className="text-sm font-semibold text-primary-500 hover:text-primary-700"
+              >
+                Details
+              </button>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <span className="text-xs">
               Shift Timing: {convertTime(data.start_time)}
             </span>
+            {canBoostShift && (
+              <button
+                onClick={() => setBoostModal(true)}
+                className="text-sm font-semibold text-primary-500 hover:text-primary-700"
+              >
+                Boost your job
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -58,6 +73,13 @@ const AllShiftCard = ({
           disableBids={disableBids}
           data={data}
           setData={setData}
+        />
+      )}
+      {canBoostShift && boostModal && (
+        <BoostShiftModal
+          boostModal={boostModal}
+          setBoostModal={setBoostModal}
+          data={data}
         />
       )}
     </>

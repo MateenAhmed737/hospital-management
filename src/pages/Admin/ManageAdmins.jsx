@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { convertPropsToObject, fetchData, modifyData } from "../../utils";
+import { convertPropsToObject, fetchData } from "../../utils";
 import { base_url } from "../../utils/url";
 import GeneralPage from "../GeneralPage";
 
@@ -26,6 +26,7 @@ const ManageAdmins = () => {
   const [, setSearchText] = useState("");
   const [data, setData] = useState(null);
   const [roles, setRoles] = useState([]);
+  const [reload, setReload] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [paginatedData, setPaginatedData] = useState({
     items: [],
@@ -51,22 +52,23 @@ const ManageAdmins = () => {
   };
 
   const editCallback = (res) => {
-    const resData = modifyData(res?.success?.data, neededProps, true);
-    const newState = data.map((item) =>
-      item.id === resData.id ? resData : item
-    );
-    setData(newState);
-    setPaginatedData((prev) => ({ ...prev, items: newState }));
+    // const resData = modifyData(res?.success?.data, neededProps, true);
+    // const newState = data.map((item) =>
+    //   item.id === resData.id ? resData : item
+    // );
+    // setData(newState);
+    // setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
+    setReload(!reload)
   };
 
   const uploadFields = [
     {
       key: "profile_image",
       title: "profile_image",
-      canUploadMultiple: true,
-      required: false,
+      canUploadMultiple: false,
+      required: true,
     },
   ];
 
@@ -76,7 +78,6 @@ const ManageAdmins = () => {
       title: "roles",
       arr: roles,
       getOption: (val) => val.roles,
-      getValue: (val) => val.id,
     },
     {
       key: "status",
@@ -104,8 +105,8 @@ const ManageAdmins = () => {
     {
       key: "roles",
       appendFunc: (key, state, formdata) => {
-        formdata.append("role_id", state);
-        formdata.append("roles", roles.find((e) => e.id == state).roles);
+        formdata.append("role_id", roles.find((e) => e.roles == state).id);
+        formdata.append("roles", state);
       },
     },
   ];
@@ -145,6 +146,7 @@ const ManageAdmins = () => {
       dropdownFields,
       hideFields: [""],
       successCallback: editCallback,
+      required: true,
     },
     editModalProps: {
       textAreaFields: [""],
@@ -166,6 +168,7 @@ const ManageAdmins = () => {
     },
     viewModalProps: {
       excludeFields: ["_created_at", "_updated_at", "role_id"],
+      imageFields: ["profile_image"],
     },
   };
 
@@ -197,7 +200,7 @@ const ManageAdmins = () => {
     });
 
     fetchRoles();
-  }, []);
+  }, [reload]);
 
   return <GeneralPage {...props} />;
 };

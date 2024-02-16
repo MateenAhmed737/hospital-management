@@ -7,7 +7,6 @@ import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
 import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
-import { Link } from "react-router-dom";
 import * as echarts from "echarts";
 
 const getAnalytics = `${base_url}/admin-dashboard/`;

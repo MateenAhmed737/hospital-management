@@ -41,7 +41,7 @@ const AllFacilityShifts = () => {
             .slice()
             .reverse()
             .map((shift) => (
-              <AllShiftCard {...shift} data={shift} setData={setShifts} />
+              <AllShiftCard enableBoost {...shift} data={shift} setData={setShifts} />
             ))
         ) : (
           <Empty title="No shifts found!" noMargin />

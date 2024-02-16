@@ -58,7 +58,7 @@ function Pagination({ paginatedData, setPaginatedData }) {
           <select
             defaultValue={paginationEntries[1]}
             onChange={handleSelect}
-            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 py-1"
+            className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 py-1"
           >
             {paginationEntries.map((item) => (
               <option className="text-xs" key={item} value={item}>
@@ -81,11 +81,11 @@ function Pagination({ paginatedData, setPaginatedData }) {
         previousLabel="Previous"
         renderOnZeroPageCount={null}
         className="flex justify-center items-center space-x-1 text-sm p-2.5 py-4 overflow-x-auto"
-        activeLinkClassName="px-2.5 py-1 !bg-blue-600 text-white"
-        breakLinkClassName="px-2.5 py-1 bg-blue-500 rounded-md hover:bg-blue-600 hover:text-white"
-        pageLinkClassName="px-2.5 py-1 bg-blue-500 rounded-md hover:bg-blue-600 hover:text-white"
-        nextLinkClassName="px-4 py-1.5 bg-blue-500 text-xs rounded-md hover:bg-blue-600 hover:text-white whitespace-nowrap"
-        previousLinkClassName="px-4 py-1.5 bg-blue-500 text-xs rounded-md hover:bg-blue-600 hover:text-white whitespace-nowrap"
+        activeLinkClassName="px-2.5 py-1 !bg-primary-600 text-white"
+        breakLinkClassName="px-2.5 py-1 bg-primary-500 rounded-md hover:bg-primary-600 hover:text-white"
+        pageLinkClassName="px-2.5 py-1 bg-primary-500 rounded-md hover:bg-primary-600 hover:text-white"
+        nextLinkClassName="px-4 py-1.5 bg-primary-500 text-xs rounded-md hover:bg-primary-600 hover:text-white whitespace-nowrap"
+        previousLinkClassName="px-4 py-1.5 bg-primary-500 text-xs rounded-md hover:bg-primary-600 hover:text-white whitespace-nowrap"
         disabledClassName="opacity-90 cursor-not-allowed saturate-0 bg-gray-300 hover:bg-gray-300 hover:!text-black"
         disabledLinkClassName="opacity-90 cursor-not-allowed saturate-0 bg-gray-300 hover:bg-gray-300 hover:!text-black"
       />
