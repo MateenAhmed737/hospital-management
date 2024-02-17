@@ -156,7 +156,7 @@ export const MultiSelectField = ({
   title,
   ...props
 }) => {
-  console.log('state', state)
+  console.log("state", state);
   return (
     <div>
       <label
@@ -174,5 +174,52 @@ export const MultiSelectField = ({
         {...props}
       />
     </div>
+  );
+};
+
+export const FacilityHourlyRates = ({
+  state,
+  setState,
+  required = true,
+  gridCols,
+}) => {
+  const classes = useMemo(
+    () => ({
+      header: (gridCols === 2 ? "col-span-1 sm:col-span-2" : "col-span-1") + " mt-6 font-semibold text-sm text-gray-700",
+      field: "col-span-1",
+    }),
+    [gridCols]
+  );
+
+  const handleChange = (e) => {
+    const indx = e.target.id;
+    const value = e.target.value;
+
+    const newState = [...state];
+    newState[indx].amount = value;
+
+    setState(newState);
+  };
+
+  return (
+    <>
+      <div className={classes.header}>Hourly Rates</div>
+
+      {state.map(({ type, amount }, indx) => (
+        <div className={classes.field}>
+          <label className="block mb-2 text-xs font-medium text-gray-900 capitalize">
+            {type?.replace(/_/g, " ")}
+          </label>
+          <input
+            id={indx}
+            type="number"
+            defaultValue={amount}
+            onChange={handleChange}
+            className="shadow-sm bg-gray-50 border transition-all duration-300 border-gray-300 text-gray-900 text-xs rounded-lg outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+            required={required}
+          />
+        </div>
+      ))}
+    </>
   );
 };

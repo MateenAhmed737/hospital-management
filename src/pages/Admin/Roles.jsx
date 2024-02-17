@@ -22,7 +22,6 @@ const Roles = () => {
     curItems: [],
   });
 
-
   const search = (e) => {
     const str = e.target.value;
     setSearchText(str.trim());
@@ -71,9 +70,9 @@ const Roles = () => {
       key: "view",
       appendFunc: (key, value, formdata, state) => {
         const permissions = {
-          add: state._add,
-          update: state._update,
-          view: state._view,
+          add: state._add.map(e => e.label),
+          update: state._update.map(e => e.label),
+          view: state._view.map(e => e.label),
         };
         console.log("permission", JSON.stringify(permissions));
         formdata.append("permission", JSON.stringify(permissions));
@@ -98,7 +97,7 @@ const Roles = () => {
     isLoading,
     actions: {
       deleteUrl,
-      hasEditAccess: true
+      hasEditAccess: true,
     },
     search: {
       type: "text",
@@ -177,11 +176,22 @@ const Roles = () => {
       setIsLoading,
       sort: (data) => data?.sort((a, b) => b.id - a.id),
       callback: (data) => {
+        const updateLabels = (arr) => {
+          if (typeof arr[0] !== "object") {
+            return arr.map((e) => ({
+              label: e,
+              value: permissions.find((j) => j.label === e).value,
+            }));
+          }
+
+          return arr;
+        };
+
         const newData = data.map((item) => {
-          const permissions = item?._permission;
-          const _add = permissions?.add || [];
-          const _update = permissions?.update || [];
-          const _view = permissions?.view || [];
+          const user_permissions = item?._permission;
+          const _add = updateLabels(user_permissions?.add) || [];
+          const _update = updateLabels(user_permissions?.update) || [];
+          const _view = updateLabels(user_permissions?.view) || [];
 
           return { ...item, _view, _add, _update };
         });

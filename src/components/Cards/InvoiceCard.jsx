@@ -11,6 +11,7 @@ const InvoiceCard = (data) => {
       ? "text-red-600"
       : "";
 
+  const isByAdmin = data?.invoice_by === "Admin";
   const fcData = data?.[user.isAdmin ? "user" : "facility"];
   const profileImage = fcData?.profile_image;
 
@@ -32,7 +33,9 @@ const InvoiceCard = (data) => {
           </div>
         )}
         <p className="flex flex-col items-start space-y-1">
-          <span className="text-sm font-medium">{fcData?.facility_name}</span>
+          <span className="text-sm font-medium">
+            {isByAdmin ? data?.company : fcData?.facility_name}
+          </span>
           <span className="text-xs text-gray-400">
             {new Date(data.created_at).toLocaleString()}
           </span>
@@ -42,7 +45,7 @@ const InvoiceCard = (data) => {
       <p className="flex flex-col items-end space-y-0.5">
         <span className={`text-xs ${color}`}>{data.status}</span>
         <span className="text-sm">
-          ${Number(data.total_amount || 0).toFixed(2)}
+          ${Number(data.total_amount || data?.amount || 0).toFixed(2)}
         </span>
       </p>
     </button>

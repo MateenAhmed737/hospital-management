@@ -117,7 +117,7 @@ const CreateModal = ({
     closeButton:
       "text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-base p-1.5 ml-auto inline-flex items-center",
     input:
-      "w-full shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500/50 focus:border-blue-600 block p-2.5",
+      "w-full shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:border-primary-600 transition-all duration-300 block p-2.5",
     createButton: `!w-full !rounded-md ${isLoading ? "!py-2" : "!py-3"}`,
   };
 

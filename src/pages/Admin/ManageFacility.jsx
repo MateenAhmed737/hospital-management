@@ -17,7 +17,6 @@ const neededProps = [
   "phone_number",
   "_device_name",
   "_device_token",
-  // "hourly_rate",
   "_information",
   "_name_contact",
   "_address_1",
@@ -29,6 +28,7 @@ const neededProps = [
   "_state",
   "zip_code",
   "status",
+  "_hourly_rate",
   // "created_at",
   // "updated_at",
 ];
@@ -141,6 +141,12 @@ const ManageFacility = () => {
         }
       },
     },
+    {
+      key: "hourly_rate",
+      appendFunc: (key, value, formdata) => {
+        formdata.append(key, JSON.stringify(value));
+      },
+    },
   ];
 
   const props = {
@@ -150,7 +156,9 @@ const ManageFacility = () => {
     setData,
     template,
     isLoading,
-    actions: {},
+    actions: {
+      hasEditAccess,
+    },
     search: {
       type: "text",
       onChange: search,
@@ -175,6 +183,7 @@ const ManageFacility = () => {
         "role_id",
         "_device_name",
         "_device_token",
+        "_hourly_rate",
       ],
       dropdownFields,
       hideFields: ["_role_id"],

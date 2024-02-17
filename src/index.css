@@ -139,3 +139,7 @@ SELECT {
     height: 40px;
   }
 }
+
+input {
+  outline: none;
+}
