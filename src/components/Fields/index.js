@@ -19,7 +19,7 @@ export const TextArea = (props) => {
         id={title}
         value={state}
         onChange={(e) => setState(e.target.value)}
-        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5"
+        className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg outline-none focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
         placeholder={"Write " + title + " here..."}
         required={required}
       />
@@ -60,7 +60,7 @@ export const DropdownField = ({
         id={name}
         value={state}
         onChange={handleChange}
-        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-600 focus:border-blue-600 block w-full p-2.5 ${styles}`}
+        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs outline-none rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${styles}`}
         required={required}
         disabled={disabled}
       >
@@ -185,7 +185,9 @@ export const FacilityHourlyRates = ({
 }) => {
   const classes = useMemo(
     () => ({
-      header: (gridCols === 2 ? "col-span-1 sm:col-span-2" : "col-span-1") + " mt-6 font-semibold text-sm text-gray-700",
+      header:
+        (gridCols === 2 ? "col-span-1 sm:col-span-2" : "col-span-1") +
+        " mt-6 font-semibold text-sm text-gray-700",
       field: "col-span-1",
     }),
     [gridCols]

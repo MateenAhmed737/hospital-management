@@ -120,6 +120,10 @@ export const navLinks = {
           title: "Completed",
           path: "/fc-shifts/completed",
         },
+        {
+          title: "New Shift",
+          path: "/fc-shifts/new",
+        },
       ],
     },
     {

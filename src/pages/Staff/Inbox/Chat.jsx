@@ -229,7 +229,7 @@ const Chat = () => {
         </button>
         <Button
           loading={sending}
-          handleClick={handleSend}
+          handleClick={() => handleSend({ target: { value: message, name: "message" } })}
           extraStyles={`!flex !items-center !justify-center !rounded-full !w-12 !h-11 !p-0 ${
             sending ? "!pl-2 !pt-px" : ""
           }`}

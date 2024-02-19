@@ -30,6 +30,7 @@ import {
   OnGoingFacilityShifts,
   AllFacilityShifts,
   CheckInOuts,
+  NewShift,
 } from "../pages/Facility";
 import {
   ManageAdmins,
@@ -132,6 +133,10 @@ const Router = () => {
             <Route element={<Auth allowedRoles={["3"]} />}>
               <Route path="/fc-shifts">
                 <Route index element={privateRoute(AllFacilityShifts)} />
+                <Route
+                  path="/fc-shifts/new"
+                  element={privateRoute(NewShift)}
+                />
                 <Route
                   path="/fc-shifts/completed"
                   element={privateRoute(FacilityCompletedShifts)}

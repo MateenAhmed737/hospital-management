@@ -253,7 +253,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
           {/* <!-- Client info --> */}
           <div className="grid items-center grid-cols-2 mt-8">
             <div className="text-gray-500">
-              <p>{data.address}</p>
+              <p>{data?.address}</p>
             </div>
 
             <div className="text-right">
@@ -263,19 +263,19 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
               <p className="mt-3 space-x-2">
                 <span className="font-semibold text-left">Invoice #</span>
                 <span className="font-semibold text-right text-gray-500">
-                  {data.transaction_id}
+                  {data?.transaction_id}
                 </span>
               </p>
               <p className="space-x-2">
                 <span className="font-semibold text-left">Invoice Date</span>
                 <span className="font-semibold text-right text-gray-500">
-                  {data.created_at}
+                  {data?.created_at}
                 </span>
               </p>
               <p className="space-x-2">
                 <span className="font-semibold text-left">Due Date</span>
                 <span className="font-semibold text-right text-gray-500">
-                  {data.due_date}
+                  {data?.due_date}
                 </span>
               </p>
             </div>
@@ -370,7 +370,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                     <br />
                     <br />
                     <span>
-                      08/15/23: Check #14297 Amount paid: $${data.total_amount}{" "}
+                      08/15/23: Check #14297 Amount paid: $${data?.total_amount}{" "}
                       ({data?.address})
                     </span>
                     <br />
