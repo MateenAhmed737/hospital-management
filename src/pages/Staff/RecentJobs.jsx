@@ -4,14 +4,16 @@ import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
 import { BiSearch } from "react-icons/bi";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
-import { FaBookmark } from "react-icons/fa";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
 import { CiLocationOn } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
+import toast from "react-hot-toast";
 
 const getShifts = `${base_url}/upcomming-shift/`;
 const bookmark = `${base_url}/book-marked-shifts`;
 const getBidsUser = `${base_url}/recent-bits/`;
+const getUserBookmarks = `${base_url}/get-book-marked-shifts/`;
 
 const RecentJobs = () => {
   const user = useSelector((state) => state.user);
@@ -20,6 +22,7 @@ const RecentJobs = () => {
   const [searchText, setSearchText] = useState("");
   const [userBids, setUserBids] = useState([]);
   const [reload, setReload] = useState(false);
+  const [userBookmarks, setUserBookmarks] = useState([]);
 
   console.log("data", data);
 
@@ -61,8 +64,23 @@ const RecentJobs = () => {
 
         if (json.success) {
           const data = json.success.data || [];
-          console.log("data", data);
           setUserBids(data?.map((e) => Number(e?.shift_id)));
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchUserBookmarks = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(getUserBookmarks + user?.id);
+        const json = await res.json();
+
+        if (json.success) {
+          const data = json.success.data || [];
+          setUserBookmarks(data.map((e) => Number(e.shift_id)));
         }
       } catch (error) {
         console.error(error);
@@ -73,9 +91,11 @@ const RecentJobs = () => {
 
     fetchUserBids();
     fetchShifts();
+    fetchUserBookmarks();
   }, [user, reload]);
 
-  console.log("userBids", userBids);
+  // console.log("userBids", userBids);
+  console.log("userBookmarks", userBookmarks);
 
   return (
     <Page title="Recent Jobs" enableHeader>
@@ -114,6 +134,8 @@ const RecentJobs = () => {
               {...item}
               user={user}
               bidPlacedAlready={userBids.includes(item.id)}
+              isBookmarked={userBookmarks.includes(item.id)}
+              setUserBookmarks={setUserBookmarks}
               reload={() => setReload(!reload)}
             />
           ))
@@ -127,22 +149,35 @@ const RecentJobs = () => {
 
 const RecentJob = (data) => {
   const [shiftModal, setShiftModal] = useState(false);
+  const [bookmarking, setBookmarking] = useState(false);
 
   const handleBookmark = () => {
+    setBookmarking(true);
+
     const formdata = new FormData();
     formdata.append("user_id", data?.user?.id);
-    fetch(`${bookmark}/${data.shift_id}`, {
+    fetch(`${bookmark}/${data.id}`, {
       method: "POST",
       body: formdata,
     })
       .then((res) => res.json())
       .then((res) => {
         console.log("res", res);
-        if (res.success) {
-          console.log(res.success.data);
+        if (res.status === 200) {
+          data.setUserBookmarks((prev) =>
+            data.isBookmarked
+              ? prev.filter((e) => e != res.data.shift_id)
+              : [...prev, Number(res.data.shift_id)]
+          );
+          toast.success(res.message, { duration: 2000 });
+        } else if (res.error) {
+          toast.error(res?.error?.message);
         }
       })
-      .catch((err) => console.error(err));
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setBookmarking(true);
+      });
   };
 
   return (
@@ -151,7 +186,7 @@ const RecentJob = (data) => {
         className="absolute text-primary-500 top-2 right-2"
         onClick={handleBookmark}
       >
-        <FaBookmark />
+        {data.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
       </button>
       <button
         onClick={() => setShiftModal(true)}

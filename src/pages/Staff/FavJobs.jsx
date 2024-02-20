@@ -49,7 +49,7 @@ const FavJobs = () => {
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          data.map((item) => <RecentJobCard {...item} />)
+          data.map((item) => <RecentJobCard {...item} {...item.facility.shift} {...item.facility} />)
         ) : (
           <Empty title="No jobs found!" />
         )}
