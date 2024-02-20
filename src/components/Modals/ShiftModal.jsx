@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
@@ -18,20 +18,22 @@ const ShiftModal = ({
   data,
   disableBids,
   isTodaysShift,
-  setTodayJob
+  setTodayJob,
+  reload
 }) => {
+  const user = useSelector(state => state.user);
   const [tab, setTab] = useState(0);
   const [placeBidsModal, setPlaceBidsModal] = useState(false);
   const [viewOtherBids, setViewOtherBids] = useState(false);
   const [status, setStatus] = useState(
-    data?.job_status !== "CheckIn" ? "Check in" : "CheckOut"
+    data?.job_status !== "CheckIn" ? "CheckIn" : "CheckOut"
   );
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
 
-  let details = parseJson(data.job_details);
+  let details = useMemo(() => parseJson(data.job_details), [data.job_details]);
 
-  console.log("data", data);
+  console.log("data ===========>", data);
 
   const close = () => setShiftModal(false);
 
@@ -60,16 +62,26 @@ const ShiftModal = ({
   const handleCheck = async () => {
     setLoading(true);
     try {
-      const url = `${base_url}/user-job-status/${data.id}`;
+      const url = `${base_url}/user-job-status/${user.id}`;
       const formdata = new FormData();
-
       formdata.append("status", status);
+      formdata.append("shift_id", data.id);
+
+      console.log("status", status);
+      console.log("shift_id", data.id);
+
 
       const res = await fetch(url, {
-        method: "post",
+        method: "POST",
         body: formdata,
+        headers: {
+          accept: "application/json",
+        },
+        redirect: "follow",
       });
-      if (res.status) {
+      const result = await res.json();
+      console.log("result =====>", result);
+      if (result.success) {
         setTodayJob((prev) => ({ ...prev, reload: true }));
         toast.success("Check in successful!");
         close();
@@ -178,7 +190,7 @@ const ShiftModal = ({
           {tab === 1 && (
             <div className="-mt-2 text-xs text-left">
               <p className="text-sm font-semibold">
-                {data.service_amount}/hr USD
+                ${Number(data.service_amount).toFixed(2)}/hr USD
               </p>
               <p className="mt-2 text-sm font-medium text-gray-800">
                 {data.title}
@@ -186,7 +198,7 @@ const ShiftModal = ({
               <p className="text-gray-600">{data.description}</p>
 
               <p className="mt-4 text-sm font-semibold">Job Detail</p>
-              {details.map((item) => (
+              {details?.map((item) => (
                 // use summary tag
                 <details className="mt-1.5 mb-3">
                   <summary className="font-semibold text-gray-900">
@@ -238,6 +250,8 @@ const ShiftModal = ({
         placeBidsModal={placeBidsModal}
         setPlaceBidsModal={setPlaceBidsModal}
         data={data}
+        closeShiftModal={close}
+        reload={reload}
       />
 
       <ViewOtherBidsModal
@@ -249,21 +263,19 @@ const ShiftModal = ({
   );
 };
 
-const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
+const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data, closeShiftModal, reload }) => {
   const user = useSelector((state) => state.user);
-  const [bid, setBid] = useState(0.0);
+  // const [bid, setBid] = useState(0.0);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
-
-  console.log("data", data);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
     const formdata = new FormData();
-    formdata.append("price", bid);
+    // formdata.append("price", bid);
     formdata.append("description", description);
 
     const requestOptions = {
@@ -278,16 +290,21 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
     fetch(`${storeBid}/${user.id}/${data.id}`, requestOptions)
       .then((res) => res.json())
       .then((json) => {
+        console.log("json", json);
         if (json.success) {
           toast.success("Bid placed successfully!");
-          setBid(0.0);
+          // setBid(0.0);
           setDescription("");
           setPlaceBidsModal(false);
+          closeShiftModal()
+          reload && reload()
         } else if (json?.message?.includes("Bit already exists")) {
-          toast.error("Bid already exists.");
-          setBid(0.0);
+          toast.error("Bid already exists!");
+          // setBid(0.0);
           setDescription("");
           setPlaceBidsModal(false);
+          closeShiftModal()
+          reload && reload()
         } else if (json?.error) {
           toast.error(json?.error?.[0]?.message || json?.error?.message);
         }
@@ -356,7 +373,7 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
             </div>
           </p>
 
-          <b>${bid}</b>
+          {/* <b>${bid}</b>
           <input
             type="range"
             min={0}
@@ -366,10 +383,9 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data }) => {
             onChange={(e) => setBid(e.target.value)}
             className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
             required
-          />
+          /> */}
 
-          <div className="flex flex-col items-start">
-            <br />
+          <div className="flex flex-col items-start mt-2">
             <label
               htmlFor="description"
               className="block mb-2 text-xs font-medium text-gray-900 capitalize"
@@ -518,7 +534,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
                         {item.user_name}
                       </span>
                       <span className="text-sm font-medium text-gray-800 capitalize">
-                        ${item.price}
+                        ${Number(item.total || 0).toFixed(2)}
                       </span>
                     </div>
                     <div className="flex items-center justify-between">

@@ -30,6 +30,12 @@ const Chat = () => {
     const isMedia = name === "media";
     const value = isMedia ? e.target.files[0] : e.target.value;
 
+    if (!isMedia && value.trim() === "") {
+      setSending(false);
+      setMessage("");
+      return;
+    };
+
     const formdata = new FormData();
     formdata.append("reciver_id", id);
     formdata.append("sender_id", user.id);
@@ -229,7 +235,9 @@ const Chat = () => {
         </button>
         <Button
           loading={sending}
-          handleClick={() => handleSend({ target: { value: message, name: "message" } })}
+          handleClick={() =>
+            handleSend({ target: { value: message, name: "message" } })
+          }
           extraStyles={`!flex !items-center !justify-center !rounded-full !w-12 !h-11 !p-0 ${
             sending ? "!pl-2 !pt-px" : ""
           }`}

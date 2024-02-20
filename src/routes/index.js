@@ -15,10 +15,8 @@ import {
   EmailVerification,
   AccessDenied,
   Register,
-  UpcomingShifts,
   Recent,
   Completed,
-  AllOffers,
   FavJobs,
   RecentJobs,
   Invoices,
@@ -96,12 +94,7 @@ const Router = () => {
                   path="/shifts/completed"
                   element={privateRoute(Completed)}
                 />
-                <Route path="/shifts/all" element={privateRoute(AllOffers)} />
               </Route>
-              <Route
-                path="/upcoming-shifts"
-                element={privateRoute(UpcomingShifts)}
-              />
               <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
@@ -146,10 +139,6 @@ const Router = () => {
                   element={privateRoute(OnGoingFacilityShifts)}
                 />
               </Route>
-              <Route
-                path="/upcoming-shifts"
-                element={privateRoute(UpcomingShifts)}
-              />
               <Route
                 path="/check_in_outs"
                 element={privateRoute(CheckInOuts)}

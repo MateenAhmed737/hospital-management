@@ -5,7 +5,6 @@ import { Empty, Loader, Page } from "../../../components";
 import { BiSearch } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
-import { convertTime } from "../../../utils";
 import moment from "moment";
 
 const showInbox = `${base_url}/inbox/`;
@@ -62,7 +61,7 @@ const Inbox = () => {
       </div>
 
       <main
-        className={`relative min-h-[80vh] pt-5 ${
+        className={`relative min-h-[80vh] pt-5 space-y-1 ${
           loading ? "flex justify-center items-center" : ""
         }`}
       >
@@ -86,7 +85,7 @@ const Chat = ({ name_user_id, profile_image, status, created_at, name }) => {
   return (
     <button
       onClick={() => navigate("/messages/" + name_user_id)}
-      className="flex items-center w-full px-2 py-2 space-x-3 bg-gray-100 rounded-md hover:bg-gray-200"
+      className="flex items-center w-full px-2 py-2 space-x-3 bg-gray-100 border rounded-md hover:bg-gray-200"
     >
       <img className="rounded-md size-14" src={profile_image} alt="profile" />
 

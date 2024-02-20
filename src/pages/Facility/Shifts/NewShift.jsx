@@ -70,7 +70,6 @@ const NewShift = () => {
         formdata.append("boost_fee", "10");
         formdata.append("boost_start", "2024-02-19");
         formdata.append("boost_end", "2024-05-30");
-
         
         console.log("boost_fee", "10");
         console.log("boost_start", "2024-02-19");
@@ -104,6 +103,7 @@ const NewShift = () => {
     fetch(createUrl + user.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
+        console.log('res ==>', res)
         if (res.success) {
           toast.success("Shift created successfully!", { duration: 2000 });
           setState(initialState);
@@ -112,7 +112,7 @@ const NewShift = () => {
             duration: 2000,
           });
         }
-      })
+      }).catch((error) => console.error(error))
       .finally(() => setLoading(false));
   };
 
@@ -242,7 +242,6 @@ const NewShift = () => {
             state={state.staff_type}
             setState={(e) => setState({ ...state, staff_type: e })}
             getOption={(val) => val.service_name}
-            getValue={(val) => val.id}
             styles="!rounded-md !bg-gray-100 !py-3 !text-gray-500"
             required
             label

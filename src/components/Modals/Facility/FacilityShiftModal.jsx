@@ -15,7 +15,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 
 const getBitData = `${base_url}/get-bits-users`;
-const storeBid = `${base_url}/store-bit`;
+const acceptBid = `${base_url}/confirmed-shifts`;
 const shiftBoost = `${base_url}/shift-boost/`;
 const deleteShift = `${base_url}/delete-shifts/`;
 const editShift = `${base_url}/edit-shift/`;
@@ -271,6 +271,7 @@ const FacilityShiftModal = ({
         bidsModal={bidsModal}
         setBidsModal={setBidsModal}
         data={data}
+        close={close}
       />
 
       <BoostShiftModal
@@ -288,11 +289,9 @@ const FacilityShiftModal = ({
   );
 };
 
-const BidsModal = ({ bidsModal, setBidsModal }) => {
+const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
   const user = useSelector((state) => state.user);
-  const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
-  const [bid, setBid] = useState(0.0);
   const data = bidsModal.data;
   console.log("data", data);
 
@@ -300,42 +299,32 @@ const BidsModal = ({ bidsModal, setBidsModal }) => {
     e.preventDefault();
     setLoading(true);
 
-    // const formdata = new FormData();
-    // formdata.append("price", bid);
-    // formdata.append("description", description);
+    const formdata = new FormData();
+    formdata.append("user_id", data.user_id);
+    formdata.append("type", "Accept");
 
-    // const requestOptions = {
-    //   method: "POST",
-    //   headers: {
-    //     Accept: "application/json",
-    //   },
-    //   body: formdata,
-    //   redirect: "follow",
-    // };
+    const requestOptions = {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+      body: formdata,
+      redirect: "follow",
+    };
 
-    // fetch(`${storeBid}/${user.id}/${data.id}`, requestOptions)
-    //   .then((res) => res.json())
-    //   .then((json) => {
-    //     if (json.success) {
-    //       toast.success("Bid placed successfully!");
-    //       setBid(0.0);
-    //       setDescription("");
-    //       setBidsModal(false);
-    //     } else if (json?.message?.includes("Bit already exists")) {
-    //       toast.error("Bid already exists.");
-    //       setBid(0.0);
-    //       setDescription("");
-    //       setBidsModal(false);
-    //     } else if (json?.error) {
-    //       toast.error(json?.error?.[0]?.message || json?.error?.message);
-    //     }
-    //   })
-    //   .catch((error) => toast.error(error?.[0]?.message || error?.message))
-    //   .finally(() => setLoading(false));
-    setTimeout(() => {
-      setLoading(false);
-      toast.error("Server side Error");
-    }, 3000);
+    fetch(`${acceptBid}/${data.shift_id}/${user.id}`, requestOptions)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.success) {
+          toast.success("Bid Accepted!");
+          setBidsModal(false);
+          closeShiftModal()
+        } else if (json?.error) {
+          toast.error(json?.error?.[0]?.message || json?.error?.message);
+        }
+      })
+      .catch((error) => toast.error(error?.[0]?.message || error?.message))
+      .finally(() => setLoading(false));
   };
 
   const close = () => setBidsModal((prev) => ({ ...prev, isOpen: false }));
@@ -358,7 +347,10 @@ const BidsModal = ({ bidsModal, setBidsModal }) => {
       "text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-base p-1.5 ml-auto inline-flex items-center",
     input:
       "min-h-[37px] w-[300px] shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-blue-500/50 focus:border-blue-600 block p-2.5",
-    createButton: `!w-full !rounded-md ${loading ? "!py-2" : "!py-3"}`,
+    createButton: `!w-full !rounded-md ${loading ? "!py-2" : "!py-2.5"}`,
+    ignoreButton: `!w-full !rounded-md !border !border-primary-500 !text-primary-500 !bg-transparent ${
+      loading ? "!py-2" : "!py-2.5"
+    }`,
   };
 
   const handleBackdropClick = (e) => {
@@ -408,7 +400,7 @@ const BidsModal = ({ bidsModal, setBidsModal }) => {
           <Button
             title="Ignore"
             handleClick={close}
-            extraStyles={styles.createButton}
+            extraStyles={styles.ignoreButton}
           />
           <Button
             title="Accept"

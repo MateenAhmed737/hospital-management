@@ -22,7 +22,7 @@ const JobCard = ({
       >
         <div className="flex items-center">
           <img
-            src={facility.profile_image}
+            src={facility?.profile_image}
             className="rounded-md w-11 h-11"
             alt="facility profile"
           />

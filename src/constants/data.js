@@ -166,10 +166,6 @@ export const navLinks = {
           title: "Completed",
           path: "/shifts/completed",
         },
-        {
-          title: "All Offers",
-          path: "/shifts/all",
-        },
       ],
     },
     {

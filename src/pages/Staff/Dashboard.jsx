@@ -12,7 +12,7 @@ import { JobCard } from "../../components/Cards/Staff";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;
-const getShifts = `${base_url}/upcomming-shift/`;
+const getShifts = `${base_url}/ongoing-shifts/`;
 const Dashboard = () => {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
@@ -148,7 +148,7 @@ const Dashboard = () => {
                 Upcoming Shifts
               </h2>
               <Link
-                to="/upcoming-shifts"
+                to="/shifts"
                 className="text-xs text-blue-500 hover:underline"
               >
                 See more

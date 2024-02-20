@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { base_url } from "../../../utils/url";
 import { RecentJobCard } from "../../../components/Cards/Staff";
 
-const getShifts = `${base_url}/pending-shift/`;
+const getShifts = `${base_url}/ongoing-shifts/`;
 
 const Recent = () => {
   const navigate = useNavigate();
@@ -13,7 +13,7 @@ const Recent = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  console.log('data', data)
+  // console.log('data', data)
   useEffect(() => {
     const fetchShifts = async () => {
       setLoading(true);
@@ -21,6 +21,7 @@ const Recent = () => {
         const res = await fetch(getShifts + user?.id);
         const json = await res.json();
 
+        console.log('json', json)
         if (json.success) {
           const data = json.success.data || [];
           setData(data);
@@ -49,7 +50,7 @@ const Recent = () => {
             ))}
           </div>
         ) : (
-          <Empty title="No shifts found!" />
+          <Empty title="No recent shifts found!" />
         )}
       </main>
     </Page>

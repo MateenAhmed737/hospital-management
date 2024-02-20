@@ -9,14 +9,17 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
 
-const getShifts = `${base_url}/recent-bits/`;
-const bookmark = `${base_url}/book-marked-shifts/`;
+const getShifts = `${base_url}/upcomming-shift/`;
+const bookmark = `${base_url}/book-marked-shifts`;
+const getBidsUser = `${base_url}/recent-bits/`;
 
 const RecentJobs = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
+  const [userBids, setUserBids] = useState([]);
+  const [reload, setReload] = useState(false);
 
   console.log("data", data);
 
@@ -50,9 +53,29 @@ const RecentJobs = () => {
         setLoading(false);
       }
     };
+    const fetchUserBids = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(getBidsUser + user?.id);
+        const json = await res.json();
 
+        if (json.success) {
+          const data = json.success.data || [];
+          console.log("data", data);
+          setUserBids(data?.map((e) => Number(e?.shift_id)));
+        }
+      } catch (error) {
+        console.error(error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserBids();
     fetchShifts();
-  }, [user]);
+  }, [user, reload]);
+
+  console.log("userBids", userBids);
 
   return (
     <Page title="Recent Jobs" enableHeader>
@@ -86,7 +109,14 @@ const RecentJobs = () => {
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          filteredData.map((item) => <RecentJob {...item} user={user} />)
+          filteredData.map((item) => (
+            <RecentJob
+              {...item}
+              user={user}
+              bidPlacedAlready={userBids.includes(item.id)}
+              reload={() => setReload(!reload)}
+            />
+          ))
         ) : (
           <Empty title="No shifts found!" />
         )}
@@ -99,17 +129,20 @@ const RecentJob = (data) => {
   const [shiftModal, setShiftModal] = useState(false);
 
   const handleBookmark = () => {
-  //   fetch(bookmark + data.id, {
-  //     method: "POST",
-  //   })
-  //     .then((res) => res.json())
-  //     .then((res) => {
-  //       console.log('res', res)
-        // if (res.success) {
-        //   console.log(res.success.data);
-        // }
-      // })
-      // .catch((err) => console.error(err));
+    const formdata = new FormData();
+    formdata.append("user_id", data?.user?.id);
+    fetch(`${bookmark}/${data.shift_id}`, {
+      method: "POST",
+      body: formdata,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        if (res.success) {
+          console.log(res.success.data);
+        }
+      })
+      .catch((err) => console.error(err));
   };
 
   return (
@@ -139,10 +172,8 @@ const RecentJob = (data) => {
             )}
 
             <p className="flex flex-col items-start ml-2 text-sm">
-              <span className="text-sm font-semibold">
-                {data.facility.facility_name}
-              </span>
-              <span className="text-xs">${data.price}/mo</span>
+              <span className="text-sm font-semibold">{data.title}</span>
+              <span className="text-xs">${data.service_amount}/hr</span>
             </p>
           </div>
         </div>
@@ -153,11 +184,11 @@ const RecentJob = (data) => {
           <div className="flex items-center justify-between mt-1">
             <span className="text-xs">
               <CiLocationOn className="inline mb-0.5 mr-0.5 text-sm" />
-              {data.facility.country}
+              {data.state}, {data.facility.country}
             </span>
             <span className="text-xs">
               <FaRegClock className="inline mb-1 mr-1" />
-              {moment(data.created_at).format("DD-MMMM-YYYY")}
+              {moment(data.created_at).format("DD/MM/YYYY, hh:mm A")}
             </span>
           </div>
         </div>
@@ -168,7 +199,8 @@ const RecentJob = (data) => {
           shiftModal={shiftModal}
           setShiftModal={setShiftModal}
           data={{ ...data, ...data.facility.shift }}
-          disableBids
+          disableBids={data.bidPlacedAlready}
+          reload={data.reload}
         />
       )}
     </div>
