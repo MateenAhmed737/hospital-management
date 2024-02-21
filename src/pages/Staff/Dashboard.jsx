@@ -7,13 +7,17 @@ import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
 import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
-import { Link } from "react-router-dom";
+import AwardedJobBg1 from "../../assets/images/Backgrounds/award1.png";
+import AwardedJobBg2 from "../../assets/images/Backgrounds/award2.png";
+import { Link, useNavigate } from "react-router-dom";
 import { JobCard } from "../../components/Cards/Staff";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;
 const getShifts = `${base_url}/ongoing-shifts/`;
+
 const Dashboard = () => {
+  const navigate = useNavigate();
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [analytics, setAnalytics] = useState({});
@@ -89,6 +93,25 @@ const Dashboard = () => {
         </div>
       ) : (
         <main>
+          {/* Awarded Jobs */}
+          <button onClick={() => navigate("/awarded-jobs")} className="relative flex items-center justify-between w-full mb-3 bg-[#E476F9] rounded-2xl overflow-hidden">
+            <img
+              src={AwardedJobBg1}
+              className="object-contain h-full max-h-28"
+              alt="awarded jobs"
+            />
+            <img
+              src={AwardedJobBg2}
+              className="object-contain h-full max-h-28"
+              alt="awarded jobs"
+            />
+
+            <div className="absolute inset-0 flex flex-col items-start justify-center w-full px-4 text-white">
+              <h3 className="font-semibold">Awarded Jobs</h3>
+              <span className="text-xs">Congrats you get the new job</span>
+            </div>
+          </button>
+
           {!todayJob.loading && !!todayJob.data.length && (
             <div className="flex flex-col mb-4">
               <h2 className="text-sm font-medium text-gray-600">
@@ -142,14 +165,14 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="mt-8">
+          <div className="pb-10 mt-8">
             <div className="flex items-center justify-between">
               <h2 className="text-sm font-medium text-gray-600">
                 Upcoming Shifts
               </h2>
               <Link
                 to="/shifts"
-                className="text-xs text-blue-500 hover:underline"
+                className="text-xs text-primary-500 hover:underline"
               >
                 See more
               </Link>
@@ -165,7 +188,14 @@ const Dashboard = () => {
               ) : (
                 upcomingShifts.data
                   .slice(-4)
-                  .map((shift) => <JobCard {...shift} data={shift} />)
+                  .map((item) => (
+                    <JobCard
+                      {...item}
+                      data={item}
+                      shift={item?.shift}
+                      {...item?.shift}
+                    />
+                  ))
               )}
             </div>
           </div>

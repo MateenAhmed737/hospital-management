@@ -22,9 +22,12 @@ const CompletedJobCard = (data) => {
               <span className="text-sm font-semibold">{data.title}</span>
             </p>
           </div>
-          <span className="text-sm font-semibold text-primary-500">
-            ${Number(data.boost_fee || 0).toFixed(2)}
-          </span>
+          <div className="flex flex-col items-end text-sm font-semibold text-primary-500">
+            <span>
+              ${Number(data?.total_service_amount || 0).toFixed(2)}
+            </span>
+            <sub>AMT</sub>
+          </div>
         </div>
         <div className="w-full h-px my-1 bg-gray-300" />
         <div className="">

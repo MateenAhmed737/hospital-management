@@ -15,11 +15,12 @@ import {
   EmailVerification,
   AccessDenied,
   Register,
-  Recent,
   Completed,
   FavJobs,
-  RecentJobs,
+  AwardedJobs,
+  AllJobs,
   Invoices,
+  Applied,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -89,13 +90,14 @@ const Router = () => {
             {/* For Staff (1) */}
             <Route element={<Auth allowedRoles={["1"]} />}>
               <Route path="/shifts">
-                <Route index element={privateRoute(Recent)} />
+                <Route index element={privateRoute(Applied)} />
                 <Route
                   path="/shifts/completed"
                   element={privateRoute(Completed)}
                 />
               </Route>
-              <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+              <Route path="/all-jobs" element={privateRoute(AllJobs)} />
+              <Route path="/awarded-jobs" element={privateRoute(AwardedJobs)} />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
                 <Route index element={privateRoute(Inbox)} />
@@ -143,7 +145,7 @@ const Router = () => {
                 path="/check_in_outs"
                 element={privateRoute(CheckInOuts)}
               />
-              <Route path="/recent-jobs" element={privateRoute(RecentJobs)} />
+              {/* <Route path="/recent-jobs" element={privateRoute(RecentJobs)} /> */}
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
             </Route>
           </Route>

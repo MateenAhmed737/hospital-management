@@ -1,4 +1,4 @@
 import Completed from "./Completed";
-import Recent from "./Recent";
+import Applied from "./Applied";
 
-export { Recent, Completed };
+export { Applied, Completed };

@@ -21,8 +21,8 @@ const getAllInvoices = `${base_url}/get-all-invoice-admin`;
 const createUrl = `${base_url}/store-admin-invoice/`;
 
 const neededProps = [
-  "transaction_id",
-  "bank_name",
+  // "transaction_id",
+  // "bank_name",
   "title",
   "amount",
   "client",
@@ -160,6 +160,7 @@ const Invoices = () => {
                 {...invoice}
                 key={invoice.id}
                 onClick={() => setInvoiceModal({ isOpen: true, data: invoice })}
+                reload={() => setReload(!reload)}
               />
             ))
           ) : (

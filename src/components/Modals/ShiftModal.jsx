@@ -202,9 +202,9 @@ const ShiftModal = ({
                 // use summary tag
                 <details className="mt-1.5 mb-3">
                   <summary className="font-semibold text-gray-900">
-                    {item.subject}
+                    {item?.subject}
                   </summary>
-                  <p className="mt-1 ml-4 text-gray-600">{item.detail}</p>
+                  <p className="mt-1 ml-4 text-gray-600">{item?.detail}</p>
                 </details>
               ))}
             </div>

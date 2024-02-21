@@ -10,12 +10,12 @@ import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
 import toast from "react-hot-toast";
 
-const getShifts = `${base_url}/upcomming-shift/`;
+const getShifts = `${base_url}/get-country-wise-shifts/`;
 const bookmark = `${base_url}/book-marked-shifts`;
 const getBidsUser = `${base_url}/recent-bits/`;
 const getUserBookmarks = `${base_url}/get-book-marked-shifts/`;
 
-const RecentJobs = () => {
+const AllJobs = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -98,7 +98,7 @@ const RecentJobs = () => {
   console.log("userBookmarks", userBookmarks);
 
   return (
-    <Page title="Recent Jobs" enableHeader>
+    <Page title="All Jobs" enableHeader>
       <label htmlFor="table-search" className="sr-only">
         Search
       </label>
@@ -185,6 +185,7 @@ const RecentJob = (data) => {
       <button
         className="absolute text-primary-500 top-2 right-2"
         onClick={handleBookmark}
+        disabled={bookmarking}
       >
         {data.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
       </button>
@@ -242,4 +243,4 @@ const RecentJob = (data) => {
   );
 };
 
-export default RecentJobs;
+export default AllJobs;

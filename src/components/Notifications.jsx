@@ -1,4 +1,3 @@
-import { MdOutlineDoneAll } from "react-icons/md";
 import { base_url } from "../utils/url";
 import { notificationIcons } from "../constants/data";
 import { VscClose } from "react-icons/vsc";
@@ -10,36 +9,34 @@ const Notifications = ({
   notifications,
   setNotifications,
   userId,
-  role,
 }) => {
-  const handleReadAll = async () => {
-    const url = `${base_url}/read-admin-notification/${userId}`;
-    console.log(`${base_url}/read-admin-notification/${userId}`);
+  // const handleReadAll = async () => {
+  //   const url = `${base_url}/read-admin-notification/${userId}`;
+  //   console.log(`${base_url}/read-admin-notification/${userId}`);
 
-    try {
-      const formdata = new FormData();
-      formdata.append("type", role);
-      const requestOptions = {
-        headers: {
-          Accept: "application/json",
-        },
-        method: "POST",
-        body: formdata,
-        redirect: "follow",
-      };
+  //   try {
+  //     const formdata = new FormData();
+  //     const requestOptions = {
+  //       headers: {
+  //         Accept: "application/json",
+  //       },
+  //       method: "POST",
+  //       body: formdata,
+  //       redirect: "follow",
+  //     };
 
-      const res = await fetch(url, requestOptions);
-      const json = await res.json();
-      console.log("json", json);
+  //     const res = await fetch(url, requestOptions);
+  //     const json = await res.json();
+  //     console.log("json", json);
 
-      if (res.status === 200) {
-        setNotifications([]);
-        setSingleToggle("notifications", !toggle.notifications);
-      }
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  //     if (res.status === 200) {
+  //       setNotifications([]);
+  //       setSingleToggle("notifications", !toggle.notifications);
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   return (
     <div className="relative" id="notifications">
@@ -64,9 +61,7 @@ const Notifications = ({
         {notifications?.length ? (
           <>
             <div
-              className={`absolute -top-[4px] -right-[4px] w-3.5 h-3.5 tracking-tighter text-[9.5px] ${
-                notifications?.length > 9 ? "pl-0.5" : ""
-              } flex items-center justify-center text-white rounded-full bg-red-500`}
+              className={`absolute -top-[4px] -right-[6px] px-1 text-center h-[11px] tracking-tighter text-[9px] text-white rounded-full bg-red-500`}
             >
               {notifications?.length > 9 ? "9+" : notifications?.length}
             </div>
@@ -89,7 +84,7 @@ const Notifications = ({
                     const icon = notificationIcons.default;
 
                     const handleClick = async (id) => {
-                      const url = `${base_url}/read-single-notification/${id}`;
+                      const url = `${base_url}/read-notification/${id}`;
 
                       try {
                         const requestOptions = {
@@ -127,8 +122,8 @@ const Notifications = ({
                       >
                         {icon}
                         <span className="ml-2 whitespace-nowrap">{`${
-                          elem.title
-                        } - ${elem.message} - ${new Date(
+                          elem.subject
+                        } - ${new Date(
                           elem.created_at
                         ).toLocaleDateString()}`}</span>
                       </li>
@@ -136,12 +131,12 @@ const Notifications = ({
                   })
               : "No notifications found!"}
           </div>
-          {notifications?.length ? (
+          {/* {notifications?.length ? (
             <div className="pr-3.5">
               <button
                 onClick={handleReadAll}
                 type="button"
-                className="w-full flex justify-center items-center hover:text-blue-600 border-t focus:outline-none font-medium text-base py-1 pt-1.5 mr-5 text-center"
+                className="w-full flex justify-center items-center hover:text-primary-600 border-t focus:outline-none font-medium text-base py-1 pt-1.5 mr-5 text-center"
               >
                 <MdOutlineDoneAll />
                 <span className="ml-1 text-xs">Read All</span>
@@ -149,7 +144,7 @@ const Notifications = ({
             </div>
           ) : (
             ""
-          )}
+          )} */}
         </DropdownContainer>
       )}
       <DropdownContainer
@@ -189,7 +184,7 @@ const Notifications = ({
                       const icon = notificationIcons.default;
 
                       const handleClick = async (id) => {
-                        const url = `${base_url}/read-single-notification/${id}`;
+                        const url = `${base_url}/read-notification/${id}`;
 
                         try {
                           const requestOptions = {
@@ -227,8 +222,8 @@ const Notifications = ({
                         >
                           {icon}
                           <span className="ml-2 whitespace-nowrap">{`${
-                            elem.title
-                          } - ${elem.message} - ${new Date(
+                            elem.subject
+                          } - ${new Date(
                             elem.created_at
                           ).toLocaleDateString()}`}</span>
                         </li>
@@ -236,18 +231,18 @@ const Notifications = ({
                     })
                 : "No notifications found!"}
             </div>
-            {notifications?.length ? (
+            {/* {notifications?.length ? (
               <button
                 onClick={handleReadAll}
                 type="button"
-                className="w-full flex justify-center items-center hover:text-blue-600 border-t focus:outline-none font-medium text-base py-1 pt-1.5 mr-5 text-center"
+                className="w-full flex justify-center items-center hover:text-primary-600 border-t focus:outline-none font-medium text-base py-1 pt-1.5 mr-5 text-center"
               >
                 <MdOutlineDoneAll />
                 <span className="ml-1 text-xs">Read All</span>
               </button>
             ) : (
               ""
-            )}
+            )} */}
           </div>
         </div>
       </DropdownContainer>

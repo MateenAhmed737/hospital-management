@@ -253,8 +253,9 @@ const FacilityShiftModal = ({
               </div>
               <Button
                 title="Boost Your Shift"
-                handleClick={() => setBoostModal(true)}
+                handleClick={() => data.boost_status === "No" && setBoostModal(true)}
                 extraStyles={styles.boostBtn}
+                disabled={data.boost_status === "Yes"}
               />
             </>
           ) : (

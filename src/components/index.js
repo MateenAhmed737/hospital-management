@@ -5,6 +5,7 @@ import Actions from "./Actions";
 import Loader from "./Loaders/Loader";
 import ConfirmationCodeFeilds from "./ConfirmationCodeFeilds";
 import DropdownFilter from "./DropdownFilter";
+import Notifications from "./Notifications";
 import Pagination from "./Pagination";
 import Account from "./Account";
 import Empty from "./Empty";
@@ -23,6 +24,7 @@ export {
   Loader,
   ConfirmationCodeFeilds,
   DropdownFilter,
+  Notifications,
   Pagination,
   Account,
   Empty,

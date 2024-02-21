@@ -4,9 +4,9 @@ import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
 import { AppliedShiftCard } from "../../components/Cards/Staff";
 
-const getShifts = `${base_url}/get-book-marked-shifts/`;
+const getShifts = `${base_url}/ongoing-shifts/`;
 
-const FavJobs = () => {
+const AwardedJobs = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -35,21 +35,21 @@ const FavJobs = () => {
   }, [user]);
 
   return (
-    <Page title="Favourite Jobs" enableHeader>
-      <div className="flex items-center justify-between mt-2 text-xs">
+    <Page title="Awarded Jobs" enableHeader>
+      {/* <div className="flex items-center justify-between mt-2 text-xs">
         <span className="ml-1 font-medium">All Result</span>
         <span>{data?.length} jobs found</span>
-      </div>
+      </div> */}
 
       <main
-        className={`relative min-h-[80vh] py-5 space-y-2 ${
+        className={`relative min-h-[80vh] pb-5 space-y-2 ${
           loading ? "flex justify-center items-center" : ""
         }`}
       >
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          data.map((item) => <AppliedShiftCard {...item} {...item.facility.shift} {...item.facility} />)
+          data.map((item) => <AppliedShiftCard {...item} {...item?.shift} />)
         ) : (
           <Empty title="No jobs found!" />
         )}
@@ -58,4 +58,4 @@ const FavJobs = () => {
   );
 };
 
-export default FavJobs;
+export default AwardedJobs;

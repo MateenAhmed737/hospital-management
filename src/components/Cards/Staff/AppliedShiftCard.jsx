@@ -3,14 +3,61 @@ import { ShiftModal } from "../../Modals";
 import { convertTime } from "../../../utils";
 import { useNavigate } from "react-router-dom";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import toast from "react-hot-toast";
+import { base_url } from "../../../utils/url";
 
-const RecentJobCard = (data) => {
+const bookmark = `${base_url}/book-marked-shifts`;
+
+const AppliedShiftCard = (data) => {
   const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
+  const [bookmarking, setBookmarking] = useState(false);
+
+  const handleBookmark = () => {
+    setBookmarking(true);
+
+    const formdata = new FormData();
+    formdata.append("user_id", data?.user?.id);
+    fetch(`${bookmark}/${data.id}`, {
+      method: "POST",
+      body: formdata,
+    })
+      .then((res) => res.json())
+      .then((res) => {
+        console.log("res", res);
+        if (res.status === 200) {
+          data.setUserBookmarks((prev) =>
+            data.isBookmarked
+              ? prev.filter((e) => e != res.data.shift_id)
+              : [...prev, Number(res.data.shift_id)]
+          );
+          toast.success(res.message, { duration: 2000 });
+        } else if (res.error) {
+          toast.error(res?.error?.message);
+        }
+      })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        setBookmarking(true);
+      });
+  };
 
   return (
     <>
-      <div className="p-2 py-1.5 bg-gray-100 border rounded-md">
+      <div className="relative p-2 py-1.5 bg-gray-100 border rounded-md">
+        {/* Bookmark Button */}
+        {data.enableBookmarks && (
+          <button
+            className="absolute text-primary-500 top-2 right-2"
+            onClick={handleBookmark}
+            disabled={bookmarking}
+          >
+            {data.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
+          </button>
+        )}
+
+        {/* Shift Info */}
         <div className="flex items-center justify-between p-1">
           <div className="flex items-center">
             {data.facility?.profile_image ? (
@@ -29,9 +76,10 @@ const RecentJobCard = (data) => {
               <span className="text-sm font-semibold">{data.title}</span>
             </p>
           </div>
-          <span className="text-sm font-semibold text-primary-500">
-            ${Number(data.boost_fee || 0).toFixed(2)}
-          </span>
+          <div className="flex flex-col items-end text-sm font-semibold text-primary-500">
+            <span>${Number(data?.total_service_amount || 0).toFixed(2)}</span>
+            <sub>EST AMT</sub>
+          </div>
         </div>
         <div className="w-full h-px my-1 bg-gray-300" />
         <div className="">
@@ -72,4 +120,4 @@ const RecentJobCard = (data) => {
   );
 };
 
-export default RecentJobCard;
+export default AppliedShiftCard;

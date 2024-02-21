@@ -159,7 +159,7 @@ export const navLinks = {
       title: "shifts",
       items: [
         {
-          title: "Recent",
+          title: "Applied",
           path: "/shifts",
         },
         {
@@ -171,8 +171,8 @@ export const navLinks = {
     {
       id: 2,
       icon: <FaList className="text-base" />,
-      title: "recent_jobs",
-      path: "/recent-jobs",
+      title: "all_jobs",
+      path: "/all-jobs",
     },
     {
       id: 3,
