@@ -27,11 +27,13 @@ const AppliedShiftCard = (data) => {
       .then((res) => {
         console.log("res", res);
         if (res.status === 200) {
-          data.setUserBookmarks((prev) =>
-            data.isBookmarked
-              ? prev.filter((e) => e != res.data.shift_id)
-              : [...prev, Number(res.data.shift_id)]
-          );
+          data.setUserBookmarks &&
+            data.setUserBookmarks((prev) =>
+              data.isBookmarked
+                ? prev.filter((e) => e != res.data.shift_id)
+                : [...prev, Number(res.data.shift_id)]
+            );
+          data.onSuccess && data.onSuccess();
           toast.success(res.message, { duration: 2000 });
         } else if (res.error) {
           toast.error(res?.error?.message);

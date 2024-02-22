@@ -52,6 +52,13 @@ const InvoiceCard = (data) => {
 
         <p className="flex flex-col items-end space-y-0.5">
           <div className={color}>
+            {isPaid ? (
+              <IoCheckmarkDoneSharp />
+            ) : isUnpaid ? (
+              <IoCheckmarkSharp />
+            ) : (
+              <MdOutlinePendingActions />
+            )}
             {user.isAdmin && (
               <button
                 onClick={() => setMarkInvoiceModal(true)}
@@ -67,13 +74,6 @@ const InvoiceCard = (data) => {
                 title={isPaid ? "Paid" : isUnpaid ? "Mark paid" : ""}
                 disabled={isPaid}
               >
-                {isPaid ? (
-                  <IoCheckmarkDoneSharp />
-                ) : isUnpaid ? (
-                  <IoCheckmarkSharp />
-                ) : (
-                  <MdOutlinePendingActions />
-                )}
               </button>
             )}
             <span className={`text-xs`}>{data.status}</span>

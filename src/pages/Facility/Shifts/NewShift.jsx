@@ -237,7 +237,7 @@ const NewShift = () => {
         </div>
         <div className="col-span-2 sm:col-span-1">
           <DropdownField
-            title="staff_type"
+            title="service_type"
             arr={staffTypes}
             state={state.staff_type}
             setState={(e) => setState({ ...state, staff_type: e })}

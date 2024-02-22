@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
@@ -8,13 +8,15 @@ import { base_url } from "../../../utils/url";
 import { Loader } from "../../Loaders";
 import Empty from "../../Empty";
 import { useSelector } from "react-redux";
-import { MdEdit } from "react-icons/md";
+import { MdChat, MdEdit } from "react-icons/md";
 import { ImBin } from "react-icons/im";
 import { DropdownField } from "../../Fields";
 import moment from "moment";
 import { Link } from "react-router-dom";
+import { FaRegStar, FaStar } from "react-icons/fa";
+import ProfileViewModal from "../ProfileViewModal";
 
-const getBitData = `${base_url}/get-bits-users`;
+const getBitData = `${base_url}/get_bitdata`;
 const acceptBid = `${base_url}/confirmed-shifts`;
 const shiftBoost = `${base_url}/shift-boost/`;
 const deleteShift = `${base_url}/delete-shifts/`;
@@ -31,12 +33,16 @@ const FacilityShiftModal = ({
   const [tab, setTab] = useState(0);
   const [bids, setBids] = useState({ data: [], loading: false });
   const [bidsModal, setBidsModal] = useState({ isOpen: false, data: null });
+  const [profileModal, setProfileModal] = useState({
+    isOpen: false,
+    user_id: null,
+  });
   const [editModal, setEditModal] = useState(false);
   const [boostModal, setBoostModal] = useState(false);
   const [loadingBtn, setLoadingBtn] = useState({ delete: false, edit: false });
   let details = parseJson(data.job_details);
 
-  console.log("data", data);
+  console.log("bids", bids.data);
 
   const close = () => setShiftModal(false);
 
@@ -197,31 +203,58 @@ const FacilityShiftModal = ({
                 <Loader />
               </div>
             ) : bids.data.length > 0 ? (
-              bids.data.map((item) => (
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <img
-                      src={item.profile_image}
-                      alt="profile"
-                      className="rounded-md size-12"
-                    />
+              bids.data.map((item) => {
+                const averageRating =
+                  eval(
+                    item.reviews.reduce((a, e) => (a += Number(e.stars)), 0) /
+                      item.reviews.length
+                  ) || 0;
+                return (
+                  <div className="flex items-center justify-between">
+                    <button
+                      onClick={() => setProfileModal({ isOpen: true, ...item })}
+                      className="flex items-center space-x-3"
+                    >
+                      <img
+                        src={item.profile_image}
+                        alt="profile"
+                        className="rounded-md size-12"
+                      />
 
-                    <p className="flex flex-col items-start space-y-1 text-gray-700">
-                      <span className="text-sm font-semibold capitalize">
-                        {item.user_name}
-                      </span>
-                      <span className="text-xs">{item.description}</span>
-                    </p>
+                      <p className="flex flex-col items-start space-y-1 text-gray-700">
+                        <div className="flex items-center space-x-3">
+                          <span className="text-sm font-semibold capitalize">
+                            {item.user_name}
+                          </span>
+
+                          <div className="flex items-center space-x-0.5 text-xs">
+                            {new Array(5)
+                              .fill(0)
+                              .map((_, index) =>
+                                index > averageRating ? (
+                                  <FaRegStar className="text-primary-500" />
+                                ) : (
+                                  <FaStar className="text-primary-500" />
+                                )
+                              )}
+                            <span className="text-xs">
+                              ({averageRating.toFixed(1)})
+                            </span>
+                          </div>
+                        </div>
+                        <span className="text-xs">{item.description}</span>
+                      </p>
+                    </button>
+
+                    <button
+                      onClick={() => setBidsModal({ isOpen: true, data: item })}
+                      className="px-3 py-1.5 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600"
+                    >
+                      View Bid
+                    </button>
                   </div>
-
-                  <button
-                    onClick={() => setBidsModal({ isOpen: true, data: item })}
-                    className="px-3 py-2 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600"
-                  >
-                    View Bid
-                  </button>
-                </div>
-              ))
+                );
+              })
             ) : (
               <Empty title="No bids yet!" noMargin />
             ))}
@@ -253,7 +286,9 @@ const FacilityShiftModal = ({
               </div>
               <Button
                 title="Boost Your Shift"
-                handleClick={() => data.boost_status === "No" && setBoostModal(true)}
+                handleClick={() =>
+                  data.boost_status === "No" && setBoostModal(true)
+                }
                 extraStyles={styles.boostBtn}
                 disabled={data.boost_status === "Yes"}
               />
@@ -278,6 +313,7 @@ const FacilityShiftModal = ({
       <BoostShiftModal
         boostModal={boostModal}
         setBoostModal={setBoostModal}
+        setData={setData}
         data={data}
       />
       <EditModal
@@ -285,6 +321,10 @@ const FacilityShiftModal = ({
         setEditModal={setEditModal}
         setData={setData}
         data={data}
+      />
+      <ProfileViewModal
+        profileModal={profileModal}
+        setProfileModal={setProfileModal}
       />
     </div>
   );
@@ -319,7 +359,7 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
         if (json.success) {
           toast.success("Bid Accepted!");
           setBidsModal(false);
-          closeShiftModal()
+          closeShiftModal();
         } else if (json?.error) {
           toast.error(json?.error?.[0]?.message || json?.error?.message);
         }
@@ -360,6 +400,12 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
     }
   };
 
+  const averageRating =
+    eval(
+      data?.reviews?.reduce((a, e) => (a += Number(e.stars)), 0) /
+        data?.reviews?.length
+    ) || 0;
+
   return (
     <div
       className={`${styles.modal.base} ${styles.modal.open}`}
@@ -376,16 +422,37 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
           className={`${styles.main.base} ${styles.main.grid} ${styles.main.gap}`}
         >
           <div className="flex items-center justify-between">
-            <img
-              src={data?.profile_image}
-              className="rounded-md size-12"
-              alt={data?.facility_name}
-            />
+            <div className="flex items-start space-x-2">
+              <img
+                src={data?.profile_image}
+                className="rounded-md size-10"
+                alt={data?.user_name}
+              />
+
+              <div className="flex flex-col text-xs">
+                <span className="text-base font-semibold capitalize">
+                  {data?.user_name}
+                </span>
+
+                <div className="flex items-center space-x-0.5">
+                  {new Array(5)
+                    .fill(0)
+                    .map((_, index) =>
+                      index > averageRating ? (
+                        <FaRegStar className="text-primary-500" />
+                      ) : (
+                        <FaStar className="text-primary-500" />
+                      )
+                    )}
+                  <span className="text-xs">({averageRating.toFixed(1)})</span>
+                </div>
+              </div>
+            </div>
             <Link
               to={"/messages/" + data?.user_id}
-              className="text-sm text-primary-500 hover:underline"
+              className="text-xl text-primary-500 hover:text-primary-600"
             >
-              Chat
+              <MdChat />
             </Link>
           </div>
           <div className="flex items-center justify-end">
@@ -415,7 +482,12 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
   );
 };
 
-export const BoostShiftModal = ({ boostModal, setBoostModal, data }) => {
+export const BoostShiftModal = ({
+  boostModal,
+  setBoostModal,
+  data,
+  setData,
+}) => {
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [budget, setBudget] = useState(0);
@@ -444,6 +516,12 @@ export const BoostShiftModal = ({ boostModal, setBoostModal, data }) => {
       .then((res) => {
         console.log("res", res);
         if (res.success) {
+          setData((prev) => ({
+            ...prev,
+            data: prev.data.map((e) =>
+              e.id === data.id ? { ...e, boost_status: "Yes" } : e
+            ),
+          }));
           toast.success("Shift boosted successfully!");
           setBoostModal(false);
         }

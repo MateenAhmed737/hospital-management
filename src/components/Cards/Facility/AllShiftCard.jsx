@@ -32,9 +32,15 @@ const AllShiftCard = ({
               <span className="text-sm font-semibold">{data.title}</span>
             </p>
           </div>
-          <span className="text-sm font-semibold text-primary-500">
-            ${Number(data.total_service_amount || 0).toFixed(2)}
-          </span>
+
+          <div className="flex flex-col items-end text-primary-500">
+            <span className="text-sm font-semibold">
+              ${Number(data.total || 0).toFixed(2)}
+            </span>
+            <span className="text-xs">
+              EST AMT
+            </span>
+          </div>
         </div>
         <div className="w-full h-px my-1 bg-gray-300" />
         <div className="">

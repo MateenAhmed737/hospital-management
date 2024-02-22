@@ -19,15 +19,13 @@ const ShiftModal = ({
   disableBids,
   isTodaysShift,
   setTodayJob,
-  reload
+  reload,
 }) => {
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
   const [tab, setTab] = useState(0);
   const [placeBidsModal, setPlaceBidsModal] = useState(false);
   const [viewOtherBids, setViewOtherBids] = useState(false);
-  const [status, setStatus] = useState(
-    data?.job_status !== "CheckIn" ? "CheckIn" : "CheckOut"
-  );
+  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
 
@@ -70,7 +68,6 @@ const ShiftModal = ({
       console.log("status", status);
       console.log("shift_id", data.id);
 
-
       const res = await fetch(url, {
         method: "POST",
         body: formdata,
@@ -101,6 +98,10 @@ const ShiftModal = ({
       close();
     }
   };
+
+  useEffect(() => {
+    setStatus(data?.job_status === "CheckIn" ? "CheckOut" : "CheckIn");
+  }, [data?.job_status]);
 
   return (
     <div
@@ -263,7 +264,13 @@ const ShiftModal = ({
   );
 };
 
-const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data, closeShiftModal, reload }) => {
+const PlaceBidsModal = ({
+  placeBidsModal,
+  setPlaceBidsModal,
+  data,
+  closeShiftModal,
+  reload,
+}) => {
   const user = useSelector((state) => state.user);
   // const [bid, setBid] = useState(0.0);
   const [description, setDescription] = useState("");
@@ -296,15 +303,15 @@ const PlaceBidsModal = ({ placeBidsModal, setPlaceBidsModal, data, closeShiftMod
           // setBid(0.0);
           setDescription("");
           setPlaceBidsModal(false);
-          closeShiftModal()
-          reload && reload()
+          closeShiftModal();
+          reload && reload();
         } else if (json?.message?.includes("Bit already exists")) {
           toast.error("Bid already exists!");
           // setBid(0.0);
           setDescription("");
           setPlaceBidsModal(false);
-          closeShiftModal()
-          reload && reload()
+          closeShiftModal();
+          reload && reload();
         } else if (json?.error) {
           toast.error(json?.error?.[0]?.message || json?.error?.message);
         }

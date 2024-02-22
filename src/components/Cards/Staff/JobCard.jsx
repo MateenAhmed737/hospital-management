@@ -10,7 +10,7 @@ const JobCard = ({
   opening_date,
   disableBids = false,
   isTodaysShift = false,
-  setTodayJob
+  setTodayJob,
 }) => {
   const [shiftModal, setShiftModal] = useState(false);
 
@@ -40,7 +40,11 @@ const JobCard = ({
         <ShiftModal
           shiftModal={shiftModal}
           setShiftModal={setShiftModal}
-          data={{ ...data, ...shift, facility }}
+          data={{
+            ...shift,
+            ...data,
+            facility,
+          }}
           disableBids={disableBids}
           isTodaysShift={isTodaysShift}
           setTodayJob={setTodayJob}

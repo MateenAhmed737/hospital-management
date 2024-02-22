@@ -5,9 +5,11 @@ import { base_url } from "../../utils/url";
 import { AppliedShiftCard } from "../../components/Cards/Staff";
 
 const getShifts = `${base_url}/get-book-marked-shifts/`;
+// const getUserBookmarks = `${base_url}/get-book-marked-shifts/`;
 
 const FavJobs = () => {
   const user = useSelector((state) => state.user);
+  // const [userBookmarks, setUserBookmarks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -31,7 +33,25 @@ const FavJobs = () => {
       }
     };
 
+    // const fetchUserBookmarks = async () => {
+    //   setLoading(true);
+    //   try {
+    //     const res = await fetch(getUserBookmarks + user?.id);
+    //     const json = await res.json();
+
+    //     if (json.success) {
+    //       const data = json.success.data || [];
+    //       setUserBookmarks(data.map((e) => Number(e.shift_id)));
+    //     }
+    //   } catch (error) {
+    //     console.error(error);
+    //   } finally {
+    //     setLoading(false);
+    //   }
+    // };
+
     fetchShifts();
+    // fetchUserBookmarks();
   }, [user]);
 
   return (
@@ -49,7 +69,17 @@ const FavJobs = () => {
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          data.map((item) => <AppliedShiftCard {...item} {...item.facility.shift} {...item.facility} />)
+          data.map((item) => (
+            <AppliedShiftCard
+              user={user}
+              {...item}
+              {...item.facility?.shift}
+              isBookmarked={true}
+              // setUserBookmarks={setData}
+              onSuccess={() => setData(data.filter((e) => e.id !== item.id))}
+              enableBookmarks
+            />
+          ))
         ) : (
           <Empty title="No jobs found!" />
         )}

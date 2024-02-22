@@ -189,7 +189,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Amount Paid"
-                value={"$" + Number(analytics.total_income_paid).toFixed(2)}
+                value={"$" + Number(analytics.total_income_paid || 0).toFixed(2)}
                 icon={MonthIncomeImg}
                 color="rgba(165, 204, 142, 0.3)"
                 styles="space-y-6 sm:space-y-0"

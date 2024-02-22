@@ -121,7 +121,8 @@ const Dashboard = () => {
                 {todayJob.data.map((item) => (
                   <JobCard
                     data={item}
-                    {...item.facility.shift}
+                    title={item.facility.shift.title}
+                    opening_date={item.facility.shift.opening_date}
                     facility={item.facility}
                     shift={item.facility.shift}
                     setTodayJob={setTodayJob}
@@ -151,7 +152,7 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Month Income"
-                value={"$" + Number(analytics.total_income).toFixed(2)}
+                value={"$" + Number(analytics.total_income || 0).toFixed(2)}
                 icon={MonthIncomeImg}
                 color="rgba(165, 204, 142, 0.3)"
                 styles="space-y-6 sm:space-y-0"
@@ -194,6 +195,7 @@ const Dashboard = () => {
                       data={item}
                       shift={item?.shift}
                       {...item?.shift}
+                      disableBids
                     />
                   ))
               )}

@@ -19,6 +19,7 @@ const OnGoingFacilityShifts = () => {
         fetch(getShifts + user?.id)
           .then((res) => res.json())
           .then((res) => {
+            console.log('res', res)
             const data = res.success.data.ongoing_shifts || [];
             setShifts({ loading: false, data });
           })

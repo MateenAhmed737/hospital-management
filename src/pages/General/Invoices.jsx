@@ -19,22 +19,23 @@ import toast from "react-hot-toast";
 const getFacilityInvoices = `${base_url}/facility-invoice/`;
 const getAllInvoices = `${base_url}/get-all-invoice-admin`;
 const createUrl = `${base_url}/store-admin-invoice/`;
+const getFacilities = `${base_url}/get-facility`;
 
 const neededProps = [
-  // "transaction_id",
-  // "bank_name",
   "title",
   "amount",
-  "client",
-  "telephone",
-  "email",
-  "company",
-  "vat",
-  "bill_to",
-  "address",
-  "description",
+  "facility_id",
   "due_date",
-  "amount_due",
+  "description",
+  // "transaction_id",
+  // "bank_name",
+  // "client",
+  // "telephone",
+  // "email",
+  // "company",
+  // "vat",
+  // "bill_to",
+  // "address",
 ];
 
 const initialState = convertPropsToObject(neededProps);
@@ -46,6 +47,7 @@ const Invoices = () => {
   const [filter, setFilter] = useState("all");
   const [reload, setReload] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [facilities, setFacilities] = useState([]);
   const [createModal, setCreateModal] = useState({ isOpen: false, data: null });
   const [invoiceModal, setInvoiceModal] = useState({
     isOpen: false,
@@ -62,15 +64,24 @@ const Invoices = () => {
     initialState,
     setCreateModal,
     textAreaFields: ["address", "description"],
-    appendableFields: [
+    dropdownFields: [
       {
-        key: "vat",
-        appendFunc: (key, value, formdata) => {
-          formdata.append("vat", value);
-          console.log(key, value);
-        },
+        key: "facility_id",
+        title: "facility",
+        arr: facilities,
+        getOption: (val) => val.facility_name,
+        getValue: (val) => val.id,
       },
     ],
+    // appendableFields: [
+    //   {
+    //     key: "vat",
+    //     appendFunc: (key, value, formdata) => {
+    //       formdata.append("vat", value);
+    //       console.log(key, value);
+    //     },
+    //   },
+    // ],
     successCallback: (res) => {
       if (res.success) {
         setReload(!reload);
@@ -81,7 +92,7 @@ const Invoices = () => {
     gridCols: 2,
   };
 
-  console.log("data", data);
+  console.log("facilities", facilities);
 
   useEffect(() => {
     const fetchInvoices = () => {
@@ -96,8 +107,17 @@ const Invoices = () => {
         .catch((err) => console.error(err))
         .finally(() => setLoading(false));
     };
+    const fetchFacilities = () => {
+      setLoading(true);
+      fetch(getFacilities)
+        .then((res) => res.json())
+        .then((res) => setFacilities(res.success.data))
+        .catch((err) => console.error(err))
+        .finally(() => setLoading(false));
+    };
 
     fetchInvoices();
+    fetchFacilities();
   }, [user.id, user.isAdmin, reload]);
 
   const filteredData = useMemo(() => {

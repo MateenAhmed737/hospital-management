@@ -5,6 +5,7 @@ import ImagesViewer from "./ImagesViewer";
 import ViewModal from "./ViewModal";
 import NotificationModal from "./NotificationModal";
 import ShiftModal from "./ShiftModal";
+import ProfileViewModal from "./ProfileViewModal";
 export * from "./Facility";
 
 export {
@@ -14,5 +15,6 @@ export {
   ViewModal,
   NotificationModal,
   ShiftModal,
+  ProfileViewModal,
   ImagesViewer,
 };

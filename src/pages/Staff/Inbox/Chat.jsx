@@ -165,7 +165,7 @@ const Chat = () => {
             <div className="relative">
               <img
                 className="bg-gray-100 border rounded-full min-w-12 min-h-12 size-12"
-                src={profile.data.profile_pic}
+                src={profile.data?.profile_pic}
                 alt="profile"
               />
               <div
@@ -176,8 +176,8 @@ const Chat = () => {
             </div>
 
             <div className="flex flex-col items-start">
-              <span className="font-semibold">{profile.data.name}</span>
-              <span className="text-xs">{profile.data.status}</span>
+              <span className="font-semibold">{profile.data?.name}</span>
+              <span className="text-xs">{profile.data?.status}</span>
             </div>
           </>
         )}
