@@ -48,7 +48,7 @@ const AllJobs = () => {
 
         if (json.success) {
           const data = json.success.data || [];
-          setData(data.slice().reverse());
+          setData(data);
         }
       } catch (error) {
         console.error(error);

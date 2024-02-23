@@ -9,7 +9,6 @@ import { Layout, MainLoader } from "../components";
 import {
   Page404,
   Login,
-  EditProfile,
   ChangePassword,
   ForgotPassword,
   EmailVerification,
@@ -48,6 +47,7 @@ const Router = () => {
   const role = user?.role;
 
   const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
+  const EditProfile = user && require("../pages/" + role + "/EditProfile")?.default;
   const Inbox =
     user &&
     (user?.isStaff || user?.isFacility) &&

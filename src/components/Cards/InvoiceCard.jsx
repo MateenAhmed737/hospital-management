@@ -5,6 +5,7 @@ import { MdOutlinePendingActions } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
 import MarkInvoiceModal from "../Modals/Admin/MarkInvoiceModal";
+import { FaCircleCheck } from "react-icons/fa6";
 
 const markInvoiceUrl = `${base_url}/mark-invoice/`;
 
@@ -51,30 +52,24 @@ const InvoiceCard = (data) => {
         </div>
 
         <p className="flex flex-col items-end space-y-0.5">
-          <div className={color}>
+          <div className={color + " flex items-center space-x-1"}>
+            {user.isAdmin && !isPaid && (
+              <button
+                onClick={() => setMarkInvoiceModal(true)}
+                onMouseEnter={() => setHasEntered(true)}
+                onMouseLeave={() => setHasEntered(false)}
+                className={`inline-block text-primary-600 hover:text-primary-700 disabled:hover:text-inherit ${color}`}
+                title="Mark Paid"
+              >
+                <FaCircleCheck />
+              </button>
+            )}
             {isPaid ? (
               <IoCheckmarkDoneSharp />
             ) : isUnpaid ? (
               <IoCheckmarkSharp />
             ) : (
               <MdOutlinePendingActions />
-            )}
-            {user.isAdmin && (
-              <button
-                onClick={() => setMarkInvoiceModal(true)}
-                onMouseEnter={() => setHasEntered(true)}
-                onMouseLeave={() => setHasEntered(false)}
-                className={`relative inline-block mr-2 text-gray-600 top-1 hover:text-gray-700 disabled:hover:text-inherit ${
-                  isUnpaid
-                    ? "hover:!text-red-700"
-                    : isPending
-                    ? "hover:!text-gray-600"
-                    : ""
-                } ${color}`}
-                title={isPaid ? "Paid" : isUnpaid ? "Mark paid" : ""}
-                disabled={isPaid}
-              >
-              </button>
             )}
             <span className={`text-xs`}>{data.status}</span>
           </div>

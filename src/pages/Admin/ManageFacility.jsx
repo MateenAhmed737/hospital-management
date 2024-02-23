@@ -6,6 +6,7 @@ import { countries, states } from "../../constants/data";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { AccessDenied } from "../Auth";
+import { Country, State } from "country-state-city";
 
 const neededProps = [
   "id",
@@ -41,7 +42,6 @@ const ManageFacility = () => {
   const user_permissions = useSelector((state) => state.user?.permissions);
   const [, setSearchText] = useState("");
   const [data, setData] = useState(null);
-  // const [roles, setRoles] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [paginatedData, setPaginatedData] = useState({
     items: [],
@@ -108,21 +108,16 @@ const ManageFacility = () => {
     {
       key: "_country",
       title: "country",
-      arr: countries,
+      arr: Country.getAllCountries(),
       getOption: (val) => val.name,
+      getValue: (val) => val.isoCode,
     },
     {
       key: "_state",
       title: "state",
-      arr: (state) => {
-        const country = state._country;
-        if (country && Object.keys(states).includes(country)) {
-          return states[country];
-        }
-
-        return [];
-      },
-      getOption: (val) => val,
+      arr: (state) =>
+        state._country ? State.getStatesOfCountry(state._country) : [],
+      getOption: (val) => val.name,
     },
   ];
 
@@ -145,6 +140,13 @@ const ManageFacility = () => {
       key: "hourly_rate",
       appendFunc: (key, value, formdata) => {
         formdata.append(key, JSON.stringify(value));
+      },
+    },
+    {
+      key: "country",
+      appendFunc: (key, value, formdata) => {
+        formdata.append(`${key}`, Country.getCountryByCode(value).name);
+        console.log(`${key}`, Country.getCountryByCode(value).name);
       },
     },
   ];
@@ -198,6 +200,12 @@ const ManageFacility = () => {
       textAreaFields: ["_about"],
       template,
       neededProps,
+      initialStateFunc: (data) => ({
+        ...data,
+        _country: Country.getAllCountries().find(
+          (e) => e.name === data._country
+        )?.isoCode,
+      }),
       uploadFields,
       appendableFields,
       editUrl,

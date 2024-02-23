@@ -18,12 +18,12 @@ import toast from "react-hot-toast";
 
 const getFacilityInvoices = `${base_url}/facility-invoice/`;
 const getAllInvoices = `${base_url}/get-all-invoice-admin`;
-const createUrl = `${base_url}/store-admin-invoice/`;
+const createUrl = `${base_url}/store-admin-invoice`;
 const getFacilities = `${base_url}/get-facility`;
 
 const neededProps = [
   "title",
-  "amount",
+  "total_amount",
   "facility_id",
   "due_date",
   "description",
@@ -58,7 +58,7 @@ const Invoices = () => {
 
   const createModalProps = {
     title: "Create Invoice",
-    createUrl: createUrl + user.id,
+    createUrl: createUrl,
     createModal,
     neededProps,
     initialState,

@@ -2,7 +2,13 @@ import React, { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { getInputType } from "../../utils";
-import { DropdownField, FacilityHourlyRates, MultiSelectField, TextArea, UploadField } from "../Fields";
+import {
+  DropdownField,
+  FacilityHourlyRates,
+  MultiSelectField,
+  TextArea,
+  UploadField,
+} from "../Fields";
 import toast from "react-hot-toast";
 import moment from "moment/moment";
 
@@ -23,15 +29,20 @@ const EditModal = ({
   neededProps,
   successCallback,
   template,
+  initialStateFunc,
 }) => {
   const initialState = editModal.data;
-  const [state, setState] = useState(initialState);
+  const [state, setState] = useState(
+    initialStateFunc ? initialStateFunc(initialState) : initialState
+  );
   const [isLoading, setIsLoading] = useState(false);
 
   const uploadKeys = uploadFields.map((e) => e.key);
   const dropdownKeys = dropdownFields.map((e) => e.key);
   const multiSelectKeys = multiSelectFields.map((e) => e.key);
   const inputKeys = inputFields.map((e) => e.key);
+
+  console.log('state', state)
 
   const keys =
     template && Object.keys(template).filter((e) => !excludeFields.includes(e));

@@ -6,8 +6,8 @@ import { base_url } from "../../../utils/url";
 import { Button, DropdownField, Page } from "../../../components";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { countries, states } from "../../../constants/data";
 import VerifyOTP from "./VerifyOTP";
+import { Country, State } from "country-state-city";
 
 const roles = {
   1: "Staff",
@@ -162,11 +162,11 @@ const Register = () => {
   return (
     <Page
       title="Register"
-      containerStyles="!h-screen !w-screen flex justify-center items-center"
+      containerStyles="!h-screen !w-screen overflow-y-auto flex justify-center items-center"
     >
       <main className="w-full max-w-xl sm:mx-4">
         <section>
-          <div className="flex flex-col items-center justify-center px-2 mx-auto sm:py-8 sm:px-6 md:h-screen lg:py-0">
+          <div className="flex flex-col items-center justify-center px-2 mx-auto sm:py-8 sm:px-6 lg:py-0">
             <h1 className="my-5 text-xl font-bold text-center text-primary-600">
               {step === 2 ? "Verify OTP" : "Hospital Management"}
             </h1>
@@ -199,7 +199,7 @@ const Register = () => {
                       Facility
                     </button>
                   </div>
-                  <div className="p-6 space-y-4 md:space-y-6">
+                  <div className="p-6 pb-4 space-y-4 md:space-y-6">
                     {/* <h1 className="text-xl font-bold leading-tight text-center text-gray-800">
                   Register
                 </h1> */}
@@ -396,10 +396,11 @@ const Register = () => {
                         <DropdownField
                           title="country"
                           label={false}
-                          arr={countries}
+                          arr={Country.getAllCountries()}
                           state={state.country}
                           setState={(e) => setState({ ...state, country: e })}
                           getOption={(val) => val.name}
+                          getValue={(val) => val.isoCode}
                           styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
                           required
                         />
@@ -410,10 +411,10 @@ const Register = () => {
                             state.country ? "state" : "country to select state"
                           }
                           label={false}
-                          arr={states[state.country] || []}
+                          arr={state.country ? State.getStatesOfCountry(state.country) : []}
                           state={state.state}
                           setState={(e) => setState({ ...state, state: e })}
-                          getOption={(val) => val}
+                          getOption={(val) => val.name}
                           styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
                           disabled={!state.country}
                           required

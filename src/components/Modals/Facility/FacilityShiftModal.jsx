@@ -42,7 +42,8 @@ const FacilityShiftModal = ({
   const [loadingBtn, setLoadingBtn] = useState({ delete: false, edit: false });
   let details = parseJson(data.job_details);
 
-  console.log("bids", bids.data);
+  // console.log("bids", bids.data);
+  console.log('data ==>', data)
 
   const close = () => setShiftModal(false);
 
@@ -231,7 +232,7 @@ const FacilityShiftModal = ({
                             {new Array(5)
                               .fill(0)
                               .map((_, index) =>
-                                index > averageRating ? (
+                                ++index > averageRating ? (
                                   <FaRegStar className="text-primary-500" />
                                 ) : (
                                   <FaStar className="text-primary-500" />
@@ -667,7 +668,7 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
       "start_time",
       "end_time",
       "service_type",
-      "staff",
+      // "staff",
     ].forEach((key) => {
       if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
@@ -822,7 +823,7 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
               required
               label
             />
-            <DropdownField
+            {/* <DropdownField
               arr={serviceTypes}
               title="Staff Type"
               state={state?.staff}
@@ -832,7 +833,7 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
               getOption={(val) => val.service_name}
               required
               label
-            />
+            /> */}
             <div className="w-full">
               <label
                 htmlFor="opening_date"

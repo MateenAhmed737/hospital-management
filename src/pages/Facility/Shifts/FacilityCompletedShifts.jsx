@@ -14,11 +14,17 @@ const FacilityCompletedShifts = () => {
     useEffect(() => {
       const fetchShifts = () => {
         setShifts({ loading: true, data: [] });
+        const formdata = new FormData();
+        formdata.append("type", "Facility");
   
-        fetch(getShifts + user?.id)
+        fetch(getShifts + user?.id, {
+          method: "POST",
+          body: formdata,
+        })
           .then((res) => res.json())
           .then((res) => {
-            const data = res.success.data.completed_shifts || [];
+            console.log('res =====>', res)
+            const data = res.success.data || [];
             setShifts({ loading: false, data });
           })
           .catch((err) => console.error(err))
@@ -40,7 +46,7 @@ const FacilityCompletedShifts = () => {
               .slice()
               .reverse()
               .map((shift) => (
-                <AllShiftCard {...shift} data={shift} setData={setShifts} disableDetail />
+                <AllShiftCard {...shift} data={{...shift, profile_image: user.profile_image}} setData={setShifts} disableDetail />
               ))
           ) : (
             <Empty title="No shifts found!" noMargin />

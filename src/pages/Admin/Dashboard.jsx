@@ -8,6 +8,7 @@ import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
 import * as echarts from "echarts";
+import moment from "moment";
 
 const getAnalytics = `${base_url}/admin-dashboard/`;
 const getGraphData = `${base_url}/get-dashboard-graph`;
@@ -16,6 +17,7 @@ const Dashboard = () => {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);
   const [analytics, setAnalytics] = useState({});
+  const [date, setDate] = useState(false);
   const [graph, setGraph] = useState({
     loading: true,
     data: [],
@@ -24,7 +26,9 @@ const Dashboard = () => {
   const fetchGrapData = useCallback(async () => {
     setGraph((prev) => ({ ...prev, loading: true }));
     try {
-      const res = await fetch(getGraphData, { method: "POST" });
+      const formdata = new FormData();
+      formdata.append("date", moment(date).format("YYYY-MM-DD"));
+      const res = await fetch(getGraphData, { method: "POST", body: date ? formdata : undefined });
       const json = await res.json();
 
       if (json.success) {
@@ -37,12 +41,16 @@ const Dashboard = () => {
     } finally {
       setGraph((prev) => ({ ...prev, loading: false }));
     }
-  }, []);
+  }, [date]);
 
   useEffect(() => {
+    const formdata = new FormData();
+    formdata.append("date", moment(date).format("YYYY-MM-DD"));
+
     const requestOptions = {
       method: "POST",
       headers: { accept: "application/json" },
+      body: date ? formdata : undefined,
     };
     fetchData({
       url: getAnalytics + user?.id,
@@ -53,7 +61,7 @@ const Dashboard = () => {
     });
 
     fetchGrapData();
-  }, [user, fetchGrapData]);
+  }, [user, fetchGrapData, date]);
 
   const amountOptions = useMemo(
     () => ({
@@ -170,6 +178,14 @@ const Dashboard = () => {
         </div>
       ) : (
         <main>
+          <div className="flex justify-center w-full my-2">
+            <input
+              type="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs outline-none rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full max-w-sm p-2.5"
+            />
+          </div>
           <div className="grid grid-cols-2 gap-2">
             <div className="grid grid-cols-1 gap-2">
               <Card
@@ -189,7 +205,9 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Amount Paid"
-                value={"$" + Number(analytics.total_income_paid || 0).toFixed(2)}
+                value={
+                  "$" + Number(analytics.total_income_paid || 0).toFixed(2)
+                }
                 icon={MonthIncomeImg}
                 color="rgba(165, 204, 142, 0.3)"
                 styles="space-y-6 sm:space-y-0"

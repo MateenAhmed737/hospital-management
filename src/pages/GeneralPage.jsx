@@ -90,7 +90,7 @@ const GeneralPage = ({
               </div>
               <input
                 id="table-search"
-                className="block w-full p-2 pl-10 text-xs text-gray-900 border border-gray-400 rounded-lg md:w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
+                className="block w-full p-2 pl-10 text-xs text-gray-900 border border-gray-400 rounded-lg md:w-80 bg-gray-50 focus:ring-primary-500 focus:border-primary-500"
                 {...search}
               />
             </div>
@@ -114,6 +114,8 @@ const GeneralPage = ({
           )}
         </div>
       </div>
+
+      <p className="mt-3 mb-2 text-xs">{pagination.curLength} results</p>
 
       <Pagination {...pagination} />
 

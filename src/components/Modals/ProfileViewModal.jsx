@@ -2,6 +2,15 @@ import React, { useEffect, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import { base_url } from "../../utils/url";
 import { Loader } from "../Loaders";
+import {
+  FaBuilding,
+  FaInfoCircle,
+  FaPaperPlane,
+  FaPhoneAlt,
+  FaUser,
+} from "react-icons/fa";
+import { MdEmail } from "react-icons/md";
+import Rating from "../Cards/Rating";
 
 const getProfile = `${base_url}/get-user/`;
 
@@ -37,8 +46,6 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
       fetchProfileInfo();
     }
   }, [user_id, role_id]);
-
-  console.log("profileInfo.data", profileInfo.data);
 
   return (
     <>
@@ -76,18 +83,24 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
                 <Loader />
               ) : (
                 <div className="w-full">
-                  <img
-                    className="object-cover object-center mx-auto rounded-full size-24"
-                    src={profileInfo.profile_image}
-                    alt="profile"
-                  />
+                  {profileInfo.data?.profile_image ? (
+                    <img
+                      className="object-cover object-center mx-auto rounded-full size-24"
+                      src={profileInfo.data?.profile_image}
+                      alt="profile"
+                    />
+                  ) : (
+                    <div className="flex items-center justify-center mx-auto text-4xl text-gray-300 bg-gray-100 rounded-full size-24">
+                      <FaUser />
+                    </div>
+                  )}
                   <h3 className="mt-2 font-semibold text-center capitalize">
                     {profileInfo.data.first_name} {profileInfo.data.last_name}
                   </h3>
                   <div className="flex w-full">
                     <button
                       onClick={() => setTab(0)}
-                      className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
+                      className={`w-1/2 py-2 mt-2 text-xs font-medium border-b-2 ${
                         tab === 0
                           ? "text-primary-600 border-primary-600"
                           : "text-gray-500"
@@ -97,7 +110,7 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
                     </button>
                     <button
                       onClick={() => setTab(1)}
-                      className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
+                      className={`w-1/2 py-2 mt-2 text-xs font-medium border-b-2 ${
                         tab === 1
                           ? "text-primary-600 border-primary-600"
                           : "text-gray-500"
@@ -107,21 +120,118 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
                     </button>
                   </div>
                   {tab === 0 && (
-                    <div className="mt-2 text-xs text-left">
+                    <div className="mt-2 text-sm text-left">
                       <table className="w-full overflow-hidden rounded-lg">
                         <tbody className="border">
-                          <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                            <th className="px-2 py-1.5 font-semibold">
-                              Due Date:
-                            </th>
-                            <td className="text-xs text-gray-700">
-                              {profileInfo.data?.due_date}
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaUser className="text-base mr-2.5 inline-block" />
+                              {`${profileInfo.data?.first_name} ${profileInfo.data?.last_name}`}
                             </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <MdEmail className="text-lg mr-2.5 inline-block" />
+                              {profileInfo.data?.email}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaPhoneAlt className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.phone}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaInfoCircle className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.about}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaPaperPlane className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.Address_line_1}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={2}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaPaperPlane className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.Address_line_2}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
+                          </tr>
+                          <tr className="py-2 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                            <td
+                              colSpan={1}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaBuilding className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.country}
+                            </td>
+                            <td
+                              colSpan={1}
+                              className="px-2 py-2 font-semibold capitalize align-middle"
+                            >
+                              <FaBuilding className="text-base mr-2.5 inline-block" />
+                              {profileInfo.data?.state}
+                            </td>
+                            <td className="text-xs text-gray-700"></td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
                   )}
+
+                  <div
+                    className={
+                      tab === 1 &&
+                      (profileInfo.data?.review?.length
+                        ? "flex flex-col space-y-1 pt-2 min-h-[38vh]"
+                        : "flex justify-center items-center min-h-[38vh] text-xs")
+                    }
+                  >
+                    {tab === 1 && profileInfo.data?.review?.length
+                      ? profileInfo.data.review.map((review) => (
+                          <div className="w-full px-3 py-2 space-y-1 border rounded-md">
+                            <div className="flex items-center justify-between text-sm">
+                              <b>{review?.hospital}</b>
+
+                              <div className="flex items-center space-x-0.5">
+                                <Rating stars={review.stars} />(
+                                {Number(review.stars).toFixed(1)})
+                              </div>
+                            </div>
+
+                            <p className="text-xs">{review.content}</p>
+                          </div>
+                        ))
+                      : tab === 1 &&
+                        !profileInfo.data?.review?.length &&
+                        "No reviews found!"}
+                  </div>
                 </div>
               )}
             </div>

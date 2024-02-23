@@ -64,27 +64,16 @@ const NewShift = () => {
       } else if (key === "staff_type") {
         formdata.append("staff", state[key]);
         formdata.append("service_type", state[key]);
-        formdata.append("state", user?.state);
         formdata.append("country", user?.country);
-        formdata.append("boost_status", "Yes");
-        formdata.append("boost_fee", "10");
-        formdata.append("boost_start", "2024-02-19");
-        formdata.append("boost_end", "2024-05-30");
-        
-        console.log("boost_fee", "10");
-        console.log("boost_start", "2024-02-19");
-        console.log("boost_end", "2024-05-30");
+        formdata.append("state", user?.state);
+
         console.log("staff", state[key]);
         console.log("service_type", state[key]);
         console.log("state", user?.state);
         console.log("country", user?.country);
-        console.log("boost_status", "Yes");
       } else if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
         console.log(key, moment(state[key]).format("YYYY-MM-DD"));
-      } else if (key === "start_time" || key === "end_time") {
-        formdata.append(key, convertTime(state[key]).split(" ")[0] + ":00");
-        console.log(key, convertTime(state[key]).split(" ")[0] + ":00");
       } else {
         formdata.append(key, state[key]);
         console.log(key, state[key]);
@@ -103,7 +92,7 @@ const NewShift = () => {
     fetch(createUrl + user.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log('res ==>', res)
+        console.log("res ==>", res);
         if (res.success) {
           toast.success("Shift created successfully!", { duration: 2000 });
           setState(initialState);
@@ -112,7 +101,8 @@ const NewShift = () => {
             duration: 2000,
           });
         }
-      }).catch((error) => console.error(error))
+      })
+      .catch((error) => console.error(error))
       .finally(() => setLoading(false));
   };
 
