@@ -20,6 +20,8 @@ import {
   AllJobs,
   Invoices,
   Applied,
+  TermsAndConditions,
+  PrivacyPolicy,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -73,6 +75,8 @@ const Router = () => {
           >
             <Route path="/dashboard" element={privateRoute(Dashboard)} />
             <Route path="/edit-profile" element={privateRoute(EditProfile)} />
+            <Route path="/terms-and-conditions" element={privateRoute(TermsAndConditions)} />
+            <Route path="/privacy-policy" element={privateRoute(PrivacyPolicy)} />
 
             {/* For Staff (1), Admins (2) and Facalities (3) */}
             <Route element={<Auth allowedRoles={["1", "3"]} />}>

@@ -1,6 +1,7 @@
 import React from "react";
 import { GiSandsOfTime } from "react-icons/gi";
 import {
+  FaBookOpen,
   FaBriefcaseMedical,
   FaCheck,
   FaClipboardList,
@@ -19,6 +20,7 @@ import {
   MdLock,
   MdMessage,
   MdOutlinePlaylistAddCheck,
+  MdPrivacyTip,
 } from "react-icons/md";
 import { RxLapTimer } from "react-icons/rx";
 import {
@@ -60,7 +62,7 @@ export const navLinks = {
     },
     {
       icon: <MdLock className="-ml-0.5 text-xl" />,
-      id: 3,
+      id: 2,
       path: "/manage-roles",
       title: "manage_roles",
     },
@@ -72,27 +74,39 @@ export const navLinks = {
     },
     {
       icon: <FaUser className="-ml-0.5 text-xl" />,
-      id: 3,
+      id: 4,
       path: "/manage-staff",
       title: "manage_staff",
     },
     {
       icon: <HiMiniBuildingOffice className="-ml-0.5 text-xl" />,
-      id: 3,
+      id: 5,
       path: "/manage-facility",
       title: "manage_facility",
     },
     {
       icon: <FaBriefcaseMedical className="text-lg" />,
-      id: 4,
+      id: 6,
       path: "/service-types",
       title: "service_types",
     },
     {
       icon: <IoClipboardOutline className="text-lg" />,
-      id: 4,
+      id: 7,
       path: "/invoices",
       title: "invoices",
+    },
+    {
+      icon: <FaBookOpen className="text-lg" />,
+      id: 8,
+      path: "/terms-and-conditions",
+      title: "terms_and_conditions",
+    },
+    {
+      icon: <MdPrivacyTip className="text-lg" />,
+      id: 9,
+      path: "/privacy-policy",
+      title: "privacy_policy",
     },
   ],
   Facility: [

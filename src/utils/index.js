@@ -53,6 +53,14 @@ export const parseJson = (value) => {
   return typeof copy === "string" ? JSON.parse(copy) : copy;
 };
 
+export const replaceParaWithDivs = (htmlString) =>
+  htmlString
+    ?.replace(/<p(.*?)>/gi, (m) =>
+      m?.includes("class") ? m?.replace("p", "div") : "<div>"
+    )
+    ?.replace(/<\/p>/gi, "</div>");
+// .replace(/class="ql-align-center"/g, 'style="text-align: center;"');
+
 export const modifyData = (data, neededProps, isSingleObject) => {
   let keys = Object.keys(isSingleObject ? data : data.length ? data[0] : {});
 

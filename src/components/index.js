@@ -8,6 +8,7 @@ import DropdownFilter from "./DropdownFilter";
 import Notifications from "./Notifications";
 import Pagination from "./Pagination";
 import Account from "./Account";
+import Editor from "./Editor";
 import Empty from "./Empty";
 export * from "./Cards";
 export * from "./Fields";
@@ -28,4 +29,5 @@ export {
   Pagination,
   Account,
   Empty,
+  Editor
 };

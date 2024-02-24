@@ -3,13 +3,18 @@ import { Button, DropdownField, Page } from "../../components";
 import { base_url } from "../../utils/url";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
-import { countries, roles, states } from "../../constants/data";
+import { roles } from "../../constants/data";
 import { userActions } from "../../store/slices/userSlice";
+import { Country, State } from "country-state-city";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [state, setState] = useState({ ...user, about: "" });
+  const [state, setState] = useState({
+    ...user,
+    country: Country.getAllCountries().find((e) => e.name === user.country)
+      .isoCode,
+  });
   const [loading, setLoading] = useState(false);
 
   const { profile_image } = state;
@@ -27,9 +32,12 @@ const EditProfile = () => {
       Object.keys(state)
         .filter((e) => e !== "role")
         .forEach((key) => {
-          if (key === "type") {
-            formdata.append("type_of_staff", state[key]);
-            console.log("type_of_staff", state[key]);
+          if (key === "country") {
+            formdata.append(
+              "country",
+              Country.getCountryByCode(state[key]).name
+            );
+            console.log("country", Country.getCountryByCode(state[key]).name);
           } else {
             formdata.append(key, state[key]);
             console.log(key, state[key]);
@@ -125,69 +133,58 @@ const EditProfile = () => {
               />
             </div>
           </div>
-          <div className="col-span-2 sm:col-span-1">
+          <div className="col-span-2">
             <input
               type="text"
-              name="first_name"
-              id="first_name"
+              name="facility_name"
+              id="facility_name"
               onChange={handleChange}
-              value={state.first_name}
-              className="relative top-0 w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
-              placeholder="First Name"
-            />
-          </div>
-          <div className="col-span-2 sm:col-span-1">
-            <input
-              type="text"
-              name="last_name"
-              id="last_name"
-              onChange={handleChange}
-              value={state.last_name}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
-              placeholder="Last Name"
+              value={state.facility_name}
+              className="relative top-0 w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Name"
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
             <input
               type="email"
-              name="email"
-              id="email"
+              name="facility_email"
+              id="facility_email"
               onChange={handleChange}
-              value={state.email}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              value={state.facility_email}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
               placeholder="Email"
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
             <input
               type="tel"
-              name="phone"
-              id="phone"
+              name="phone_number"
+              id="phone_number"
               onChange={handleChange}
-              value={state.phone}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              value={state.phone_number}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
               placeholder="Phone Number"
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
             <input
               type="text"
-              name="Address_line_1"
-              id="Address_line_1"
+              name="address_1"
+              id="address_1"
               onChange={handleChange}
-              value={state.Address_line_1}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              value={state.address_1}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
               placeholder="Address line 1"
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
             <input
               type="text"
-              name="Address_line_2"
-              id="Address_line_2"
+              name="address_2"
+              id="address_2"
               onChange={handleChange}
-              value={state.Address_line_2}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              value={state.address_2}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
               placeholder="Address line 2"
             />
           </div>
@@ -195,22 +192,23 @@ const EditProfile = () => {
             <DropdownField
               title="country"
               label={false}
-              arr={countries}
+              arr={Country.getAllCountries()}
               state={state.country}
               setState={(e) => setState({ ...state, country: e })}
               getOption={(val) => val.name}
-              styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+              getValue={(val) => val.isoCode}
+              styles="!shadow-none !rounded-md !bg-gray-100 !py-3 !outline-none disabled:!text-gray-500"
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
             <DropdownField
               title={state.country ? "state" : "country to select state"}
               label={false}
-              arr={states[state.country] || []}
+              arr={State.getStatesOfCountry(state.country)}
               state={state.state}
               setState={(e) => setState({ ...state, state: e })}
-              getOption={(val) => val}
-              styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+              getOption={(val) => val.name}
+              styles="!shadow-none !rounded-md !bg-gray-100 !py-3 !outline-none disabled:!text-gray-500"
               disabled={!state.country}
             />
           </div>
@@ -221,19 +219,19 @@ const EditProfile = () => {
               id="zip_code"
               onChange={handleChange}
               value={state.zip_code}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
               placeholder="Zip code"
               maxLength={5}
             />
           </div>
           <div className="col-span-2">
             <textarea
-              name="about"
+              name="information"
               rows="8"
               onChange={handleChange}
-              value={state.about}
-              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
-              placeholder="About..."
+              value={state.information}
+              className="block w-full px-4 py-3 text-xs font-medium text-gray-900 transition-all duration-300 bg-gray-100 border border-transparent rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+              placeholder="Info..."
             ></textarea>
           </div>
 

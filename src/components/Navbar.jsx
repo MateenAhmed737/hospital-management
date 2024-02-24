@@ -31,6 +31,35 @@ const Navbar = ({ toggle, setToggle }) => {
             <NavItem key={data.title} data={data} />
           ))}
         </div>
+
+        {!user.isAdmin && (
+          <div className="flex items-center justify-between text-xs text-nowrap">
+            <NavLink
+              to="/terms-and-conditions"
+              className={({ isActive }) => {
+                return `${
+                  isActive
+                    ? "text-primary-500 underline font-semibold"
+                    : "text-primary-500"
+                } hover:underline`;
+              }}
+            >
+              Terms
+            </NavLink>
+            <NavLink
+              to="/privacy-policy"
+              className={({ isActive }) => {
+                return `${
+                  isActive
+                    ? "text-primary-500 font-semibold"
+                    : "text-primary-500"
+                } hover:underline`;
+              }}
+            >
+              Privacy Policy
+            </NavLink>
+          </div>
+        )}
       </nav>
     </>
   );

@@ -2,14 +2,12 @@ import React, { useEffect, useState } from "react";
 import { Empty, Loader, Page } from "../../components";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
-import { AppliedShiftCard } from "../../components/Cards/Staff";
+import { AppliedShiftCard, RecentJobCard } from "../../components/Cards/Staff";
 
 const getShifts = `${base_url}/get-book-marked-shifts/`;
-// const getUserBookmarks = `${base_url}/get-book-marked-shifts/`;
 
 const FavJobs = () => {
   const user = useSelector((state) => state.user);
-  // const [userBookmarks, setUserBookmarks] = useState([]);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
@@ -33,25 +31,7 @@ const FavJobs = () => {
       }
     };
 
-    // const fetchUserBookmarks = async () => {
-    //   setLoading(true);
-    //   try {
-    //     const res = await fetch(getUserBookmarks + user?.id);
-    //     const json = await res.json();
-
-    //     if (json.success) {
-    //       const data = json.success.data || [];
-    //       setUserBookmarks(data.map((e) => Number(e.shift_id)));
-    //     }
-    //   } catch (error) {
-    //     console.error(error);
-    //   } finally {
-    //     setLoading(false);
-    //   }
-    // };
-
     fetchShifts();
-    // fetchUserBookmarks();
   }, [user]);
 
   return (
