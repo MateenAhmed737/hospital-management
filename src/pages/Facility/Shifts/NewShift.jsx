@@ -7,7 +7,6 @@ import { base_url } from "../../../utils/url";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import moment from "moment/moment";
-import { convertTime } from "../../../utils";
 
 const initialState = {
   title: "",
@@ -66,11 +65,14 @@ const NewShift = () => {
         formdata.append("service_type", state[key]);
         formdata.append("country", user?.country);
         formdata.append("state", user?.state);
+        formdata.append("boost_status", "No");
 
         console.log("staff", state[key]);
         console.log("service_type", state[key]);
         console.log("state", user?.state);
         console.log("country", user?.country);
+        console.log("boost_status", "No");
+        
       } else if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
         console.log(key, moment(state[key]).format("YYYY-MM-DD"));

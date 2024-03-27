@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { convertPropsToObject, fetchData, modifyData } from "../../utils";
 import { base_url } from "../../utils/url";
 import GeneralPage from "../GeneralPage";
-import { countries, states } from "../../constants/data";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { AccessDenied } from "../Auth";
@@ -221,7 +220,7 @@ const ManageFacility = () => {
       successCallback: editCallback,
     },
     viewModalProps: {
-      excludeFields: ["_created_at", "_updated_at", "_role_id", "_password"],
+      excludeFields: ["_created_at", "_updated_at", "_role_id", "_password", "_hourly_rate"],
       longFields: ["_about"],
       imageFields: ["profile_image"],
     },
