@@ -2,11 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Button, DropdownField, Page } from "../../components";
 import { base_url } from "../../utils/url";
 import { useDispatch, useSelector } from "react-redux";
-import toast from "react-hot-toast";
 import { roles } from "../../constants/data";
 import { userActions } from "../../store/slices/userSlice";
 import { Country, State } from "country-state-city";
-// import {  } from "country-code-lookup";
+import toast from "react-hot-toast";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
@@ -113,9 +112,8 @@ const EditProfile = () => {
 
     fetchStaffTypes();
   }, []);
-  
 
-console.log('state', state)
+  console.log('state', state)
 
   return (
     <Page title="Edit Profile" enableHeader>
@@ -265,12 +263,13 @@ console.log('state', state)
           </div>
           <div className="col-span-2 sm:col-span-1">
             <DropdownField
-              title={"staff type"}
+              title="staff type"
               label={false}
               arr={staffTypes}
-              state={state.type}
-              setState={(e) => setState({ ...state, type: e })}
+              state={state.type_id}
+              setState={(e) => setState({ ...state, type_id: e })}
               getOption={(val) => val.service_name}
+              getValue={(val) => val.id}
               styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
             />
           </div>

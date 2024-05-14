@@ -38,7 +38,7 @@ const Page = ({
   useEffect(() => {
     const fetchNotifications = async () => {
       try {
-        const res = await fetch(getNotificationsUrl + user?.id);
+        const res = await fetch(getNotificationsUrl + user?.id, {method: "POST"});
         const json = await res.json();
 
         if (json.success) {

@@ -38,6 +38,8 @@ const NewShift = () => {
     setState((prev) => ({ ...prev, [name]: value }));
   };
 
+  console.log('state', state)
+
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -62,7 +64,7 @@ const NewShift = () => {
         console.log("job_details", JSON.stringify(state[key]));
       } else if (key === "staff_type") {
         formdata.append("staff", state[key]);
-        formdata.append("service_type", state[key]);
+        formdata.append("type_id", state[key]);
         formdata.append("country", user?.country);
         formdata.append("state", user?.state);
         formdata.append("boost_status", "No");
@@ -234,6 +236,7 @@ const NewShift = () => {
             state={state.staff_type}
             setState={(e) => setState({ ...state, staff_type: e })}
             getOption={(val) => val.service_name}
+            getValue={(val) => val.id}
             styles="!rounded-md !bg-gray-100 !py-3 !text-gray-500"
             required
             label

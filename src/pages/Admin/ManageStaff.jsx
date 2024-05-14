@@ -17,7 +17,7 @@ const neededProps = [
   "phone",
   "_Address_line_1",
   "_Address_line_2",
-  "_type",
+  "_type_id",
   "_country",
   "_state",
   "_about",
@@ -117,10 +117,11 @@ const ManageStaff = () => {
       getOption: (val) => val.name,
     },
     {
-      key: "_type",
+      key: "_type_id",
       title: "type",
       arr: staffTypes,
       getOption: (val) => val.service_name,
+      getValue: (val) => val.id,
     },
   ];
 

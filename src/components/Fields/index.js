@@ -60,7 +60,7 @@ export const DropdownField = ({
         id={name}
         value={state}
         onChange={handleChange}
-        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs outline-none rounded-lg border-transparent transition-all duration-300 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${styles}`}
+        className={`shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs outline-none rounded-lg transition-all duration-300 focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 ${styles}`}
         required={required}
         disabled={disabled}
       >
