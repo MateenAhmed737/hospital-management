@@ -44,6 +44,7 @@ const JobCard = ({
             ...shift,
             ...data,
             facility,
+            id: data?.shift_id
           }}
           disableBids={disableBids}
           isTodaysShift={isTodaysShift}
