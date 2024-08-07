@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { NavLink, useLocation } from "react-router-dom";
 import { navLinks } from "../constants/data";
 import { VscClose } from "react-icons/vsc";
 import { useSelector } from "react-redux";
+import { cn } from "../lib/utils";
 
 const Navbar = ({ toggle, setToggle }) => {
   const user = useSelector((state) => state.user);
@@ -12,9 +13,12 @@ const Navbar = ({ toggle, setToggle }) => {
     <>
       <nav
         id="navbar"
-        className={`flex flex-col justify-between h-screen overflow-y-auto absolute md:static top-0 left-0 border-r bg-white ${
-          toggle ? "" : "-translate-x-full md:-translate-x-0"
-        } max-md:transition-all max-md:duration-300 w-full max-w-[220px] px-5 pb-7 md:py-8 z-[3]`}
+        className={cn(
+          "flex flex-col justify-between h-screen overflow-y-auto absolute md:static top-0 left-0 border-r bg-white max-md:transition-all max-md:duration-300 w-full max-w-[220px] px-5 pb-7 md:py-8 z-[3]",
+          {
+            "-translate-x-full md:-translate-x-0": !toggle,
+          }
+        )}
       >
         <div>
           {/* close btn (inside navbar) */}
@@ -25,7 +29,9 @@ const Navbar = ({ toggle, setToggle }) => {
             <VscClose />
           </button>
 
-          <h1 className="text-sm">Hospital Management</h1>
+          <h1 className="text-base font-medium">
+            <abbr title="Nurse Staffing & Concierge Services">NSCS</abbr>
+          </h1>
 
           {navigation.map((data) => (
             <NavItem key={data.title} data={data} />
@@ -91,17 +97,20 @@ const NavItem = ({ data }) => {
   // if Nav item is a Dropdown
   return (
     <>
-      <div
-        className={`flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-primary-500 ${
-          location.pathname.includes(data.path) ? "!text-primary-500" : ""
-        }`}
+      <button
+        className={cn(
+          "flex items-center my-4 mb-2 cursor-pointer text-[#091A35] hover:text-primary-500",
+          {
+            "text-primary-500": location.pathname.includes(data.path),
+          }
+        )}
         onClick={() => setToggle(!toggle)}
       >
         {data.icon}
         <span className="ml-2 text-xs capitalize">
           {data.title.replaceAll("_", " ")}
         </span>
-      </div>
+      </button>
       <div
         className={`${toggle ? "block" : "hidden"} relative ml-[26px] text-xs`}
       >
@@ -118,11 +127,12 @@ const NavItem = ({ data }) => {
               }}
             >
               <div
-                className={`${
-                  window.location.pathname === path
+                className={cn(
+                  "group-hover:bg-[#909090] relative right-0.5 group-hover:scale-125 rounded-full transition-all duration-300 w-2 h-2 mr-1 my-2",
+                  location.pathname === path
                     ? "bg-[#909090] scale-110"
                     : "bg-[#D9D9D9]"
-                } group-hover:bg-[#909090] relative right-0.5 group-hover:scale-125 rounded-full transition-all duration-300 w-2 h-2 mr-1 my-2`}
+                )}
               />
               {title}
             </NavLink>

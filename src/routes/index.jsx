@@ -31,6 +31,10 @@ import {
   AllFacilityShifts,
   CheckInOuts,
   NewShift,
+  Dashboard as FacilityDashboard,
+  EditProfile as FacilityEditProfile,
+  Inbox as FacilityInbox,
+  Chat as FacilityChat,
 } from "../pages/Facility";
 import {
   ManageAdmins,
@@ -38,28 +42,35 @@ import {
   ServiceTypes,
   ManageStaff,
   Roles,
+  Dashboard as AdminDashboard,
+  EditProfile as AdminEditProfile,
 } from "../pages/Admin";
+import {
+  Dashboard as StaffDashboard,
+  EditProfile as StaffEditProfile,
+  Inbox as StaffInbox,
+  Chat as StaffChat,
+} from "../pages/Staff";
 
 // Router component handles the routing of the application
 const Router = () => {
   const { loading } = useAppState();
   const user = useSelector((state) => state.user);
 
-  console.log("user", user);
-  const role = user?.role;
+  const { isAdmin, isStaff, isFacility } = user || {};
 
-  const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
-  const EditProfile = user && require("../pages/" + role + "/EditProfile")?.default;
-  const Inbox =
-    user &&
-    (user?.isStaff || user?.isFacility) &&
-    require("../pages/" + role + "/Inbox/Inbox").default;
-  const Chat =
-    user &&
-    (user?.isStaff || user?.isFacility) &&
-    require("../pages/" + role + "/Inbox/Chat").default;
+  // const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
+  // const EditProfile = user && require("../pages/" + role + "/EditProfile")?.default;
+  // const Inbox =
+  //   user &&
+  //   (user?.isStaff || user?.isFacility) &&
+  //   require("../pages/" + role + "/Inbox/Inbox").default;
+  // const Chat =
+  //   user &&
+  //   (user?.isStaff || user?.isFacility) &&
+  //   require("../pages/" + role + "/Inbox/Chat").default;
 
-  const privateRoute = (Page) => (user ? <Page /> : <AccessDenied />);
+  const privateRoute = (Page) => (user && Page ? <Page /> : <AccessDenied />);
   const publicRoute = (Page) => (user ? <Navigate to="/" /> : <Page />);
 
   return (
@@ -73,16 +84,58 @@ const Router = () => {
             path="/"
             element={user ? <Layout /> : <Navigate to="/login" replace />}
           >
-            <Route path="/dashboard" element={privateRoute(Dashboard)} />
-            <Route path="/edit-profile" element={privateRoute(EditProfile)} />
-            <Route path="/terms-and-conditions" element={privateRoute(TermsAndConditions)} />
-            <Route path="/privacy-policy" element={privateRoute(PrivacyPolicy)} />
+            <Route
+              path="/dashboard"
+              element={privateRoute(
+                isAdmin
+                  ? AdminDashboard
+                  : isFacility
+                  ? FacilityDashboard
+                  : isStaff
+                  ? StaffDashboard
+                  : undefined
+              )}
+            />
+            <Route
+              path="/edit-profile"
+              element={privateRoute(
+                isAdmin
+                  ? AdminEditProfile
+                  : isFacility
+                  ? FacilityEditProfile
+                  : isStaff
+                  ? StaffEditProfile
+                  : undefined
+              )}
+            />
+            <Route
+              path="/terms-and-conditions"
+              element={privateRoute(TermsAndConditions)}
+            />
+            <Route
+              path="/privacy-policy"
+              element={privateRoute(PrivacyPolicy)}
+            />
 
             {/* For Staff (1), Admins (2) and Facalities (3) */}
             <Route element={<Auth allowedRoles={["1", "3"]} />}>
               <Route path="/messages">
-                <Route index element={privateRoute(Inbox)} />
-                <Route path="/messages/:id" element={privateRoute(Chat)} />
+                <Route
+                  index
+                  element={privateRoute(
+                    isFacility
+                      ? FacilityInbox
+                      : isStaff
+                      ? StaffInbox
+                      : undefined
+                  )}
+                />
+                <Route
+                  path="/messages/:id"
+                  element={privateRoute(
+                    isFacility ? FacilityChat : isStaff ? StaffChat : undefined
+                  )}
+                />
               </Route>
             </Route>
 
@@ -104,8 +157,22 @@ const Router = () => {
               <Route path="/awarded-jobs" element={privateRoute(AwardedJobs)} />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
-                <Route index element={privateRoute(Inbox)} />
-                <Route path="/messages/:id" element={privateRoute(Chat)} />
+                <Route
+                  index
+                  element={privateRoute(
+                    isFacility
+                      ? FacilityInbox
+                      : isStaff
+                      ? StaffInbox
+                      : undefined
+                  )}
+                />
+                <Route
+                  path="/messages/:id"
+                  element={privateRoute(
+                    isFacility ? FacilityChat : isStaff ? StaffChat : undefined
+                  )}
+                />
               </Route>
             </Route>
 
@@ -132,10 +199,7 @@ const Router = () => {
             <Route element={<Auth allowedRoles={["3"]} />}>
               <Route path="/fc-shifts">
                 <Route index element={privateRoute(AllFacilityShifts)} />
-                <Route
-                  path="/fc-shifts/new"
-                  element={privateRoute(NewShift)}
-                />
+                <Route path="/fc-shifts/new" element={privateRoute(NewShift)} />
                 <Route
                   path="/fc-shifts/completed"
                   element={privateRoute(FacilityCompletedShifts)}

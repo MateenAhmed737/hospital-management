@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   CommonTable,
@@ -19,13 +19,11 @@ const GeneralPage = ({
   actionCols = ["Edit", "Block/Unblock", "Delete"],
   headerStyles = "",
   template,
-  data,
   setData,
   isLoading,
   pagination,
   notificationModalProps = {},
   imagesViewerProps = {},
-  videosViewerProps = {},
   createModalProps = {},
   editModalProps = {},
   viewModalProps = {},

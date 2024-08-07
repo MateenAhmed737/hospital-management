@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Account from "./Account";
 import { useSelector } from "react-redux";
 import Notifications from "./Notifications";
 import { base_url } from "../utils/url";
 
 const getNotificationsUrl = `${base_url}/all-notification/`;
+const initialState = { account: false, notifications: false };
 
 const Page = ({
   title,
@@ -14,7 +15,6 @@ const Page = ({
   enableHeader,
 }) => {
   const user = useSelector((state) => state.user);
-  const initialState = { account: false, notifications: false };
   const [notifications, setNotifications] = useState(null);
   const [toggle, setToggle] = useState(initialState);
 
@@ -22,10 +22,10 @@ const Page = ({
     setToggle({ ...initialState, [key]: value });
 
   useEffect(() => {
-    document.title = title + " - Hospital Management";
+    document.title = title + " - NSCS";
 
     return () => {
-      document.title = "Hospital Management";
+      document.title = "NSCS";
     };
   }, [title]);
 
@@ -55,28 +55,9 @@ const Page = ({
       fetchNotifications();
       const interval = setInterval(() => {
         fetchNotifications();
-        // console.log("notifications", notifications);
       }, 20000);
 
-      // const mouseDownHandler = (e) => {
-      //   const accountMenu = document.getElementById("account-menu");
-      //   const notifications = document.getElementById("notifications");
-
-      //   console.log({ accountMenu, notifications });
-
-      //   if (accountMenu && !accountMenu.contains(e.target)) {
-      //     setToggle({ ...toggle, account: false });
-      //     console.log("first");
-      //   } else if (notifications && !notifications.contains(e.target)) {
-      //     console.log("second");
-      //     setToggle({ ...toggle, notifications: false });
-      //   }
-      // };
-
-      // document.addEventListener("click", mouseDownHandler);
-
       return () => {
-        // document.removeEventListener("click", mouseDownHandler);
         clearInterval(interval);
       };
     }

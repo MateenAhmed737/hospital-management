@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Empty, Loader, Page, ShiftModal } from "../../components";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
@@ -27,12 +27,12 @@ const AllJobs = () => {
   console.log("data", data);
 
   const filteredData = useMemo(() => {
-    const str = searchText.trim();
+    const query = searchText.trim().toLowerCase();
 
-    if (str) {
+    if (query) {
       return data.filter((item) =>
         ["title", "description"].some((key) =>
-          item[key]?.toLowerCase()?.includes(str?.toLowerCase())
+          item[key]?.toLowerCase()?.includes(query)
         )
       );
     }
@@ -89,12 +89,11 @@ const AllJobs = () => {
       }
     };
 
-    fetchUserBids();
     fetchShifts();
+    fetchUserBids();
     fetchUserBookmarks();
   }, [user, reload]);
 
-  // console.log("userBids", userBids);
   console.log("userBookmarks", userBookmarks);
 
   return (
@@ -131,6 +130,7 @@ const AllJobs = () => {
         ) : data?.length ? (
           filteredData.map((item) => (
             <RecentJob
+              key={item.id}
               {...item}
               user={user}
               bidPlacedAlready={userBids.includes(item.id)}

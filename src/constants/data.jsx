@@ -1,4 +1,3 @@
-import React from "react";
 import { GiSandsOfTime } from "react-icons/gi";
 import {
   FaBookOpen,

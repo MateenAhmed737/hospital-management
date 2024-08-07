@@ -1,13 +1,12 @@
-import React from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
 import { Link, Navigate, useNavigate } from "react-router-dom";
 import { base_url } from "../../utils/url";
 import { Button, Page } from "../../components";
-import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { userActions } from "../../store/slices";
 import { roles } from "../../constants/data";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -162,7 +161,7 @@ const Login = () => {
               />
 
               <div className="w-full text-center text-nowrap text-[11px] font-medium mt-3">
-                Don't have an account?{" "}
+                Don&apos;t have an account?{" "}
                 <Link
                   to="/register"
                   className="text-primary-400 hover:text-primary-500 hover:underline"
