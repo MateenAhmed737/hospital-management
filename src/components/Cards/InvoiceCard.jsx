@@ -1,32 +1,33 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { IoCheckmarkDoneSharp, IoCheckmarkSharp } from "react-icons/io5";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
-import MarkInvoiceModal from "../Modals/Admin/MarkInvoiceModal";
 import { FaCircleCheck } from "react-icons/fa6";
+import { cn } from "../../lib/utils";
+import MarkInvoiceModal from "../Modals/Admin/MarkInvoiceModal";
 
 const markInvoiceUrl = `${base_url}/mark-invoice/`;
 
-const InvoiceCard = (data) => {
+const InvoiceCard = ({ invoice, onClick, reload }) => {
   const [markInvoiceModal, setMarkInvoiceModal] = useState(false);
   const [hasEntered, setHasEntered] = useState(false);
   const user = useSelector((state) => state.user);
 
-  const isPaid = data.status.toLowerCase() === "paid";
-  const isUnpaid = data.status.toLowerCase() === "unpaid";
-  const isPending = data.status.toLowerCase() === "pending";
+  const isPaid = invoice.status.toLowerCase() === "paid";
+  const isUnpaid = invoice.status.toLowerCase() === "unpaid";
   const color = isPaid ? "text-green-600" : isUnpaid ? "text-red-600" : "";
 
-  const isByAdmin = data?.invoice_by === "Admin";
-  const fcData = data?.[user.isAdmin ? "user" : "facility"];
+  const isByAdmin = invoice?.invoice_by === "Admin";
+  const fcData = invoice?.[user.isAdmin ? "facility" : "user"];
   const profileImage = fcData?.profile_image;
+  console.log("data invoice card", invoice);
 
   return (
     <>
       <button
-        onClick={hasEntered ? undefined : data?.onClick}
+        onClick={hasEntered ? undefined : onClick}
         className="flex items-center justify-between p-2 border rounded-md hover:bg-gray-100"
       >
         <div className="flex items-center space-x-2">
@@ -41,13 +42,12 @@ const InvoiceCard = (data) => {
               <HiMiniBuildingOffice />
             </div>
           )}
-          <p className="flex flex-col items-start space-y-1">
+          <p className="flex flex-col items-start">
             <span className="text-sm font-medium">
-              {isByAdmin ? data?.company : fcData?.facility_name}
+              {isByAdmin ? invoice?.company : fcData?.facility_name}
             </span>
-            <span className="text-xs text-gray-400">
-              {new Date(data.created_at).toLocaleString()}
-            </span>
+            <span className="text-[11px] text-gray-400">{invoice.due_date}</span>
+            <span className="text-xs text-gray-400">{fcData?.state + ", " + fcData?.country}</span>
           </p>
         </div>
 
@@ -58,7 +58,10 @@ const InvoiceCard = (data) => {
                 onClick={() => setMarkInvoiceModal(true)}
                 onMouseEnter={() => setHasEntered(true)}
                 onMouseLeave={() => setHasEntered(false)}
-                className={`inline-block text-primary-600 hover:text-primary-700 disabled:hover:text-inherit ${color}`}
+                className={cn(
+                  "inline-block text-primary-600 hover:text-primary-700 disabled:hover:text-inherit",
+                  color
+                )}
                 title="Mark Paid"
               >
                 <FaCircleCheck />
@@ -71,10 +74,10 @@ const InvoiceCard = (data) => {
             ) : (
               <MdOutlinePendingActions />
             )}
-            <span className={`text-xs`}>{data.status}</span>
+            <span className="text-xs">{invoice.status}</span>
           </div>
           <span className="text-sm">
-            ${Number(data.total_amount || data?.amount || 0).toFixed(2)}
+            ${Number(invoice.total_amount || invoice?.amount || 0).toFixed(2)}
           </span>
         </p>
       </button>
@@ -82,8 +85,8 @@ const InvoiceCard = (data) => {
         markInvoiceModal={markInvoiceModal}
         setMarkInvoiceModal={setMarkInvoiceModal}
         markInvoiceUrl={markInvoiceUrl}
-        data={data}
-        reload={data?.reload}
+        data={invoice}
+        reload={reload}
       />
     </>
   );

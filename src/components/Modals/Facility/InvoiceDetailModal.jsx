@@ -8,48 +8,48 @@ import Img from "../../../assets/images/Logos/colorlogo.png";
 
 const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
   const { toPDF, targetRef } = usePDF({
-    filename: `Anee-${moment(new Date()).format("DD-MMM-YYYY")}.pdf`, page: {
+    filename: `Anee-${moment(new Date()).format("DD-MMM-YYYY")}.pdf`,
+    page: {
       // default is `save`
-      method: 'open',
+      method: "open",
       // default is Resolution.MEDIUM = 3, which should be enough, higher values
       // increases the image quality but also the size of the PDF, so be careful
       // using values higher than 10 when having multiple pages generated, it
       // might cause the page to crash or hang.
       resolution: Resolution.HIGH,
       page: {
-         // margin is in MM, default is Margin.NONE = 0
-         margin: Margin.SMALL,
-         // default is 'A4'
-         format: 'letter',
-         // default is 'portrait'
-         orientation: 'landscape',
+        // margin is in MM, default is Margin.NONE = 0
+        margin: Margin.SMALL,
+        // default is 'A4'
+        format: "letter",
+        // default is 'portrait'
+        orientation: "landscape",
       },
       canvas: {
-         // default is 'image/jpeg' for better size performance
-         mimeType: 'image/png',
-         qualityRatio: 1
+        // default is 'image/jpeg' for better size performance
+        mimeType: "image/png",
+        qualityRatio: 1,
       },
       // Customize any value passed to the jsPDF instance and html2canvas
-      // function. You probably will not need this and things can break, 
+      // function. You probably will not need this and things can break,
       // so use with caution.
       overrides: {
-         // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
-         pdf: {
-            compress: true
-         },
-         // see https://html2canvas.hertzen.com/configuration for more options
-         canvas: {
-            useCORS: true
-         }
+        // see https://artskydj.github.io/jsPDF/docs/jsPDF.html for more options
+        pdf: {
+          compress: true,
+        },
+        // see https://html2canvas.hertzen.com/configuration for more options
+        canvas: {
+          useCORS: true,
+        },
       },
-   }
+    },
   });
   const user = useSelector((state) => state.user);
   const data = invoiceModal.data;
   const isByAdmin = data?.invoice_by === "Admin";
-  console.log("data ==>", data);
 
-  const fcData = data?.[user.isAdmin ? "user" : "facility"];
+  const fcData = data?.[user.isAdmin ? "facility" : "user"];
   const profileImage = fcData?.profile_image;
 
   const close = () => setInvoiceModal((prev) => ({ ...prev, isOpen: false }));
@@ -83,6 +83,8 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       close();
     }
   };
+
+  console.log("data", data);
 
   return (
     <div
@@ -134,11 +136,13 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                   </tr>
                   <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
                     <th className="px-2 py-1.5 font-semibold">From:</th>
-                    <td className="text-xs text-gray-700">{data?.from}</td>
+                    <td className="text-xs text-gray-700">
+                      {data?.from || "-"}
+                    </td>
                   </tr>
                   <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
                     <th className="px-2 py-1.5 font-semibold">To:</th>
-                    <td className="text-xs text-gray-700">{data?.to}</td>
+                    <td className="text-xs text-gray-700">{data?.to || "-"}</td>
                   </tr>
                   <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
                     <th className="px-2 py-1.5 font-semibold">Total Amount:</th>
@@ -231,17 +235,18 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       </div>
 
       {/* Invoice */}
-      <div className="absolute translate-y-full">
+      <div className="absolute translate-y-0 scale-75">
         <div
-          className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm "
+          className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm"
           id="invoice"
           ref={targetRef}
         >
           <div className="grid items-center grid-cols-2">
             <div className="text-left">
-              <p>NURSE STAFFING & CONCIERGE SERVICE</p>
-              <p>{data?.user?.facility_name || data?.bank_name}</p>
-              <p>EAU CLAIRE, WI 54701</p>
+              <h1 className="font-semibold text-2xl mb-3">
+                NURSE STAFFING & CONCIERGE SERVICE
+              </h1>
+              <p></p>
             </div>
 
             <div className="flex items-center justify-end">
@@ -253,27 +258,41 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
           {/* <!-- Client info --> */}
           <div className="grid items-center grid-cols-2 mt-8">
             <div className="text-gray-500">
-              <p>{data?.address}</p>
+              <p>
+                {data?.facility?.facility_name ||
+                  data?.user?.facility_name ||
+                  data?.bank_name}
+              </p>
+              <p>
+                {data?.facility?.address_1 + ", " + data?.facility?.address_2}
+              </p>
+              <p>
+                {data?.facility?.state +
+                  ", " +
+                  data?.facility?.city +
+                  ", " +
+                  data?.facility?.country}
+              </p>
             </div>
 
             <div className="text-right">
-              <h1 className="leading-[5px] font-medium text-gray-800">
+              <h1 className="leading-[5px] text-2xl font-semibold text-gray-800">
                 INVOICE
               </h1>
               <p className="mt-3 space-x-2">
                 <span className="font-semibold text-left">Invoice #</span>
                 <span className="font-semibold text-right text-gray-500">
-                  {data?.transaction_id}
+                  {data?.id}
                 </span>
               </p>
               <p className="space-x-2">
-                <span className="font-semibold text-left">Invoice Date</span>
+                <span className="font-semibold text-left">Invoice Date:</span>
                 <span className="font-semibold text-right text-gray-500">
-                  {data?.created_at}
+                  {new Date(data?.created_at).toLocaleString()}
                 </span>
               </p>
               <p className="space-x-2">
-                <span className="font-semibold text-left">Due Date</span>
+                <span className="font-semibold text-left">Due Date:</span>
                 <span className="font-semibold text-right text-gray-500">
                   {data?.due_date}
                 </span>
@@ -284,37 +303,31 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
           {/* <!-- Invoice Items --> */}
           <div className="flow-root mt-8 -mx-4 sm:mx-0">
             <table className="min-w-full">
-              <colgroup>
-                <col className="sm:w-1/6" />
-                <col className="w-full sm:w-1/2" />
-                <col className="sm:w-1/6" />
-                <col className="sm:w-1/6" />
-              </colgroup>
               <thead className="text-gray-900 border-b border-gray-300">
-                <tr className="bg-blue-400">
+                <tr className="bg-blue-400 *:text-center">
                   <th
                     scope="col"
                     className="hidden px-3 py-3.5 text-left text-sm font-semibold text-white sm:table-cell"
                   >
-                    item
+                    Shift Details
                   </th>
                   <th
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
                   >
-                    Description
+                    Staff Name
                   </th>
                   <th
                     scope="col"
                     className="hidden px-3 py-3.5 text-right text-sm font-semibold text-white sm:table-cell"
                   >
-                    Unit Price
+                    Worked Hours
                   </th>
                   <th
                     scope="col"
                     className="hidden px-3 py-3.5 text-right text-sm font-semibold text-white sm:table-cell"
                   >
-                    Quantity
+                    Breaks
                   </th>
                   <th
                     scope="col"
@@ -325,7 +338,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                 </tr>
               </thead>
               <tbody className="border">
-                <tr className="border-b border-gray-200">
+                {/* <tr className="border-b border-gray-200">
                   <td className="py-3.5 pl-4 pr-3 text-sm max-w-0">
                     <div className="font-medium text-gray-900">Service</div>
                   </td>
@@ -341,7 +354,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                   <td className="py-3.5 pl-3 pr-4 text-sm text-right text-gray-500">
                     $12000.00
                   </td>
-                </tr>
+                </tr> */}
 
                 {/* <!-- Notes --> */}
                 <tr>
@@ -383,25 +396,6 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                 </tr>
               </tbody>
               <tfoot className="border-r">
-                <tr>
-                  <th
-                    scope="row"
-                    colSpan="3"
-                    className="hidden pt-6 pl-4 pr-3 text-sm font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
-                  >
-                    &nbsp;
-                  </th>
-                  <th
-                    scope="row"
-                    colSpan="1"
-                    className="pt-6 pl-4 pr-3 text-sm font-normal text-center text-gray-500 border-b border-l sm:table-cell sm:pl-0"
-                  >
-                    Subtotal
-                  </th>
-                  <td className="pt-6 !pr-6 text-sm text-center text-gray-500 border-b sm:pr-0">
-                    ${data?.sd}
-                  </td>
-                </tr>
                 <tr>
                   <th
                     scope="row"

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CreateModal,
   Empty,
@@ -14,6 +14,7 @@ import Pending from "../../assets/images/InvoiceIcons/Unpaid.png";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
 import { convertPropsToObject } from "../../utils";
+import { cn } from "../../lib/utils";
 import toast from "react-hot-toast";
 
 const getFacilityInvoices = `${base_url}/facility-invoice/`;
@@ -21,6 +22,7 @@ const getAllInvoices = `${base_url}/get-all-invoice-admin`;
 const createUrl = `${base_url}/store-admin-invoice`;
 const getFacilities = `${base_url}/get-facility`;
 
+const filters = ["All", "Paid", "Overdue", "Pending"];
 const neededProps = [
   "title",
   "total_amount",
@@ -56,6 +58,11 @@ const Invoices = () => {
 
   const hasAddAccess = user?.permissions?.add?.includes("Invoice");
 
+  const filteredData = useMemo(() => {
+    if (filter === "all") return data;
+    return data.filter((item) => item.status.toLowerCase() === filter);
+  }, [data, filter]);
+
   const createModalProps = {
     title: "Create Invoice",
     createUrl: createUrl,
@@ -73,15 +80,6 @@ const Invoices = () => {
         getValue: (val) => val.id,
       },
     ],
-    // appendableFields: [
-    //   {
-    //     key: "vat",
-    //     appendFunc: (key, value, formdata) => {
-    //       formdata.append("vat", value);
-    //       console.log(key, value);
-    //     },
-    //   },
-    // ],
     successCallback: (res) => {
       if (res.success) {
         setReload(!reload);
@@ -91,8 +89,12 @@ const Invoices = () => {
     required: true,
     gridCols: 2,
   };
-
-  console.log("facilities", facilities);
+  const invoiceListProps = {
+    loading,
+    filteredData,
+    setInvoiceModal,
+    setReload,
+  };
 
   useEffect(() => {
     const fetchInvoices = () => {
@@ -120,34 +122,11 @@ const Invoices = () => {
     fetchFacilities();
   }, [user.id, user.isAdmin, reload]);
 
-  const filteredData = useMemo(() => {
-    if (filter === "all") return data;
-    return data.filter((item) => item.status.toLowerCase() === filter);
-  }, [data, filter]);
-
   return (
     <Page title="Invoices" enableHeader>
       <main className="relative">
         <div className="flex items-center justify-center space-x-4 text-sm">
-          {["All", "Paid", "Overdue", "Pending"].map((item) => {
-            const name = item.toLowerCase();
-            return (
-              <button
-                onClick={() => setFilter(name)}
-                className={`p-2 text-center text-gray-400 rounded-full size-20 ${
-                  filter === name ? "bg-primary-400 !text-gray-100" : ""
-                }`}
-              >
-                <img
-                  width={30}
-                  src={images[item]}
-                  alt={name + "_invoices"}
-                  className="mx-auto"
-                />
-                {item}
-              </button>
-            );
-          })}
+          <Filters filter={filter} setFilter={setFilter} />
         </div>
 
         {/* Create New */}
@@ -172,20 +151,7 @@ const Invoices = () => {
               : "flex flex-col space-y-1 mt-5 pb-5"
           }
         >
-          {loading ? (
-            <Loader />
-          ) : filteredData.length > 0 ? (
-            filteredData.map((invoice) => (
-              <InvoiceCard
-                {...invoice}
-                key={invoice.id}
-                onClick={() => setInvoiceModal({ isOpen: true, data: invoice })}
-                reload={() => setReload(!reload)}
-              />
-            ))
-          ) : (
-            <Empty title="No invoices found!" />
-          )}
+          <InvoiceList {...invoiceListProps} />
         </div>
 
         {user.isAdmin && <CreateModal {...createModalProps} />}
@@ -197,5 +163,44 @@ const Invoices = () => {
     </Page>
   );
 };
+
+function InvoiceList({ loading, filteredData, setInvoiceModal, setReload }) {
+  if (loading) return <Loader />;
+  if (!filteredData.length) {
+    return <Empty title="No invoices found!" />;
+  }
+
+  return filteredData.map((invoice) => (
+    <InvoiceCard
+      key={invoice.id}
+      invoice={invoice}
+      onClick={() => setInvoiceModal({ isOpen: true, data: invoice })}
+      reload={() => setReload((prev) => !prev)}
+    />
+  ));
+}
+
+function Filters({ filter, setFilter }) {
+  return filters.map((item) => {
+    const name = item.toLowerCase();
+    return (
+      <button
+        key={item}
+        onClick={() => setFilter(name)}
+        className={cn("p-2 text-center text-gray-400 rounded-full size-20", {
+          "bg-primary-400 !text-gray-100": filter === name,
+        })}
+      >
+        <img
+          width={30}
+          src={images[item]}
+          alt={name + "_invoices"}
+          className="mx-auto"
+        />
+        {item}
+      </button>
+    );
+  });
+}
 
 export default Invoices;

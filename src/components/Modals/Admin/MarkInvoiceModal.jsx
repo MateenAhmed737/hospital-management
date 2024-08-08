@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import { Button } from "../../Buttons";
 import toast from "react-hot-toast";
@@ -106,7 +106,6 @@ const MarkInvoiceModal = ({
               onChange={handleChange}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required={true}
-              autoFocus={true}
             />
           </div>
           <div className="col-span-1 sm:col-span-2">
@@ -124,7 +123,6 @@ const MarkInvoiceModal = ({
               onChange={handleChange}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required={true}
-              autoFocus={true}
             />
           </div>
         </div>
