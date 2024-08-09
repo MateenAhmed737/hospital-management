@@ -4,6 +4,7 @@ import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { Margin, Resolution, usePDF } from "react-to-pdf";
 import moment from "moment";
+import { formatPrice } from "../../../utils/index";
 import Img from "../../../assets/images/Logos/colorlogo.png";
 
 const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
@@ -19,7 +20,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       resolution: Resolution.HIGH,
       page: {
         // margin is in MM, default is Margin.NONE = 0
-        margin: Margin.SMALL,
+        margin: Margin.MEDIUM,
         // default is 'A4'
         format: "letter",
         // default is 'portrait'
@@ -51,6 +52,8 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
 
   const fcData = data?.[user.isAdmin ? "facility" : "user"];
   const profileImage = fcData?.profile_image;
+  const taxAmount = data?.total_amount * 0.07;
+  const balanceDue = data?.total_amount + taxAmount;
 
   const close = () => setInvoiceModal((prev) => ({ ...prev, isOpen: false }));
 
@@ -83,8 +86,6 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       close();
     }
   };
-
-  console.log("data", data);
 
   return (
     <div
@@ -235,7 +236,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       </div>
 
       {/* Invoice */}
-      <div className="absolute translate-y-0 scale-75">
+      <div className="absolute translate-y-full scale-75">
         <div
           className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm"
           id="invoice"
@@ -304,62 +305,16 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
           <div className="flow-root mt-8 -mx-4 sm:mx-0">
             <table className="min-w-full">
               <thead className="text-gray-900 border-b border-gray-300">
-                <tr className="bg-blue-400 *:text-center">
-                  <th
-                    scope="col"
-                    className="hidden px-3 py-3.5 text-left text-sm font-semibold text-white sm:table-cell"
-                  >
-                    Shift Details
-                  </th>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-0"
-                  >
-                    Staff Name
-                  </th>
-                  <th
-                    scope="col"
-                    className="hidden px-3 py-3.5 text-right text-sm font-semibold text-white sm:table-cell"
-                  >
-                    Worked Hours
-                  </th>
-                  <th
-                    scope="col"
-                    className="hidden px-3 py-3.5 text-right text-sm font-semibold text-white sm:table-cell"
-                  >
-                    Breaks
-                  </th>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-3 pr-4 text-right text-sm font-semibold text-white"
-                  >
-                    Amount
-                  </th>
+                <tr className="border *:border-r *:text-center *:font-medium *:px-3 *:py-3.5 *:sm:table-cell">
+                  <th scope="col">Shift Details</th>
+                  <th scope="col">Staff Name</th>
+                  <th scope="col">Worked Hours</th>
+                  <th scope="col">Breaks</th>
+                  <th scope="col">Amount</th>
                 </tr>
               </thead>
               <tbody className="border">
-                {/* <tr className="border-b border-gray-200">
-                  <td className="py-3.5 pl-4 pr-3 text-sm max-w-0">
-                    <div className="font-medium text-gray-900">Service</div>
-                  </td>
-                  <td className="hidden px-3 py-3.5 text-sm text-left text-gray-500 sm:table-cell">
-                    Late Fee
-                  </td>
-                  <td className="hidden px-3 py-3.5 text-sm text-right text-gray-500 sm:table-cell">
-                    $100.00
-                  </td>
-                  <td className="hidden px-3 py-3.5 text-sm text-right text-gray-500 sm:table-cell">
-                    12.00
-                  </td>
-                  <td className="py-3.5 pl-3 pr-4 text-sm text-right text-gray-500">
-                    $12000.00
-                  </td>
-                </tr> */}
-
                 {/* <!-- Notes --> */}
-                <tr>
-                  <td colSpan="6" className="h-[100px]" />
-                </tr>
                 <tr>
                   <td colSpan="6" className="p-4 text-gray-500">
                     <span>
@@ -374,83 +329,65 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                       Percentage Rate of 10%) or the maximum legal rate,
                       whichever is higher, calculated from the date of receipt.
                     </span>
-                    <br />
-                    <span>Employee: [Name], [Name], [Name], [Name]</span>
-                    <br />
-                    <span>08/01/23: 11 days late, late fee: $1000.00</span>
-                    <br />
-                    <span>08/07/23: 17 days late, Late fee: $1000.00</span>
-                    <br />
-                    <br />
-                    <span>
-                      08/15/23: Check #14297 Amount paid: $${data?.total_amount}{" "}
-                      ({data?.address})
-                    </span>
-                    <br />
-                    <span>Remaining balance: 25 days late $12000.00</span>
-                    <br />
-                    <span>
-                      *09/12/23-53 days late, late fee $12000.00 not paid
-                    </span>
                   </td>
                 </tr>
               </tbody>
               <tfoot className="border-r">
-                <tr>
+                <tr className="*:border-b">
                   <th
                     scope="row"
                     colSpan="3"
-                    className="hidden pt-6 pl-4 pr-3 text-sm font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
+                    className="hidden pt-6 pl-4 pr-3 !border-b-0 text-sm font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
                   >
                     &nbsp;
                   </th>
                   <th
                     scope="row"
                     colSpan="1"
-                    className="pt-4 pl-4 pr-3 text-sm font-normal text-center text-gray-500 border-l sm:table-cell sm:pl-0"
+                    className="py-2 pl-4 pr-3 text-sm font-normal text-center text-gray-500 border-x sm:table-cell sm:pl-0"
                   >
-                    Total
+                    Gross Total
                   </th>
-                  <td className="pt-4 !pr-6 text-sm text-center text-gray-500 sm:pr-0">
-                    ${data?.total_amount}
+                  <td className="py-2 !pr-6 text-sm text-center text-gray-500 sm:pr-0">
+                    {formatPrice(data?.total_amount)}
                   </td>
                 </tr>
-                <tr>
+                <tr className="*:border-b">
                   <th
                     scope="row"
                     colSpan="3"
-                    className="hidden pt-6 pl-4 pr-3 text-sm font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
+                    className="hidden pt-6 pl-4 pr-3 text-sm !border-b-0 font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
                   >
                     &nbsp;
                   </th>
                   <th
                     scope="row"
                     colSpan="1"
-                    className="pt-4 pl-4 pr-3 text-sm font-normal text-center text-gray-500 border-b border-l sm:table-cell sm:pl-0"
+                    className="py-2 pl-4 pr-3 text-sm font-normal text-center text-gray-500  border-x sm:table-cell sm:pl-0"
                   >
-                    Amount Paid
+                    Tax 7%
                   </th>
-                  <td className="pt-4 !pr-6 text-sm text-center text-gray-500 border-b sm:pr-0">
-                    0.00
+                  <td className="py-2 !pr-6 text-sm text-center text-gray-500 sm:pr-0">
+                    {formatPrice(taxAmount)}
                   </td>
                 </tr>
-                <tr>
+                <tr className="*:border-b">
                   <th
                     scope="row"
                     colSpan="3"
-                    className="hidden pt-6 pl-4 pr-3 text-sm font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
+                    className="hidden pt-6 pl-4 pr-3 text-sm !border-b-0 font-normal text-center text-gray-500 sm:table-cell sm:pl-0"
                   >
                     &nbsp;
                   </th>
                   <th
                     scope="row"
                     colSpan="1"
-                    className="py-2 pl-4 pr-3 text-sm font-semibold text-center text-gray-900 border-b border-l sm:table-cell sm:pl-0"
+                    className="py-2 pl-4 pr-3 text-sm font-semibold text-center text-gray-900 border-x sm:table-cell sm:pl-0"
                   >
                     Balance Due
                   </th>
-                  <td className="py-2 !pr-4 text-sm font-semibold text-center text-gray-900 border-b sm:pr-0">
-                    $10,500.00
+                  <td className="py-2 !pr-4 text-sm font-semibold text-center text-gray-900 sm:pr-0">
+                    {formatPrice(balanceDue)}
                   </td>
                 </tr>
               </tfoot>

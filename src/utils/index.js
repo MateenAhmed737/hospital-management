@@ -1,3 +1,11 @@
+export function formatPrice(amount, options) {
+  return Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    ...options,
+  }).format(parseFloat(amount));
+}
+
 export const getInputType = (key) => {
   const str = key.toLowerCase();
 
