@@ -4,7 +4,7 @@ import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { useSelector } from "react-redux";
 import { Margin, Resolution, usePDF } from "react-to-pdf";
 import moment from "moment";
-import { formatPrice } from "../../../utils/index";
+import { formatNumbers } from "../../../utils/index";
 import Img from "../../../assets/images/Logos/colorlogo.png";
 
 const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
@@ -236,7 +236,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       </div>
 
       {/* Invoice */}
-      <div className="absolute translate-y-full scale-75">
+      <div className="absolute scale-75 translate-y-full">
         <div
           className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm"
           id="invoice"
@@ -244,7 +244,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
         >
           <div className="grid items-center grid-cols-2">
             <div className="text-left">
-              <h1 className="font-semibold text-2xl mb-3">
+              <h1 className="mb-3 text-2xl font-semibold">
                 NURSE STAFFING & CONCIERGE SERVICE
               </h1>
               <p></p>
@@ -349,7 +349,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                     Gross Total
                   </th>
                   <td className="py-2 !pr-6 text-sm text-center text-gray-500 sm:pr-0">
-                    {formatPrice(data?.total_amount)}
+                    {formatNumbers(data?.total_amount, "currency")}
                   </td>
                 </tr>
                 <tr className="*:border-b">
@@ -363,12 +363,12 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                   <th
                     scope="row"
                     colSpan="1"
-                    className="py-2 pl-4 pr-3 text-sm font-normal text-center text-gray-500  border-x sm:table-cell sm:pl-0"
+                    className="py-2 pl-4 pr-3 text-sm font-normal text-center text-gray-500 border-x sm:table-cell sm:pl-0"
                   >
                     Tax 7%
                   </th>
                   <td className="py-2 !pr-6 text-sm text-center text-gray-500 sm:pr-0">
-                    {formatPrice(taxAmount)}
+                    {formatNumbers(taxAmount, "currency")}
                   </td>
                 </tr>
                 <tr className="*:border-b">
@@ -387,7 +387,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                     Balance Due
                   </th>
                   <td className="py-2 !pr-4 text-sm font-semibold text-center text-gray-900 sm:pr-0">
-                    {formatPrice(balanceDue)}
+                    {formatNumbers(balanceDue, "currency")}
                   </td>
                 </tr>
               </tfoot>

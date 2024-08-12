@@ -67,9 +67,9 @@ const Login = () => {
       if (json.success) {
         let data = json.success.data;
         data.role = roles[data.role_id];
-        data.isStaff = data.role_id === "1";
-        data.isAdmin = data.role_id === "2";
-        data.isFacility = data.role_id === "3";
+        data.isStaff = data.role_id == "1";
+        data.isAdmin = data.role_id == "2";
+        data.isFacility = data.role_id == "3";
 
         toast.success("Login successful!", { duration: 2000 });
         dispatch(userActions.set(data));

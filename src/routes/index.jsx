@@ -52,24 +52,11 @@ import {
   Chat as StaffChat,
 } from "../pages/Staff";
 
-// Router component handles the routing of the application
 const Router = () => {
   const { loading } = useAppState();
   const user = useSelector((state) => state.user);
 
   const { isAdmin, isStaff, isFacility } = user || {};
-
-  // const Dashboard = user && require("../pages/" + role + "/Dashboard").default;
-  // const EditProfile = user && require("../pages/" + role + "/EditProfile")?.default;
-  // const Inbox =
-  //   user &&
-  //   (user?.isStaff || user?.isFacility) &&
-  //   require("../pages/" + role + "/Inbox/Inbox").default;
-  // const Chat =
-  //   user &&
-  //   (user?.isStaff || user?.isFacility) &&
-  //   require("../pages/" + role + "/Inbox/Chat").default;
-
   const privateRoute = (Page) => (user && Page ? <Page /> : <AccessDenied />);
   const publicRoute = (Page) => (user ? <Navigate to="/" /> : <Page />);
 
@@ -240,7 +227,7 @@ const Router = () => {
 const Auth = ({ allowedRoles }) => {
   const user = useSelector((state) => state.user);
   const isAllowed = allowedRoles.find(
-    (role) => user?.role_id?.toLowerCase() === role?.toLowerCase()
+    (role) => String(user?.role_id)?.toLowerCase() === role?.toLowerCase()
   );
 
   // Check if the user role is allowed and render the protected routes

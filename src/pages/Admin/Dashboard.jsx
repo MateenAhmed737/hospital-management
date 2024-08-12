@@ -8,6 +8,7 @@ import RecentImg from "../../assets/images/DashboardIcons/recent.png";
 import * as echarts from "echarts";
 import moment from "moment";
 import axios from "axios";
+import { formatNumbers } from "../../utils";
 
 const getDashboardGraph = async (date) => {
   const formattedDate = date && moment(date).format("YYYY-MM-DD");
@@ -62,7 +63,7 @@ const Dashboard = () => {
       // color: ["#DE4347", "#F7D8DA", "#61a0a8"],
       tooltip: {
         trigger: "item",
-        valueFormatter: (value) => "$" + Number(value).toFixed(2),
+        valueFormatter: val => formatNumbers(val, "currency"),
       },
       series: [
         {
@@ -102,7 +103,7 @@ const Dashboard = () => {
       // color: ["#DE4347", "#F7D8DA", "#61a0a8"],
       tooltip: {
         trigger: "item",
-        valueFormatter: (value) => value,
+        valueFormatter: (value) => formatNumbers(value, "decimal"),
       },
       series: [
         {
@@ -191,13 +192,13 @@ function MainDashContent({ analytics, isLoading, date, setDate, graph }) {
         <div className="grid grid-cols-1 gap-2">
           <Card
             title="Total Facility"
-            value={analytics.total_facilities}
+            value={formatNumbers(analytics.total_facilities, "decimal")}
             icon={CompletedShiftImg}
             color="rgba(255, 161, 88, 0.2)"
           />
           <Card
             title="Amount to be Paid"
-            value={"$" + Number(analytics.total_unpaid || 0).toFixed(2)}
+            value={formatNumbers(analytics.total_unpaid || 0, "currency")}
             icon={UpcomingImg}
             color="rgba(162, 144, 242, 0.2)"
             styles="space-y-6 sm:space-y-0"
@@ -206,14 +207,14 @@ function MainDashContent({ analytics, isLoading, date, setDate, graph }) {
         <div className="grid grid-cols-1 gap-2">
           <Card
             title="Amount Paid"
-            value={"$" + Number(analytics.total_income_paid || 0).toFixed(2)}
+            value={formatNumbers(analytics.total_income_paid || 0, "currency")}
             icon={MonthIncomeImg}
             color="rgba(165, 204, 142, 0.3)"
             styles="space-y-6 sm:space-y-0"
           />
           <Card
             title="Total Staff"
-            value={analytics.total_staff}
+            value={formatNumbers(analytics.total_staff, "decimal")}
             icon={RecentImg}
             color="rgba(132, 114, 212, 0.2)"
           />

@@ -1,9 +1,23 @@
-export function formatPrice(amount, options) {
-  return Intl.NumberFormat("en-US", {
+const formatteringPresets = {
+  currency: {
     style: "currency",
     currency: "USD",
+  },
+  percentage: {
+    style: "percent",
+  },
+  decimal: {
+    style: "decimal",
+    maximumFractionDigits: 2,
+  },
+  default: {},
+}
+
+export function formatNumbers(numbers, preset = "default", options = {}) {
+  return Intl.NumberFormat("en-US", {
+    ...formatteringPresets[preset],
     ...options,
-  }).format(parseFloat(amount));
+  }).format(parseFloat(numbers));
 }
 
 export const getInputType = (key) => {

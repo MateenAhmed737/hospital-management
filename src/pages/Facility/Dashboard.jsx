@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Loader, Page, Empty } from "../../components";
-import { fetchData } from "../../utils";
+import { fetchData, formatNumbers } from "../../utils";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
 import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
@@ -61,13 +61,13 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="All Posted Shifts"
-                value={analytics.posted_shifts_count + " Shifts"}
+                value={formatNumbers(analytics.posted_shifts_count, "decimal") + " Shifts"}
                 icon={CompletedShiftImg}
                 color="rgba(255, 161, 88, 0.2)"
               />
               <Card
                 title="Total Confirmed Shifts"
-                value={analytics.confirmed_job_count + " Shifts"}
+                value={formatNumbers(analytics.confirmed_job_count, "decimal") + " Shifts"}
                 icon={UpcomingImg}
                 color="rgba(162, 144, 242, 0.2)"
                 styles="space-y-6 sm:space-y-0"
@@ -76,14 +76,14 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Total Invoice Amount"
-                value={"$" + Number(analytics.total_invoice_amount).toFixed(2)}
+                value={formatNumbers(analytics.total_invoice_amount, "currency")}
                 icon={MonthIncomeImg}
                 color="rgba(165, 204, 142, 0.3)"
                 styles="space-y-6 sm:space-y-0"
               />
               <Card
                 title="Total Pending Shifts"
-                value={analytics.pending_shifts_count + " Shifts"}
+                value={formatNumbers(analytics.pending_shifts_count, "decimal") + " Shifts"}
                 icon={RecentImg}
                 color="rgba(132, 114, 212, 0.2)"
               />
@@ -111,7 +111,7 @@ const Dashboard = () => {
               ) : shifts.data.length ? (
                 shifts.data
                   .slice(-4).reverse()
-                  .map((shift) => <ShiftCard {...shift} data={shift} setData={setShifts} />)
+                  .map((shift) => <ShiftCard key={shift.id} {...shift} data={shift} setData={setShifts} />)
               ) : (
                 <Empty title="No shifts found!" noMargin />
               )}
