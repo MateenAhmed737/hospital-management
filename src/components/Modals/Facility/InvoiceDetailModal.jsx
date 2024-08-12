@@ -5,11 +5,11 @@ import { useSelector } from "react-redux";
 import { Margin, Resolution, usePDF } from "react-to-pdf";
 import moment from "moment";
 import { formatNumbers } from "../../../utils/index";
-import Img from "../../../assets/images/Logos/colorlogo.png";
+import Logo from "../../../assets/images/Logos/logo.png";
 
 const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
   const { toPDF, targetRef } = usePDF({
-    filename: `Anee-${moment(new Date()).format("DD-MMM-YYYY")}.pdf`,
+    filename: `NSCS-${moment(new Date()).format("DD-MMM-YYYY")}.pdf`,
     page: {
       // default is `save`
       method: "open",
@@ -50,7 +50,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
   const data = invoiceModal.data;
   const isByAdmin = data?.invoice_by === "Admin";
 
-  const fcData = data?.[user.isAdmin ? "facility" : "user"];
+  const fcData = data?.[user.isAdmin ? "user" : "facility"];
   const profileImage = fcData?.profile_image;
   const taxAmount = data?.total_amount * 0.07;
   const balanceDue = data?.total_amount + taxAmount;
@@ -127,104 +127,106 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
             </div>
           )}
 
-          <table className="w-full -mt-2 overflow-hidden rounded-lg">
-            <tbody className="border">
-              {!isByAdmin && (
-                <>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Due Date:</th>
-                    <td className="text-xs text-gray-700">{data?.due_date}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">From:</th>
-                    <td className="text-xs text-gray-700">
-                      {data?.from || "-"}
-                    </td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">To:</th>
-                    <td className="text-xs text-gray-700">{data?.to || "-"}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Total Amount:</th>
-                    <td className="text-xs text-gray-700">
-                      ${Number(data?.total_amount || 0).toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">
-                      Invoice Status:
-                    </th>
-                    <td className="text-xs text-gray-700">{data?.status}</td>
-                  </tr>
-                </>
-              )}
-              {isByAdmin && (
-                <>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Client:</th>
-                    <td className="text-xs text-gray-700">{data?.client}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Telephone:</th>
-                    <td className="text-xs text-gray-700">{data?.telephone}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Email:</th>
-                    <td className="text-xs text-gray-700">
-                      {data?.email || "N/A"}
-                    </td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Company:</th>
-                    <td className="text-xs text-gray-700">{data?.company}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">VAT:</th>
-                    <td className="text-xs text-gray-700">%{data?.vat}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Address:</th>
-                    <td className="text-xs text-gray-700">{data?.address}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Details:</th>
-                    <td className="text-xs text-gray-700">{data?.details}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Bill to:</th>
-                    <td className="text-xs text-gray-700">{data?.bill_to}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Amount Due:</th>
-                    <td className="text-xs text-gray-700">
-                      ${Number(data?.amount_due || 0).toFixed(2)}
-                    </td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">Payment Due:</th>
-                    <td className="text-xs text-gray-700">{data?.due_date}</td>
-                  </tr>
-                  <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
-                    <th className="px-2 py-1.5 font-semibold">
-                      Invoice status:
-                    </th>
-                    <td
-                      className={`text-xs font-medium ${
-                        data?.status === "Unpaid"
-                          ? "text-red-500"
-                          : data?.status === "Paid"
-                          ? "text-green-500"
-                          : "text-gray-700"
-                      }`}
-                    >
-                      {data?.status}
-                    </td>
-                  </tr>
-                </>
-              )}
-            </tbody>
-          </table>
+          <div className="border rounded-lg">
+            <table className="w-full overflow-hidden rounded-lg">
+              <tbody>
+                {!isByAdmin && (
+                  <>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Due Date:</th>
+                      <td className="text-xs text-gray-700">
+                        {data?.due_date}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">
+                        Total Amount:
+                      </th>
+                      <td className="text-xs text-gray-700">
+                        ${Number(data?.total_amount || 0).toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">
+                        Invoice Status:
+                      </th>
+                      <td className="text-xs text-gray-700">{data?.status}</td>
+                    </tr>
+                  </>
+                )}
+                {isByAdmin && (
+                  <>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Client:</th>
+                      <td className="text-xs text-gray-700">{data?.client}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Telephone:</th>
+                      <td className="text-xs text-gray-700">
+                        {data?.telephone}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Email:</th>
+                      <td className="text-xs text-gray-700">
+                        {data?.email || "N/A"}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Company:</th>
+                      <td className="text-xs text-gray-700">{data?.company}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">VAT:</th>
+                      <td className="text-xs text-gray-700">%{data?.vat}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Address:</th>
+                      <td className="text-xs text-gray-700">{data?.address}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Details:</th>
+                      <td className="text-xs text-gray-700">{data?.details}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Bill to:</th>
+                      <td className="text-xs text-gray-700">{data?.bill_to}</td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">Amount Due:</th>
+                      <td className="text-xs text-gray-700">
+                        ${Number(data?.amount_due || 0).toFixed(2)}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">
+                        Payment Due:
+                      </th>
+                      <td className="text-xs text-gray-700">
+                        {data?.due_date}
+                      </td>
+                    </tr>
+                    <tr className="py-1 text-xs text-left text-gray-600 bg-gray-50 hover:bg-gray-200">
+                      <th className="px-2 py-1.5 font-semibold">
+                        Invoice status:
+                      </th>
+                      <td
+                        className={`text-xs font-medium ${
+                          data?.status === "Unpaid"
+                            ? "text-red-500"
+                            : data?.status === "Paid"
+                            ? "text-green-500"
+                            : "text-gray-700"
+                        }`}
+                      >
+                        {data?.status}
+                      </td>
+                    </tr>
+                  </>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className={styles.footer}>
           <Button
@@ -236,7 +238,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       </div>
 
       {/* Invoice */}
-      <div className="absolute scale-75 translate-y-full">
+      <div className="absolute translate-y-full mt-32">
         <div
           className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm"
           id="invoice"
@@ -252,7 +254,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
 
             <div className="flex items-center justify-end">
               {/* <!--  Company logo  --> */}
-              <img src={Img} alt="company-logo" height="100" width="100" />
+              <img src={Logo} alt="company-logo" height="130" width="130" />
             </div>
           </div>
 
@@ -314,6 +316,37 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
                 </tr>
               </thead>
               <tbody className="border">
+                {data?.shifts?.length > 0
+                  ? data?.shifts?.map((item) => {
+                      return (
+                        <tr
+                          key={item?.id}
+                          className="border-b border-gray-200"
+                          style="text-align:center"
+                        >
+                          <td className="py-3.5 pl-4 pr-3 text-sm max-w-0">
+                            <div className="font-medium text-gray-900">
+                              Shift was posted on : {item?.start_date} for $
+                              {item?.actual_hours} hours
+                            </div>
+                          </td>
+                          <td className="hidden px-3 py-3.5 text-sm text-left text-gray-500 sm:table-cell">
+                            {item?.user?.first_name + " " + item?.user?.last_name}
+                          </td>
+                          <td className="hidden px-3 py-3.5 text-sm text-right text-gray-500 sm:table-cell">
+                            {item?.total_hour} h
+                          </td>
+                          <td className="hidden px-3 py-3.5 text-sm text-right text-gray-500 sm:table-cell">
+                            {(parseFloat(item?.break_minutes) / 60).toFixed(2)}{" "}
+                            m
+                          </td>
+                          <td className="py-3.5 pl-3 pr-4 text-sm text-right text-gray-500">
+                            {formatNumbers(item?.total_amount || 0, "currency")}
+                          </td>
+                        </tr>
+                      );
+                    })
+                  : null}
                 {/* <!-- Notes --> */}
                 <tr>
                   <td colSpan="6" className="p-4 text-gray-500">

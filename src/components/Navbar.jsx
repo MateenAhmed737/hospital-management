@@ -5,6 +5,8 @@ import { VscClose } from "react-icons/vsc";
 import { useSelector } from "react-redux";
 import { cn } from "../lib/utils";
 
+import Logo from "../assets/images/Logos/logo.png";
+
 const Navbar = ({ toggle, setToggle }) => {
   const user = useSelector((state) => state.user);
   const navigation = navLinks[user.role];
@@ -29,9 +31,12 @@ const Navbar = ({ toggle, setToggle }) => {
             <VscClose />
           </button>
 
-          <h1 className="text-base font-medium">
-            <abbr title="Nurse Staffing & Concierge Services">NSCS</abbr>
-          </h1>
+          <div className="flex items-center -ml-4">
+            <img src={Logo} className="w-1/3" alt="logo" />
+            <h1 className="text-base font-medium">
+              <abbr title="Nurse Staffing & Concierge Services">NSCS</abbr>
+            </h1>
+          </div>
 
           {navigation.map((data) => (
             <NavItem key={data.title} data={data} />

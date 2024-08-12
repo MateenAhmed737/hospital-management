@@ -43,8 +43,6 @@ const MarkInvoiceModal = ({
       .finally(() => setLoading(false));
   };
 
-  //   console.log('data', data)
-
   const close = () => {
     setMarkInvoiceModal(false);
   };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Empty, Loader, Page } from "../../components";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
@@ -31,7 +31,7 @@ const CheckInOuts = () => {
         {loading ? (
           <Loader />
         ) : data.length > 0 ? (
-          data.map((item) => <AllChecksCard {...item} setData={setData} />)
+          data.map((item) => <AllChecksCard key={item?.id} {...item} setData={setData} />)
         ) : (
           <Empty title="No Check In/Out for today!" />
         )}

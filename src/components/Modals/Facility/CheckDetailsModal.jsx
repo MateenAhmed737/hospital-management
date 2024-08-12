@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
 import { VscClose } from "react-icons/vsc";
 import { base_url } from "../../../utils/url";
@@ -76,38 +76,40 @@ const CheckDetailsModal = ({ checkModal, setCheckModal, data, setData }) => {
             {data.user.first_name} {data.user.last_name}
           </span>
 
-          <table className="w-full -mt-2 overflow-hidden rounded-lg">
-            <tbody>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">Job Title:</th>
-                <td className="text-xs text-gray-700">{data.shift.title}</td>
-              </tr>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">Start time:</th>
-                <td className="text-xs text-gray-700">
-                  {convertTime(data.shift.start_time)}
-                </td>
-              </tr>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">End time:</th>
-                <td className="text-xs text-gray-700">
-                  {convertTime(data.shift.end_time)}
-                </td>
-              </tr>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">Current Status:</th>
-                <td className="text-xs text-gray-700">{currentStatus}</td>
-              </tr>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">Check in time:</th>
-                <td className="text-xs text-gray-700">{checkInTime}</td>
-              </tr>
-              <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                <th className="px-2 py-1.5 font-semibold">Check out time:</th>
-                <td className="text-xs text-gray-700">{checkOutTime}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div className="rounded-lg border border-gray-200">
+            <table className="w-full overflow-hidden rounded-lg">
+              <tbody>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Job Title:</th>
+                  <td className="text-xs text-gray-700">{data.shift.title}</td>
+                </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Start time:</th>
+                  <td className="text-xs text-gray-700">
+                    {convertTime(data.shift.start_time)}
+                  </td>
+                </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">End time:</th>
+                  <td className="text-xs text-gray-700">
+                    {convertTime(data.shift.end_time)}
+                  </td>
+                </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Current Status:</th>
+                  <td className="text-xs text-gray-700">{currentStatus}</td>
+                </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Check in time:</th>
+                  <td className="text-xs text-gray-700">{checkInTime}</td>
+                </tr>
+                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-semibold">Check out time:</th>
+                  <td className="text-xs text-gray-700">{checkOutTime}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
         </div>
         <div className={styles.footer}>
           {data.job_status === null && data.review === null ? (
@@ -234,7 +236,7 @@ const ReviewModal = ({ reviewModal, setReviewModal, setData, data }) => {
 
             <div className="my-2 space-x-2 text-xl text-primary-500">
               {new Array(5).fill(0).map((_, index) => (
-                <button onClick={() => setRating(index + 1)}>
+                <button key={index} onClick={() => setRating(index + 1)}>
                   {index >= rating ? <FaRegStar /> : <FaStar />}
                 </button>
               ))}

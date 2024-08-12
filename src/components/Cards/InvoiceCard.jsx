@@ -7,6 +7,7 @@ import { base_url } from "../../utils/url";
 import { FaCircleCheck } from "react-icons/fa6";
 import { cn } from "../../lib/utils";
 import MarkInvoiceModal from "../Modals/Admin/MarkInvoiceModal";
+import { formatNumbers } from "../../utils";
 
 const markInvoiceUrl = `${base_url}/mark-invoice/`;
 
@@ -20,7 +21,7 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
   const color = isPaid ? "text-green-600" : isUnpaid ? "text-red-600" : "";
 
   const isByAdmin = invoice?.invoice_by === "Admin";
-  const fcData = invoice?.[user.isAdmin ? "facility" : "user"];
+  const fcData = invoice?.[user.isAdmin ? "user" : "facility"];
   const profileImage = fcData?.profile_image;
   console.log("data invoice card", invoice);
 
@@ -77,7 +78,7 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
             <span className="text-xs">{invoice.status}</span>
           </div>
           <span className="text-sm">
-            ${Number(invoice.total_amount || invoice?.amount || 0).toFixed(2)}
+            {formatNumbers(invoice.total_amount || invoice?.amount || 0, "currency")}
           </span>
         </p>
       </button>

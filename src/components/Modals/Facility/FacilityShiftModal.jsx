@@ -1,5 +1,5 @@
 import { toast } from "react-hot-toast";
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
@@ -11,11 +11,13 @@ import { useSelector } from "react-redux";
 import { MdChat, MdEdit } from "react-icons/md";
 import { ImBin } from "react-icons/im";
 import { DropdownField } from "../../Fields";
+import { formatNumbers } from "../../../utils";
 import moment from "moment";
 import { Link } from "react-router-dom";
 import { FaRegStar, FaStar } from "react-icons/fa";
 import ProfileViewModal from "../ProfileViewModal";
 
+const getShift = `${base_url}/get-single-shift`;
 const getBitData = `${base_url}/get_bitdata`;
 const acceptBid = `${base_url}/confirmed-shifts`;
 const shiftBoost = `${base_url}/shift-boost/`;
@@ -31,6 +33,7 @@ const FacilityShiftModal = ({
   data,
 }) => {
   const [tab, setTab] = useState(0);
+  const [shift, setShift] = useState({ data: null, loading: true });
   const [bids, setBids] = useState({ data: [], loading: false });
   const [bidsModal, setBidsModal] = useState({ isOpen: false, data: null });
   const [profileModal, setProfileModal] = useState({
@@ -43,7 +46,7 @@ const FacilityShiftModal = ({
   let details = parseJson(data.job_details);
 
   // console.log("bids", bids.data);
-  console.log('data ==>', data)
+  console.log("shift data ==>", shift.data);
 
   const close = () => setShiftModal(false);
 
@@ -104,6 +107,19 @@ const FacilityShiftModal = ({
   };
 
   useEffect(() => {
+    const fetchShift = () => {
+      fetch(`${getShift}/${data.id}`)
+        .then((res) => res.json())
+        .then((json) => {
+          if (json.success) {
+            const data = json.success.data || [];
+            console.log("shift data", data);
+            setShift({ loading: false, data });
+          }
+        })
+        .catch((error) => console.error(error))
+        .finally(() => setShift((prev) => ({ ...prev, loading: false })));
+    };
     const fetchBids = () => {
       setBids((prev) => ({ ...prev, loading: true }));
 
@@ -120,6 +136,7 @@ const FacilityShiftModal = ({
         .finally(() => setBids((prev) => ({ ...prev, loading: false })));
     };
 
+    fetchShift();
     fetchBids();
   }, [data]);
 
@@ -136,129 +153,144 @@ const FacilityShiftModal = ({
           </button>
         </div>
         <div
-          className={`${styles.main.base} ${styles.main.grid} ${styles.main.gap} text-center`}
+          className={`${styles.main.base} ${styles.main.grid} ${styles.main.gap} relative min-h-96 text-center`}
         >
-          <img
-            src={data?.profile_image}
-            className="w-[100px] h-[100px] object-cover object-center mx-auto rounded-full"
-            alt={data?.facility_name}
-          />
-          <p className="font-semibold">
-            <span>{data?.facility_name}</span>
-
-            <div>
-              <PiMapPinDuotone className="inline text-gray-800" />
-              <span className="text-xs font-normal text-gray-600">
-                {data?.country}
-              </span>
-            </div>
-          </p>
-
-          <div className="flex w-full">
-            <button
-              onClick={() => setTab(0)}
-              className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
-                tab === 0
-                  ? "text-primary-600 border-primary-600"
-                  : "text-gray-500"
-              }`}
-            >
-              Shift Details
-            </button>
-            <button
-              onClick={() => setTab(1)}
-              className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
-                tab === 1
-                  ? "text-primary-600 border-primary-600"
-                  : "text-gray-500"
-              }`}
-            >
-              Staff Bids
-            </button>
-          </div>
-          {tab === 0 && (
-            <div className="-mt-2 text-xs text-left">
-              <p className="text-sm font-semibold">
-                {data?.service_amount}/hr USD
+          {shift.loading ? (
+            <Loader />
+          ) : (
+            <>
+              <img
+                src={data?.profile_image}
+                className="w-[100px] h-[100px] object-cover object-center mx-auto rounded-full"
+                alt={data?.facility_name}
+              />
+              <p className="font-semibold">
+                <span>{data?.facility_name}</span>
+                <div>
+                  <PiMapPinDuotone className="inline text-gray-800" />
+                  <span className="text-xs font-normal text-gray-600">
+                    {data?.state}, {data?.country}
+                  </span>
+                </div>
               </p>
-              <p className="mt-2 text-sm font-medium text-gray-800">
-                {data?.title}
-              </p>
-              <p className="text-gray-600">{data?.description}</p>
-
-              <p className="mt-4 text-sm font-semibold">Job Detail</p>
-              {details?.map((item) => (
-                // use summary tag
-                <details className="mt-1.5 mb-3">
-                  <summary className="font-semibold text-gray-900">
-                    {item.subject}
-                  </summary>
-                  <p className="mt-1 ml-4 text-gray-600">{item.detail}</p>
-                </details>
-              ))}
-            </div>
-          )}
-          {tab === 1 &&
-            (bids.loading ? (
-              <div className="relative w-full min-h-[20vh]">
-                <Loader />
+              <div className="flex w-full">
+                <button
+                  onClick={() => setTab(0)}
+                  className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
+                    tab === 0
+                      ? "text-primary-600 border-primary-600"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Shift Details
+                </button>
+                <button
+                  onClick={() => setTab(1)}
+                  className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
+                    tab === 1
+                      ? "text-primary-600 border-primary-600"
+                      : "text-gray-500"
+                  }`}
+                >
+                  Staff Requests
+                </button>
               </div>
-            ) : bids.data.length > 0 ? (
-              bids.data.map((item) => {
-                const averageRating =
-                  eval(
-                    item.reviews.reduce((a, e) => (a += Number(e.stars)), 0) /
-                      item.reviews.length
-                  ) || 0;
-                return (
-                  <div className="flex items-center justify-between">
-                    <button
-                      onClick={() => setProfileModal({ isOpen: true, ...item })}
-                      className="flex items-center space-x-3"
-                    >
-                      <img
-                        src={item.profile_image}
-                        alt="profile"
-                        className="rounded-md size-12"
-                      />
-
-                      <p className="flex flex-col items-start space-y-1 text-gray-700">
-                        <div className="flex items-center space-x-3">
-                          <span className="text-sm font-semibold capitalize">
-                            {item.user_name}
-                          </span>
-
-                          <div className="flex items-center space-x-0.5 text-xs">
-                            {new Array(5)
-                              .fill(0)
-                              .map((_, index) =>
-                                ++index > averageRating ? (
-                                  <FaRegStar className="text-primary-500" />
-                                ) : (
-                                  <FaStar className="text-primary-500" />
-                                )
-                              )}
-                            <span className="text-xs">
-                              ({averageRating.toFixed(1)})
-                            </span>
-                          </div>
-                        </div>
-                        <span className="text-xs">{item.description}</span>
-                      </p>
-                    </button>
-
-                    <button
-                      onClick={() => setBidsModal({ isOpen: true, data: item })}
-                      className="px-3 py-1.5 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600"
-                    >
-                      View Bid
-                    </button>
+              {tab === 0 && (
+                <div className="-mt-2 text-xs text-left space-y-2">
+                  <p className="text-sm font-medium">
+                    Boost Charges:{" "}
+                    {formatNumbers(data?.boost_fee || 0, "currency")}
+                  </p>
+                  <p className="text-sm font-medium">
+                    Est Hours: {data?.total_hour} hr
+                  </p>
+                  <p className="text-gray-600">{data?.description}</p>
+                  <p className="!mt-4 text-sm font-semibold">Job Detail</p>
+                  {details?.map((item, index) => (
+                    <details key={index} className="mt-1.5 mb-3">
+                      <summary className="font-semibold text-gray-900">
+                        {item.subject}
+                      </summary>
+                      <p className="mt-1 ml-4 text-gray-600">{item.detail}</p>
+                    </details>
+                  ))}
+                </div>
+              )}
+              {tab === 1 &&
+                (bids.loading ? (
+                  <div className="relative w-full min-h-[20vh]">
+                    <Loader />
                   </div>
-                );
-              })
-            ) : (
-              <Empty title="No bids yet!" noMargin />
-            ))}
+                ) : bids.data.length > 0 ? (
+                  bids.data.map((item) => {
+                    const averageRating =
+                      eval(
+                        item.reviews.reduce(
+                          (a, e) => (a += Number(e.stars)),
+                          0
+                        ) / item.reviews.length
+                      ) || 0;
+                    return (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between"
+                      >
+                        <button
+                          onClick={() =>
+                            setProfileModal({ isOpen: true, ...item })
+                          }
+                          className="flex items-center space-x-3"
+                        >
+                          <img
+                            src={item.profile_image}
+                            alt="profile"
+                            className="rounded-md size-12"
+                          />
+                          <p className="flex flex-col items-start space-y-1 text-gray-700">
+                            <div className="flex items-center space-x-3">
+                              <span className="text-sm font-semibold capitalize">
+                                {item.user_name}
+                              </span>
+                              <div className="flex items-center space-x-0.5 text-xs">
+                                {new Array(5)
+                                  .fill(0)
+                                  .map((_, index) =>
+                                    index + 1 > averageRating ? (
+                                      <FaRegStar
+                                        key={index}
+                                        className="text-primary-500"
+                                      />
+                                    ) : (
+                                      <FaStar
+                                        key={index}
+                                        className="text-primary-500"
+                                      />
+                                    )
+                                  )}
+                                <span className="text-xs">
+                                  ({averageRating.toFixed(1)})
+                                </span>
+                              </div>
+                            </div>
+                            <span className="text-xs">{item.description}</span>
+                          </p>
+                        </button>
+                        <button
+                          onClick={() =>
+                            setBidsModal({ isOpen: true, data: item })
+                          }
+                          className="px-3 py-1.5 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600"
+                        >
+                          View Bid
+                        </button>
+                      </div>
+                    );
+                  })
+                ) : (
+                  <Empty title="No Staff request yet!" noMargin />
+                ))}
+            </>
+          )}
         </div>
         <div className={styles.footer}>
           {!disableBids ? (
@@ -317,12 +349,14 @@ const FacilityShiftModal = ({
         setData={setData}
         data={data}
       />
-      <EditModal
-        editModal={editModal}
-        setEditModal={setEditModal}
-        setData={setData}
-        data={data}
-      />
+      {shift.data && (
+        <EditModal
+          editModal={editModal}
+          setEditModal={setEditModal}
+          setData={setData}
+          data={shift.data}
+        />
+      )}
       <ProfileViewModal
         profileModal={profileModal}
         setProfileModal={setProfileModal}
@@ -335,7 +369,7 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const data = bidsModal.data;
-  console.log("data", data);
+  console.log("data bidsModal", data);
 
   const handleAccept = async (e) => {
     e.preventDefault();
@@ -439,10 +473,10 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
                   {new Array(5)
                     .fill(0)
                     .map((_, index) =>
-                      index > averageRating ? (
-                        <FaRegStar className="text-primary-500" />
+                      index + 1 > averageRating ? (
+                        <FaRegStar key={index} className="text-primary-500" />
                       ) : (
-                        <FaStar className="text-primary-500" />
+                        <FaStar key={index} className="text-primary-500" />
                       )
                     )}
                   <span className="text-xs">({averageRating.toFixed(1)})</span>
@@ -458,7 +492,7 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
           </div>
           <div className="flex items-center justify-end">
             <span className="text-sm font-semibold">
-              ${Number(data?.price || 0).toFixed(2)}/hr
+              {formatNumbers(data?.price || 0, "currency")}/hr
             </span>
           </div>
 
@@ -658,6 +692,9 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!editModal) return;
+
     setLoading(true);
 
     const formdata = new FormData();
@@ -668,11 +705,15 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
       "start_time",
       "end_time",
       "service_type",
+      "staff_type",
       // "staff",
     ].forEach((key) => {
       if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
         console.log(key, moment(state[key]).format("YYYY-MM-DD"));
+      } else if (key === "staff_type") {
+        formdata.append(key, state.staff);
+        console.log(key, state.staff);
       } else {
         formdata.append(key, state[key]);
         console.log(key, state[key]);
@@ -823,7 +864,7 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
               required
               label
             />
-            {/* <DropdownField
+            <DropdownField
               arr={serviceTypes}
               title="Staff Type"
               state={state?.staff}
@@ -831,9 +872,10 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
                 handleChange({ target: { value, name: "staff" } })
               }
               getOption={(val) => val.service_name}
+              getValue={(val) => val.id}
               required
               label
-            /> */}
+            />
             <div className="w-full">
               <label
                 htmlFor="opening_date"

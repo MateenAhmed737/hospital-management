@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button, DropdownField, Page } from "../../../components";
 import { VscClose } from "react-icons/vsc";
 import { FaPlus } from "react-icons/fa";
@@ -247,7 +247,7 @@ const NewShift = () => {
             htmlFor="opening_date"
             className="block mb-1 text-xs font-medium text-gray-900 capitalize"
           >
-            Select Data
+            Select Date
           </label>
           <input
             type="date"
@@ -295,7 +295,7 @@ const NewShift = () => {
         </div>
         <div className="col-span-2">
           <Button
-            title="Create New Shift"
+            title="Post New Shift"
             extraStyles="!w-full !py-3"
             loading={loading}
             handleClick={handleSubmit}
@@ -380,6 +380,7 @@ const JobDetailModal = ({ modal, setModal, data, setData }) => {
 
   useEffect(() => {
     setState(initialState());
+    modal.isOpen && document.getElementById("subject")?.focus();
   }, [modal.isOpen, initialState]);
 
   return (
@@ -414,7 +415,6 @@ const JobDetailModal = ({ modal, setModal, data, setData }) => {
               onChange={handleChange}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-xs rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
               required={true}
-              autoFocus={true}
             />
           </div>
           <div className="col-span-1 sm:col-span-2">

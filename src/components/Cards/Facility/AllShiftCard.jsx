@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { FacilityShiftModal } from "../../Modals/Facility";
-import { convertTime } from "../../../utils";
+import { convertTime, formatNumbers } from "../../../utils";
 import { BoostShiftModal } from "../../Modals/Facility/FacilityShiftModal";
 
 const AllShiftCard = ({
   data,
-  title,
-  opening_date,
   disableBids = false,
   disableDetail = false,
   setData,
@@ -35,7 +33,7 @@ const AllShiftCard = ({
 
           <div className="flex flex-col items-end text-primary-500">
             <span className="text-sm font-semibold">
-              ${Number(data.total || 0).toFixed(2)}
+              {formatNumbers(data.total || 0, "currency")}
             </span>
             <span className="text-xs">
               EST AMT
@@ -61,14 +59,6 @@ const AllShiftCard = ({
             <span className="text-xs">
               Shift Timing: {convertTime(data.start_time)}
             </span>
-            {canBoostShift && (
-              <button
-                onClick={() => setBoostModal(true)}
-                className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-              >
-                Boost your job
-              </button>
-            )}
           </div>
         </div>
       </div>

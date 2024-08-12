@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Empty, Loader, Page } from "../../../components";
 import { AllShiftCard } from "../../../components/Cards/Facility";
 import { useSelector } from "react-redux";
@@ -38,20 +38,18 @@ const OnGoingFacilityShifts = () => {
             <Loader />
           </div>
         ) : shifts.data.length ? (
-          shifts.data
-            .slice()
-            // .reverse()
-            .map((shift) => (
-              <AllShiftCard
-                {...shift}
-                data={{
-                  ...shift,
-                  profile_image: shift.facility_details.profile_image,
-                }}
-                setData={setShifts}
-                disableDetail
-              />
-            ))
+          shifts.data.slice().map((shift) => (
+            <AllShiftCard
+              key={shift.id}
+              {...shift}
+              data={{
+                ...shift,
+                profile_image: shift.facility_details.profile_image,
+              }}
+              setData={setShifts}
+              disableDetail
+            />
+          ))
         ) : (
           <Empty title="No shifts found!" noMargin />
         )}

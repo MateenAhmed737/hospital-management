@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { getInputType } from "../../utils";
@@ -42,7 +42,7 @@ const EditModal = ({
   const multiSelectKeys = multiSelectFields.map((e) => e.key);
   const inputKeys = inputFields.map((e) => e.key);
 
-  console.log('state', state)
+  console.log("state", state);
 
   const keys =
     template && Object.keys(template).filter((e) => !excludeFields.includes(e));
@@ -159,8 +159,8 @@ const EditModal = ({
             if (textAreaFields.includes(elem)) {
               return (
                 <TextArea
+                  key={elem}
                   {...{
-                    key: elem,
                     elem,
                     gridCols,
                     state: state[elem],
@@ -175,6 +175,7 @@ const EditModal = ({
 
               return (
                 <UploadField
+                  key={elem}
                   {...{
                     ...data,
                     state: state[elem],
@@ -192,6 +193,7 @@ const EditModal = ({
 
               return (
                 <DropdownField
+                  key={elem}
                   {...{
                     ...data,
                     state: state[elem],
@@ -210,6 +212,7 @@ const EditModal = ({
 
               return (
                 <MultiSelectField
+                  key={elem}
                   {...{
                     ...data,
                     state: state[elem],
@@ -222,6 +225,7 @@ const EditModal = ({
             } else if (elem === "_hourly_rate") {
               return (
                 <FacilityHourlyRates
+                  key={elem}
                   {...{
                     state: state[elem],
                     setState: (val) => setValue(elem, val),
