@@ -65,8 +65,10 @@ const FacilityCompletedShifts = () => {
                     </div>
                   </div>
                   <div className="w-full h-px my-1 bg-gray-300" />
-                  <div className="">
-                    <span className="text-xs">{shift.description}</span>
+                  <div className="text-gray-600">
+                    <span className="text-xs text-gray-800 font-medium">
+                      {shift.description}
+                    </span>
 
                     <div className="flex items-center justify-between mt-3">
                       <span className="text-xs">

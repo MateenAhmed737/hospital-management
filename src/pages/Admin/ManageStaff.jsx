@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { convertPropsToObject, fetchData, modifyData } from "../../utils";
 import { Country, State } from "country-state-city";
 import { base_url } from "../../utils/url";

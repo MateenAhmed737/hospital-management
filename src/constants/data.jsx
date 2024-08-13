@@ -96,14 +96,20 @@ export const navLinks = {
       title: "invoices",
     },
     {
-      icon: <FaBookOpen className="text-lg" />,
+      icon: <MdMessage className="text-lg" />,
       id: 8,
+      path: "/admin-inbox",
+      title: "admin_support",
+    },
+    {
+      icon: <FaBookOpen className="text-lg" />,
+      id: 9,
       path: "/terms-and-conditions",
       title: "terms_and_conditions",
     },
     {
       icon: <MdPrivacyTip className="text-lg" />,
-      id: 9,
+      id: 10,
       path: "/privacy-policy",
       title: "privacy_policy",
     },
@@ -126,8 +132,8 @@ export const navLinks = {
           path: "/fc-shifts",
         },
         {
-          title: "OnGoing",
-          path: "/fc-shifts/on-going",
+          title: "Approved",
+          path: "/fc-shifts/approved",
         },
         {
           title: "Completed",

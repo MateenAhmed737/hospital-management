@@ -27,7 +27,7 @@ import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
 import {
   FacilityCompletedShifts,
-  OnGoingFacilityShifts,
+  ApprovedFacilityShifts,
   AllFacilityShifts,
   CheckInOuts,
   NewShift,
@@ -42,6 +42,7 @@ import {
   ServiceTypes,
   ManageStaff,
   Roles,
+  AdminInbox,
   Dashboard as AdminDashboard,
   EditProfile as AdminEditProfile,
 } from "../pages/Admin";
@@ -180,6 +181,7 @@ const Router = () => {
               />
               <Route path="/invoices" element={privateRoute(Invoices)} />
               <Route path="/manage-roles" element={privateRoute(Roles)} />
+              <Route path="/admin-inbox" element={privateRoute(AdminInbox)} />
             </Route>
 
             {/* For Facility (3) */}
@@ -192,8 +194,8 @@ const Router = () => {
                   element={privateRoute(FacilityCompletedShifts)}
                 />
                 <Route
-                  path="/fc-shifts/on-going"
-                  element={privateRoute(OnGoingFacilityShifts)}
+                  path="/fc-shifts/approved"
+                  element={privateRoute(ApprovedFacilityShifts)}
                 />
               </Route>
               <Route

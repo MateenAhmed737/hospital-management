@@ -45,7 +45,8 @@ const FacilityShiftModal = ({
   const [loadingBtn, setLoadingBtn] = useState({ delete: false, edit: false });
   let details = parseJson(data.job_details);
 
-  // console.log("bids", bids.data);
+  const isApproved = shift.data?.status === "Approved";
+
   console.log("shift data ==>", shift.data);
 
   const close = () => setShiftModal(false);
@@ -279,7 +280,9 @@ const FacilityShiftModal = ({
                           onClick={() =>
                             setBidsModal({ isOpen: true, data: item })
                           }
-                          className="px-3 py-1.5 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600"
+                          disabled={isApproved}
+                          className="px-3 py-1.5 text-xs text-white rounded-md bg-primary-500 hover:bg-primary-600 disabled:bg-primary-200 disabled:hover:bg-primary-200 disabled:cursor-not-allowed"
+                          title={isApproved ? "Job already approved!" : ""}
                         >
                           View Bid
                         </button>
