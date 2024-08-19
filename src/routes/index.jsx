@@ -45,6 +45,7 @@ import {
   AdminInbox,
   Dashboard as AdminDashboard,
   EditProfile as AdminEditProfile,
+  AdminSupportChat,
 } from "../pages/Admin";
 import {
   Dashboard as StaffDashboard,
@@ -181,7 +182,10 @@ const Router = () => {
               />
               <Route path="/invoices" element={privateRoute(Invoices)} />
               <Route path="/manage-roles" element={privateRoute(Roles)} />
-              <Route path="/admin-inbox" element={privateRoute(AdminInbox)} />
+              <Route path="/admin-inbox">
+                <Route index path="/admin-inbox" element={privateRoute(AdminInbox)} />
+                <Route path="/admin-inbox/:id" element={privateRoute(AdminSupportChat)} />
+              </Route>
             </Route>
 
             {/* For Facility (3) */}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import moment from "moment";
 import { useSelector } from "react-redux";
 import { Button, Loader, Page } from "../../../components";
@@ -23,18 +23,17 @@ const Chat = () => {
   const id = params.id;
   const isOnline = profile.data && profile.data.status === "Active";
 
-  const handleSend = (e) => {
-    setSending(true);
-
+  const handleSend = (e) => {    
     const name = e.target.name;
     const isMedia = name === "media";
     const value = isMedia ? e.target.files[0] : e.target.value;
 
     if (!isMedia && value.trim() === "") {
-      setSending(false);
       setMessage("");
       return;
-    };
+    }
+    
+    setSending(true);
 
     const formdata = new FormData();
     formdata.append("reciver_id", id);

@@ -5,7 +5,8 @@ import ManageFacility from "./ManageFacility";
 import ServiceTypes from "./ServiceTypes";
 import ManageStaff from "./ManageStaff";
 import Roles from "./Roles";
-import AdminInbox from "./AdminInbox";
+import AdminInbox from "./Inbox/AdminInbox";
+import AdminSupportChat from "./Inbox/AdminSupportChat";
 
 export {
   Dashboard,
@@ -15,5 +16,6 @@ export {
   ServiceTypes,
   Roles,
   AdminInbox,
+  AdminSupportChat,
   EditProfile,
 };

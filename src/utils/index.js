@@ -1,4 +1,4 @@
-const formatteringPresets = {
+const formattingPresets = {
   currency: {
     style: "currency",
     currency: "USD",
@@ -15,7 +15,7 @@ const formatteringPresets = {
 
 export function formatNumbers(numbers, preset = "default", options = {}) {
   return Intl.NumberFormat("en-US", {
-    ...formatteringPresets[preset],
+    ...formattingPresets[preset],
     ...options,
   }).format(parseFloat(numbers));
 }

@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { PersistGate } from "redux-persist/integration/react";
-import { MyDesignSystem } from "./constants/designSystem";
-import { PrimeReactProvider } from "primereact/api";
 import { store, persistor } from "./store";
 import { Toaster } from "react-hot-toast";
 import { Provider } from "react-redux";
@@ -11,14 +9,12 @@ import Router from "./routes";
 function App() {
   useEffect(() => {
     configAxios();
-  }, [])
-  
+  }, []);
+
   return (
     <Provider store={store}>
       <PersistGate loading={null} persistor={persistor}>
-        <PrimeReactProvider value={{ unstyled: true, pt: MyDesignSystem }}>
-          <Router />
-        </PrimeReactProvider>
+        <Router />
         <Toaster
           position="top-center"
           reverseOrder={false}

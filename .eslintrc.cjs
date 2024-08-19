@@ -13,6 +13,7 @@ module.exports = {
   settings: { react: { version: "18.2" } },
   plugins: ["react-refresh", "jsx-a11y", "react"],
   rules: {
+    "jsx-a11y/media-has-caption": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "jsx-a11y/click-events-have-key-events": "off",
     "no-unused-vars": "warn",
