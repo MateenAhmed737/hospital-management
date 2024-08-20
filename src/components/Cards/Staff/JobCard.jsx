@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ShiftModal } from "../../Modals";
 import { convertTime } from "../../../utils";
 
@@ -7,7 +7,6 @@ const JobCard = ({
   title,
   shift,
   facility,
-  opening_date,
   disableBids = false,
   isTodaysShift = false,
   setTodayJob,
@@ -29,11 +28,11 @@ const JobCard = ({
 
           <p className="flex flex-col items-start ml-2">
             <span className="text-sm font-semibold">{title}</span>
-            <span className="mt-1 text-xs">{opening_date}</span>
+            <span className="mt-1 text-xs">{data?.shift?.opening_date}</span>
           </p>
         </div>
         <span className="text-xs">
-          {convertTime(new Date(data.created_at).toLocaleTimeString())}
+          {convertTime(new Date(data?.shift?.created_at).toTimeString())}
         </span>
       </button>
       {shiftModal && (

@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
-import { Navigate, useLocation, useParams } from "react-router-dom";
-import { adminSupportService } from "../../../services";
+import { adminSupportService } from "../services";
 import { useSelector } from "react-redux";
-import { Button, Loader, Page } from "../../../components";
+import { Button, Loader, Page } from "../components";
 import { IoMdArrowRoundBack, IoMdSend } from "react-icons/io";
 import { MdImage } from "react-icons/md";
+import { cn } from "../lib/utils";
 
-function AdminSupportChat() {
-  const params = useParams();
-  const location = useLocation();
+const chatId = 16;
+const profile = {
+  name: "Admin Support",
+  profile_picture: "/public/android-chrome-192x192.png",
+};
+
+const scrollToBottom = () => {
+  const elem = document.getElementById("chats-container");
+  setTimeout(() => {
+    elem.scrollTo({ behavior: "smooth", top: elem.scrollHeight });
+  }, 500);
+};
+
+function AdminSupport() {
   const user = useSelector((state) => state.user);
   const [data, setData] = useState({ chats: [], loading: true });
   const [sending, setSending] = useState(false);
   const [message, setMessage] = useState("");
-
-  const id = params.id;
-  const profile = location.state;
 
   const handleSend = (e) => {
     const name = e.target.name;
@@ -30,45 +38,38 @@ function AdminSupportChat() {
     setSending(true);
 
     adminSupportService
-      .store_message(id, user, messageType, message, file)
+      .store_message(chatId, user, messageType, message, file)
       .then(() => {
+        scrollToBottom();
         shouldClearMessage && setMessage("");
       })
       .finally(() => setSending(false));
   };
 
   useEffect(() => {
-    if (!id || !user) return;
-    function getChats(canSetLoadingState = false) {
+    if (!user) return;
+    function getChats(canSetLoadingState = false, scroll = false) {
       if (canSetLoadingState) setData((prev) => ({ ...prev, loading: true }));
+
       adminSupportService
-        .get_messages(id, user)
-        .then((res) => setData({ chats: res?.messages || [], loading: false }))
+        .get_messages(chatId, user)
+        .then((res) => {
+          scroll && scrollToBottom();
+          setData({ chats: res?.messages || [], loading: false });
+        })
         .finally(() => setData((prev) => ({ ...prev, loading: false })));
     }
 
-    getChats(true);
+    getChats(true, true);
     const interval = setInterval(getChats, 5000);
 
     return () => clearInterval(interval);
-  }, [user, id]);
-
-  useEffect(() => {
-    const elem = document.getElementById("chats-container");
-    setTimeout(() => {
-      data.chats.length &&
-        elem.scrollTo({ behavior: "smooth", top: elem.scrollHeight });
-    }, 500);
-  }, [data.chats]);
-
-  if (!id) {
-    return <Navigate to="/admin-inbox" />;
-  }
+  }, [user]);
 
   console.log("data.chats", data.chats);
 
   return (
-    <Page title={profile?.name || "Chat"} containerStyles="!p-0 flex flex-col">
+    <Page title="Admin Support" containerStyles="!p-0 flex flex-col">
       {/* Header */}
       <header className="flex items-center px-3 py-3 space-x-2.5 border-b">
         <button
@@ -90,17 +91,17 @@ function AdminSupportChat() {
           {/* <span className="text-xs">{profile.data?.status}</span> */}
         </div>
       </header>
-
       {/* Chats */}
       <main
-        className={`p-3 relative flex flex-col h-full overflow-y-auto ${
-          data.loading ? "justify-center items-center" : ""
-        }`}
         id="chats-container"
+        className={cn("p-3 relative flex flex-col h-full overflow-y-auto", {
+          "justify-center items-center text-sm text-gray-500":
+            data.loading || !data.chats.length,
+        })}
       >
         {data.loading ? (
           <Loader />
-        ) : (
+        ) : data.chats.length ? (
           data.chats.map((item, indx) => (
             <Message
               key={"message-" + item.message_id}
@@ -110,9 +111,10 @@ function AdminSupportChat() {
               prev_message={indx !== 0 && data.chats.at(indx - 1)}
             />
           ))
+        ) : (
+          "No messages yet!"
         )}
       </main>
-
       {/* Message Input */}
       <footer className="p-2.5 flex items-center space-x-2 w-full border-t bg-gray-50">
         <input
@@ -247,4 +249,4 @@ const Message = (data) => {
   );
 };
 
-export default AdminSupportChat;
+export default AdminSupport;

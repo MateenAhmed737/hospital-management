@@ -9,6 +9,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
 import toast from "react-hot-toast";
+import { formatNumbers } from "../../utils";
 
 const getShifts = `${base_url}/get-country-wise-shifts/`;
 const bookmark = `${base_url}/book-marked-shifts`;
@@ -193,8 +194,8 @@ const RecentJob = (data) => {
         onClick={() => setShiftModal(true)}
         className="flex flex-col w-full p-2 py-1.5 bg-gray-100 border rounded-md"
       >
-        <div className="flex items-center justify-between w-full p-1">
-          <div className="flex items-center">
+        <div className="flex items-center justify-between w-full p-1 pb-1.5 border-b-2">
+          <div className="flex items-center w-full">
             {data.facility?.profile_image ? (
               <img
                 src={data.facility?.profile_image}
@@ -207,24 +208,24 @@ const RecentJob = (data) => {
               </div>
             )}
 
-            <p className="flex flex-col items-start ml-2 text-sm">
-              <span className="text-sm font-semibold">{data.title}</span>
-              <span className="text-xs">${data.service_amount}/hr</span>
-            </p>
+            <p className="text-sm ml-2 mb-5 font-semibold w-full text-start">{data.title}</p>
+            <div className="text-sm flex flex-col text-nowrap text-start justify-end">
+              <p className="text-sm font-semibold text-primary-500">{formatNumbers(data.total_service_amount, "currency")}</p>
+              <p className="text-xs font-semibold text-primary-500">Est Amount</p>
+            </div>
           </div>
         </div>
 
         <div className="w-full text-left">
           <span className="text-xs">{data.description}</span>
 
-          <div className="flex items-center justify-between mt-1">
-            <span className="text-xs">
-              <CiLocationOn className="inline mb-0.5 mr-0.5 text-sm" />
-              {data.state}, {data.facility.country}
+          <div className="flex flex-col items-start mt-1 text-xs text-gray-600">
+            <span>
+              <strong className="font-medium">Shift Date:</strong>{" "}
+              {moment(data.created_at).format("YYYY-MM-DD")}
             </span>
-            <span className="text-xs">
-              <FaRegClock className="inline mb-1 mr-1" />
-              {moment(data.created_at).format("DD/MM/YYYY, hh:mm A")}
+            <span>
+              <strong className="font-medium">Shift Timing:</strong> {data.start_time} to {data.end_time}
             </span>
           </div>
         </div>

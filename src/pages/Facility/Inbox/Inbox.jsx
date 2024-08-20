@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { base_url } from "../../../utils/url";
 import { useSelector } from "react-redux";
 import { Empty, Loader, Page } from "../../../components";
@@ -15,14 +15,12 @@ const Inbox = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
-  console.log("data", data);
-
   const filteredData = useMemo(() => {
-    const str = searchText.trim();
+    const query = searchText.trim().toLowerCase();
 
-    if (str) {
+    if (query) {
       return data.filter((item) =>
-        item.name?.toLowerCase()?.includes(str?.toLowerCase())
+        item.name?.toLowerCase()?.includes(query)
       );
     }
     return data;
@@ -68,7 +66,7 @@ const Inbox = () => {
         {loading ? (
           <Loader />
         ) : data?.length ? (
-          filteredData.map((item) => <Chat {...item} />)
+          filteredData.map((item) => <Chat key={item.id} {...item} />)
         ) : (
           <Empty title="No chats found!" />
         )}
@@ -77,7 +75,7 @@ const Inbox = () => {
   );
 };
 
-const Chat = ({ name_user_id, profile_image, status, created_at, name }) => {
+const Chat = ({ name_user_id, profile_image, status, created_at, name, message }) => {
   const navigate = useNavigate();
   const isUnread = status === "unread";
   const Icon = isUnread ? IoCheckmark : IoCheckmarkDone;
@@ -89,9 +87,10 @@ const Chat = ({ name_user_id, profile_image, status, created_at, name }) => {
     >
       <img className="rounded-md size-14" src={profile_image} alt="profile" />
 
-      <div className="w-full space-y-2 text-left">
-        <span className="font-semibold">{name}</span>
-        <div className="flex items-center justify-between text-xs ">
+      <div className="w-full text-left overflow-hidden">
+        <span className="font-semibold text-gray-700">{name}</span>
+        <p className="text-xs text-gray-700 truncate">{message}</p>
+        <div className="flex items-center justify-between text-xs text-gray-600">
           <span>{moment(created_at).format("DD-MMMM-YYYY")}</span>
 
           <span className={isUnread ? "text-gray-600" : "text-primary-500"}>

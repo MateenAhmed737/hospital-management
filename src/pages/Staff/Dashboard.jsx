@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Loader, Page, Empty } from "../../components";
-import { fetchData } from "../../utils";
+import { fetchData, formatNumbers } from "../../utils";
 import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
 import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
@@ -93,36 +93,39 @@ const Dashboard = () => {
         </div>
       ) : (
         <main>
-          {/* Awarded Jobs */}
-          <button onClick={() => navigate("/awarded-jobs")} className="relative flex items-center justify-between w-full mb-3 bg-[#E476F9] rounded-2xl overflow-hidden">
+          {/* Approved Shifts */}
+          <button
+            onClick={() => navigate("/approved-shifts")}
+            className="relative flex items-center justify-between w-full mb-3 bg-[#E476F9] rounded-2xl overflow-hidden"
+          >
             <img
               src={AwardedJobBg1}
               className="object-contain h-full max-h-28"
-              alt="awarded jobs"
+              alt="Approved Shifts"
             />
             <img
               src={AwardedJobBg2}
               className="object-contain h-full max-h-28"
-              alt="awarded jobs"
+              alt="Approved Shifts"
             />
 
             <div className="absolute inset-0 flex flex-col items-start justify-center w-full px-4 text-white">
-              <h3 className="font-semibold">Awarded Jobs</h3>
-              <span className="text-xs">Congrats you get the new job</span>
+              <h3 className="font-semibold">Approved Shifts</h3>
+              <span className="text-xs">Congratulations! Your new shift has been approved by the faciclity.</span>
             </div>
           </button>
 
           {!todayJob.loading && !!todayJob.data.length && (
             <div className="flex flex-col mb-4">
               <h2 className="text-sm font-medium text-gray-600">
-                Your today's shift
+                Your today&apos;s shift
               </h2>
               <div className="flex flex-col mt-2 space-y-3">
                 {todayJob.data.map((item) => (
                   <JobCard
+                    key={item.id}
                     data={item}
                     title={item.facility.shift.title}
-                    opening_date={item.facility.shift.opening_date}
                     facility={item.facility}
                     shift={item.facility.shift}
                     setTodayJob={setTodayJob}
@@ -137,13 +140,19 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Completed Shifts"
-                value={analytics.completed_shifts_count + " Shifts"}
+                value={
+                  formatNumbers(analytics.completed_shifts_count, "decimal") +
+                  " Shifts"
+                }
                 icon={CompletedShiftImg}
                 color="rgba(255, 161, 88, 0.2)"
               />
               <Card
                 title="Upcoming Shifts"
-                value={analytics.upcoming_shifts_count + " Shifts"}
+                value={
+                  formatNumbers(analytics.upcoming_shifts_count, "decimal") +
+                  " Shifts"
+                }
                 icon={UpcomingImg}
                 color="rgba(162, 144, 242, 0.2)"
                 styles="space-y-6 sm:space-y-0"
@@ -152,14 +161,17 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 gap-2">
               <Card
                 title="Month Income"
-                value={"$" + Number(analytics.total_income || 0).toFixed(2)}
+                value={formatNumbers(analytics.total_income, "currency")}
                 icon={MonthIncomeImg}
                 color="rgba(165, 204, 142, 0.3)"
                 styles="space-y-6 sm:space-y-0"
               />
               <Card
                 title="Recent Shifts"
-                value={analytics.recent_shifts_count + " Shifts"}
+                value={
+                  formatNumbers(analytics.recent_shifts_count, "decimal") +
+                  " Shifts"
+                }
                 icon={RecentImg}
                 color="rgba(132, 114, 212, 0.2)"
               />
@@ -191,11 +203,12 @@ const Dashboard = () => {
                   .slice(-4)
                   .map((item) => (
                     <JobCard
-                      {...item}
+                      key={item.id}
                       data={item}
                       shift={item?.shift}
-                      {...item?.shift}
                       disableBids
+                      {...item}
+                      {...item?.shift}
                     />
                   ))
               )}

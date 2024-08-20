@@ -16,12 +16,13 @@ import {
   Register,
   Completed,
   FavJobs,
-  AwardedJobs,
+  ApprovedShifts,
   AllJobs,
   Invoices,
   Applied,
   TermsAndConditions,
   PrivacyPolicy,
+  AdminSupport,
 } from "../pages";
 import { useSelector } from "react-redux";
 import { useAppState } from "../hooks";
@@ -126,6 +127,12 @@ const Router = () => {
                   )}
                 />
               </Route>
+              <Route path="/admin-support">
+                <Route
+                  index
+                  element={privateRoute(AdminSupport)}
+                />
+              </Route>
             </Route>
 
             {/* For Staff (1), Admins (2) and Facalities (3) */}
@@ -143,7 +150,7 @@ const Router = () => {
                 />
               </Route>
               <Route path="/all-jobs" element={privateRoute(AllJobs)} />
-              <Route path="/awarded-jobs" element={privateRoute(AwardedJobs)} />
+              <Route path="/approved-shifts" element={privateRoute(ApprovedShifts)} />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
                 <Route

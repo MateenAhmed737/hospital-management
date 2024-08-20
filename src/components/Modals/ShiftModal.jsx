@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import Button from "../Buttons/Button";
 import { PiMapPinDuotone } from "react-icons/pi";
-import { convertTime, parseJson } from "../../utils";
+import { convertTime, formatNumbers, parseJson } from "../../utils";
 import { base_url } from "../../utils/url";
 import { Loader } from "../Loaders";
 import Empty from "../Empty";
@@ -143,7 +143,7 @@ const ShiftModal = ({
                   : "text-gray-500"
               }`}
             >
-              Bids Detail
+              Shift Details
             </button>
             <button
               onClick={() => setTab(1)}
@@ -158,50 +158,50 @@ const ShiftModal = ({
           </div>
           {tab === 0 && (
             <table className="w-full -mt-2 overflow-hidden rounded-lg">
-              <tbody>
-                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-semibold">Start time:</th>
-                  <td className="text-xs text-gray-700">
+              <tbody className="*:text-xs *:text-left">
+                <tr className="bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-medium text-gray-600">Start time:</th>
+                  <td className="text-gray-700">
                     {convertTime(data.start_time)}
                   </td>
                 </tr>
-                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-semibold">End time:</th>
-                  <td className="text-xs text-gray-700">
+                <tr className="bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-medium text-gray-600">End time:</th>
+                  <td className="text-gray-700">
                     {convertTime(data.end_time)}
                   </td>
                 </tr>
-                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-semibold">Opening date:</th>
-                  <td className="text-xs text-gray-700">{data.opening_date}</td>
+                <tr className="bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-medium text-gray-600">Opening date:</th>
+                  <td className="text-gray-700">{data.opening_date}</td>
                 </tr>
-                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-semibold">Job created:</th>
-                  <td className="text-xs text-gray-700">
+                <tr className="bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-medium text-gray-600">Job created date:</th>
+                  <td className="text-gray-700">
                     {new Date(data.created_at).toLocaleString()}
                   </td>
                 </tr>
-                <tr className="text-sm text-left bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-semibold">Service type:</th>
-                  <td className="text-xs text-gray-700">{data.service_type}</td>
+                <tr className="bg-gray-50 hover:bg-gray-200">
+                  <th className="px-2 py-1.5 font-medium text-gray-600">Service type:</th>
+                  <td className="text-gray-700">{data.service_type || "-"}</td>
                 </tr>
               </tbody>
             </table>
           )}
           {tab === 1 && (
             <div className="-mt-2 text-xs text-left">
-              <p className="text-sm font-semibold">
-                ${Number(data.service_amount).toFixed(2)}/hr USD
+              <p className="text-sm font-medium text-gray-800">
+                Estimated Amount: {formatNumbers(data.service_amount, "currency")}/hr USD
               </p>
               <p className="mt-2 text-sm font-medium text-gray-800">
                 {data.title}
               </p>
-              <p className="text-gray-600">{data.description}</p>
+              <p className="text-gray-500 mt-1">Location: {data.state}, {data.country}</p>
+              <p className="text-gray-500 mt-1">Description: {data.description}</p>
 
               <p className="mt-4 text-sm font-semibold">Job Detail</p>
               {details?.map((item) => (
-                // use summary tag
-                <details className="mt-1.5 mb-3">
+                <details key={item?.subject} className="mt-1.5 mb-3">
                   <summary className="font-semibold text-gray-900">
                     {item?.subject}
                   </summary>
@@ -529,7 +529,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
               <Loader />
             ) : bids.length ? (
               bids.map((item) => (
-                <div className="flex items-center w-full mt-3 space-x-2">
+                <div key={item.id} className="flex items-center w-full mt-3 space-x-2">
                   <img
                     src={item.profile_image}
                     className="w-[40px] h-[40px] object-cover object-center rounded-full"

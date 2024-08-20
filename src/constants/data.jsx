@@ -27,6 +27,7 @@ import {
   IoClipboardOutline,
 } from "react-icons/io5";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
+import { BiSupport } from "react-icons/bi";
 
 // Roles
 export const roles = {
@@ -163,6 +164,12 @@ export const navLinks = {
       title: "messages",
       path: "/messages",
     },
+    {
+      id: 6,
+      icon: <BiSupport className="text-lg" />,
+      title: "admin_support",
+      path: "/admin-support",
+    },
   ],
   Staff: [
     {
@@ -204,6 +211,12 @@ export const navLinks = {
       icon: <MdMessage className="text-lg" />,
       title: "messages",
       path: "/messages",
+    },
+    {
+      id: 5,
+      icon: <BiSupport className="text-lg" />,
+      title: "admin_support",
+      path: "/admin-support",
     },
   ],
 };

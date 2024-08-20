@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Empty, Loader, Page } from "../../components";
 import { useSelector } from "react-redux";
 import { base_url } from "../../utils/url";
 import { AppliedShiftCard } from "../../components/Cards/Staff";
+import { cn } from "../../lib/utils";
 
 const getShifts = `${base_url}/ongoing-shifts/`;
 
-const AwardedJobs = () => {
+const ApprovedShifts = () => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -35,27 +36,30 @@ const AwardedJobs = () => {
   }, [user]);
 
   return (
-    <Page title="Awarded Jobs" enableHeader>
-      {/* <div className="flex items-center justify-between mt-2 text-xs">
-        <span className="ml-1 font-medium">All Result</span>
-        <span>{data?.length} jobs found</span>
-      </div> */}
-
+    <Page title="Approved Shifts" enableHeader>
       <main
-        className={`relative min-h-[80vh] pb-5 space-y-2 ${
-          loading ? "flex justify-center items-center" : ""
-        }`}
+        className={cn("relative min-h-[80vh] pb-5 space-y-2", {
+          "flex justify-center items-center": loading,
+        })}
       >
-        {loading ? (
-          <Loader />
-        ) : data?.length ? (
-          data.map((item) => <AppliedShiftCard {...item} {...item?.shift} />)
-        ) : (
-          <Empty title="No jobs found!" />
-        )}
+        <ShiftsList loading={loading} data={data} />
       </main>
     </Page>
   );
 };
 
-export default AwardedJobs;
+function ShiftsList({ loading, data }) {
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!loading && !data?.length) {
+    return <Empty title="No jobs yet!" />;
+  }
+
+  return data.map((item) => (
+    <AppliedShiftCard key={item.id} {...item} {...item?.shift} />
+  ));
+}
+
+export default ApprovedShifts;
