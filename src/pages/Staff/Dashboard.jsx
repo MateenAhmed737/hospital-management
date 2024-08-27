@@ -1,16 +1,18 @@
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
+
 import { Loader, Page, Empty } from "../../components";
 import { fetchData, formatNumbers } from "../../utils";
+import { JobCard } from "../../components/Cards/Staff";
 import { base_url } from "../../utils/url";
-import { useSelector } from "react-redux";
+
 import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
 import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
 import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
 import RecentImg from "../../assets/images/DashboardIcons/recent.png";
 import AwardedJobBg1 from "../../assets/images/Backgrounds/award1.png";
 import AwardedJobBg2 from "../../assets/images/Backgrounds/award2.png";
-import { Link, useNavigate } from "react-router-dom";
-import { JobCard } from "../../components/Cards/Staff";
 
 const getAnalytics = `${base_url}/user-dashboard/`;
 const getTodayJob = `${base_url}/user-today-job/`;
@@ -111,7 +113,10 @@ const Dashboard = () => {
 
             <div className="absolute inset-0 flex flex-col items-start justify-center w-full px-4 text-white">
               <h3 className="font-semibold">Approved Shifts</h3>
-              <span className="text-xs">Congratulations! Your new shift has been approved by the faciclity.</span>
+              <span className="text-xs">
+                Congratulations! Your new shift has been approved by the
+                faciclity.
+              </span>
             </div>
           </button>
 

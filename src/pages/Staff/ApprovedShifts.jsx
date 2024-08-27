@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Empty, Loader, Page } from "../../components";
 import { useSelector } from "react-redux";
+
+import { Empty, Loader, Page } from "../../components";
+import { ApprovedShiftCard } from "../../components/Cards/Staff";
 import { base_url } from "../../utils/url";
-import { AppliedShiftCard } from "../../components/Cards/Staff";
 import { cn } from "../../lib/utils";
 
 const getShifts = `${base_url}/ongoing-shifts/`;
@@ -58,7 +59,7 @@ function ShiftsList({ loading, data }) {
   }
 
   return data.map((item) => (
-    <AppliedShiftCard key={item.id} {...item} {...item?.shift} />
+    <ApprovedShiftCard key={item.id} {...item} {...item?.shift} />
   ));
 }
 

@@ -1,4 +1,3 @@
-import React from "react";
 import ReactCodeInput from "react-code-input";
 
 const ConfirmationCodeFeilds = ({ fields, type, autoFocus, onChange }) => {
