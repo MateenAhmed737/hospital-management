@@ -4,11 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 import { PiMapPinDuotone } from "react-icons/pi";
 import { VscClose } from "react-icons/vsc";
 
-import Button from "../Buttons/Button";
-import { convertTime, formatNumbers, parseJson } from "../../utils";
-import { base_url } from "../../utils/url";
-import { Loader } from "../Loaders";
+import { convertTime, formatNumbers, parseJson } from "@/utils";
+import { Loader } from "@/components/Loaders";
+import { base_url } from "@/utils/url";
+import { cn } from "@/lib/utils";
+
 import Empty from "../Empty";
+import Button from "../Buttons/Button";
+import { shiftService } from "@/services";
 
 const getBitData = `${base_url}/get-bits-users`;
 const storeBid = `${base_url}/store-bit`;
@@ -28,9 +31,9 @@ const ShiftModal = ({
   const [viewOtherBids, setViewOtherBids] = useState(false);
   const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
+  const [shift, setShift] = useState(null);
+  const [shiftLoading, setShiftLoading] = useState(true);
   const facility = data.facility;
-
-  let details = useMemo(() => parseJson(data.job_details), [data.job_details]);
 
   console.log("data ===========>", data);
 
@@ -104,6 +107,22 @@ const ShiftModal = ({
     setStatus(data?.job_status === "CheckIn" ? "CheckOut" : "CheckIn");
   }, [data?.job_status]);
 
+  useEffect(() => {
+    if (!data.id) {
+      setShiftLoading(false);
+      return;
+    }
+
+    shiftService
+      .get_shift(data.id)
+      .then((res) => {
+        console.log('shift res =>>', res)
+        // setShift(res);
+        // setShiftLoading(false);
+      })
+      .finally(() => setShiftLoading(false));
+  }, [data.id]);
+
   return (
     <div
       className={`${styles.modal.base} ${styles.modal.open}`}
@@ -135,97 +154,7 @@ const ShiftModal = ({
             </div>
           </p>
 
-          <div className="flex w-full">
-            <button
-              onClick={() => setTab(0)}
-              className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
-                tab === 0
-                  ? "text-primary-600 border-primary-600"
-                  : "text-gray-500"
-              }`}
-            >
-              Shift Details
-            </button>
-            <button
-              onClick={() => setTab(1)}
-              className={`w-1/2 py-3 text-xs font-medium border-b-2 ${
-                tab === 1
-                  ? "text-primary-600 border-primary-600"
-                  : "text-gray-500"
-              }`}
-            >
-              Job Detail
-            </button>
-          </div>
-          {tab === 0 && (
-            <table className="w-full -mt-2 overflow-hidden rounded-lg">
-              <tbody className="*:text-xs *:text-left">
-                <tr className="bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-medium text-gray-600">
-                    Start time:
-                  </th>
-                  <td className="text-gray-700">
-                    {convertTime(data.start_time)}
-                  </td>
-                </tr>
-                <tr className="bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-medium text-gray-600">
-                    End time:
-                  </th>
-                  <td className="text-gray-700">
-                    {convertTime(data.end_time)}
-                  </td>
-                </tr>
-                <tr className="bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-medium text-gray-600">
-                    Opening date:
-                  </th>
-                  <td className="text-gray-700">{data.opening_date}</td>
-                </tr>
-                <tr className="bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-medium text-gray-600">
-                    Job created date:
-                  </th>
-                  <td className="text-gray-700">
-                    {new Date(data.created_at).toLocaleString()}
-                  </td>
-                </tr>
-                <tr className="bg-gray-50 hover:bg-gray-200">
-                  <th className="px-2 py-1.5 font-medium text-gray-600">
-                    Service type:
-                  </th>
-                  <td className="text-gray-700">{data.service_type || "-"}</td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-          {tab === 1 && (
-            <div className="-mt-2 text-xs text-left">
-              <p className="text-sm font-medium text-gray-800">
-                Estimated Amount:{" "}
-                {formatNumbers(data.service_amount, "currency")}/hr USD
-              </p>
-              <p className="mt-2 text-sm font-medium text-gray-800">
-                {data.title}
-              </p>
-              <p className="text-gray-500 mt-1">
-                Location: {data.state}, {data.country}
-              </p>
-              <p className="text-gray-500 mt-1">
-                Description: {data.description}
-              </p>
-
-              <p className="mt-4 text-sm font-semibold">Job Detail</p>
-              {details?.map((item) => (
-                <details key={item?.subject} className="mt-1.5 mb-3">
-                  <summary className="font-semibold text-gray-900">
-                    {item?.subject}
-                  </summary>
-                  <p className="mt-1 ml-4 text-gray-600">{item?.detail}</p>
-                </details>
-              ))}
-            </div>
-          )}
+          <Tabs tab={tab} setTab={setTab} data={data} />
         </div>
         <div className={styles.footer}>
           {isTodaysShift ? (
@@ -276,6 +205,108 @@ const ShiftModal = ({
         setViewOtherBids={setViewOtherBids}
         data={data}
       />
+    </div>
+  );
+};
+
+const Tabs = ({ tab, setTab, data, loading }) => {
+  const buttonClassName = cn(
+    "w-1/2 py-3 text-xs font-medium border-b-2",
+    tab === 0 ? "text-primary-600 border-primary-600" : "text-gray-500"
+  );
+
+  return (
+    <>
+      {/* Tabs */}
+      <div className="flex w-full">
+        <button onClick={() => setTab(0)} className={buttonClassName}>
+          Shift Details
+        </button>
+        <button onClick={() => setTab(1)} className={buttonClassName}>
+          Job Detail
+        </button>
+      </div>
+
+      {/* Tab Content */}
+      <TabContent tab={tab} data={data} loading={loading} />
+    </>
+  );
+};
+
+const TabContent = ({ tab, data, loading }) => {
+  const details = useMemo(
+    () => data?.job_details && parseJson(data.job_details),
+    [data?.job_details]
+  );
+
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (tab === 0) {
+    return (
+      <table className="w-full -mt-2 overflow-hidden rounded-lg">
+        <tbody className="*:text-xs *:text-left">
+          <tr className="bg-gray-50 hover:bg-gray-200">
+            <th className="px-2 py-1.5 font-medium text-gray-600">
+              Start time:
+            </th>
+            <td className="text-gray-700">{convertTime(data.start_time)}</td>
+          </tr>
+          <tr className="bg-gray-50 hover:bg-gray-200">
+            <th className="px-2 py-1.5 font-medium text-gray-600">End time:</th>
+            <td className="text-gray-700">{convertTime(data.end_time)}</td>
+          </tr>
+          <tr className="bg-gray-50 hover:bg-gray-200">
+            <th className="px-2 py-1.5 font-medium text-gray-600">
+              Opening date:
+            </th>
+            <td className="text-gray-700">{data.opening_date}</td>
+          </tr>
+          <tr className="bg-gray-50 hover:bg-gray-200">
+            <th className="px-2 py-1.5 font-medium text-gray-600">
+              Job created date:
+            </th>
+            <td className="text-gray-700">
+              {new Date(data.created_at).toLocaleString()}
+            </td>
+          </tr>
+          <tr
+            className={cn("bg-gray-50 hover:bg-gray-200", {
+              hidden: !data.service_type,
+            })}
+          >
+            <th className="px-2 py-1.5 font-medium text-gray-600">
+              Service type:
+            </th>
+            <td className="text-gray-700">{data.service_type || "-"}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
+  }
+
+  return (
+    <div className="-mt-2 text-xs text-left">
+      <p className="text-sm font-medium text-gray-800">
+        Estimated Amount: {formatNumbers(data.service_amount, "currency")}/hr
+        USD
+      </p>
+      <p className="mt-2 text-sm font-medium text-gray-800">{data.title}</p>
+      <p className="text-gray-500 mt-1">
+        Location: {data.state}, {data.country}
+      </p>
+      <p className="text-gray-500 mt-1">Description: {data.description}</p>
+
+      <p className="mt-4 text-sm font-semibold">Job Detail</p>
+      {details?.map((item) => (
+        <details key={item?.subject} className="mt-1.5 mb-3">
+          <summary className="font-semibold text-gray-900">
+            {item?.subject}
+          </summary>
+          <p className="mt-1 ml-4 text-gray-600">{item?.detail}</p>
+        </details>
+      ))}
     </div>
   );
 };

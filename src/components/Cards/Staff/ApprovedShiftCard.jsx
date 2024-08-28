@@ -1,72 +1,27 @@
-import toast from "react-hot-toast";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { HiMiniBuildingOffice } from "react-icons/hi2";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { FaLocationDot } from "react-icons/fa6";
+import { CiClock1 } from "react-icons/ci";
 
-import { ShiftModal } from "../../Modals";
-import { convertTime } from "../../../utils";
-import { base_url } from "../../../utils/url";
-
-const bookmark = `${base_url}/book-marked-shifts`;
+import { convertTime } from "@/utils";
+import { ShiftModal } from "@/components";
 
 const ApprovedShiftCard = (data) => {
-  const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
   const [shiftModal, setShiftModal] = useState(false);
-  const [bookmarking, setBookmarking] = useState(false);
 
-  const handleBookmark = () => {
-    setBookmarking(true);
+  const facility = data.facility;
 
-    const formdata = new FormData();
-    formdata.append("user_id", data?.user?.id);
-    fetch(`${bookmark}/${data.id}`, {
-      method: "POST",
-      body: formdata,
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log("res", res);
-        if (res.status === 200) {
-          data.setUserBookmarks &&
-            data.setUserBookmarks((prev) =>
-              data.isBookmarked
-                ? prev.filter((e) => e != res.data.shift_id)
-                : [...prev, Number(res.data.shift_id)]
-            );
-          data.onSuccess && data.onSuccess();
-          toast.success(res.message, { duration: 2000 });
-        } else if (res.error) {
-          toast.error(res?.error?.message);
-        }
-      })
-      .catch((err) => console.error(err))
-      .finally(() => {
-        setBookmarking(true);
-      });
-  };
+  console.log("data", data);
 
   return (
     <>
-      <div className="relative p-2 py-1.5 bg-gray-100 border rounded-md">
-        {/* Bookmark Button */}
-        {data.enableBookmarks && (
-          <button
-            className="absolute text-primary-500 top-2 right-2"
-            onClick={handleBookmark}
-            disabled={bookmarking}
-          >
-            {data.isBookmarked ? <FaBookmark /> : <FaRegBookmark />}
-          </button>
-        )}
-
+      <button onClick={() => setShiftModal(true)} className="relative w-full p-2 bg-gray-50 hover:bg-gray-100/90 transition border rounded-md">
         {/* Shift Info */}
         <div className="flex items-center justify-between p-1">
           <div className="flex items-center">
-            {data.facility?.profile_image ? (
+            {facility?.profile_image ? (
               <img
-                src={data.facility?.profile_image}
+                src={facility?.profile_image}
                 className="rounded-md w-11 h-11"
                 alt="facility profile"
               />
@@ -77,40 +32,31 @@ const ApprovedShiftCard = (data) => {
             )}
 
             <p className="flex flex-col items-start ml-2">
-              <span className="text-sm font-semibold">{data.title}</span>
+              <span className="text-sm font-semibold">
+                {facility.facility_name}
+              </span>
             </p>
           </div>
-          <div className="flex flex-col items-end text-sm font-semibold text-primary-500">
-            <span>${Number(data?.total_service_amount || 0).toFixed(2)}</span>
-            <sub>EST AMT</sub>
-          </div>
         </div>
-        <div className="w-full h-px my-1 bg-gray-300" />
-        <div className="">
-          <span className="text-xs">{data.description}</span>
+        <hr className="my-3"/>
+        <div className="text-gray-600 text-start">
+          <div className="flex items-center justify-between text-xs">
+            <div>
+              <FaLocationDot className="inline mr-1 text-base"/>
+              <span>{data.state}, {data.country}</span>
+            </div>
+            <div>
+              <CiClock1 className="inline mr-1 text-base"/>
+              <span>{new Date(data.created_at).toLocaleString()}</span>
+            </div>
+          </div>
 
-          <div className="flex items-center justify-between mt-3">
-            <span className="text-xs">Shift Date: {data.opening_date}</span>
-            <button
-              onClick={() => setShiftModal(true)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Details
-            </button>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-xs">
-              Shift Timing: {convertTime(data.start_time)}
-            </span>
-            <button
-              onClick={() => navigate("/messages/" + data.facility.id)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Chat
-            </button>
+          <div className="flex flex-col mt-3 text-xs">
+            <span>Shift Date: {data.opening_date}</span>
+            <span>Shift Timing: {convertTime(data.start_time)}</span>
           </div>
         </div>
-      </div>
+      </button>
 
       {shiftModal && (
         <ShiftModal

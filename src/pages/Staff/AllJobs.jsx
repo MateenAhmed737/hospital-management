@@ -1,15 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
-import { Empty, Loader, Page, ShiftModal } from "../../components";
-import { useSelector } from "react-redux";
-import { base_url } from "../../utils/url";
-import { BiSearch } from "react-icons/bi";
-import { HiMiniBuildingOffice } from "react-icons/hi2";
-import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import { CiLocationOn } from "react-icons/ci";
-import { FaRegClock } from "react-icons/fa6";
 import moment from "moment";
 import toast from "react-hot-toast";
-import { formatNumbers } from "../../utils";
+import { useSelector } from "react-redux";
+import { useEffect, useMemo, useState } from "react";
+import { HiMiniBuildingOffice } from "react-icons/hi2";
+import { FaBookmark, FaRegBookmark } from "react-icons/fa";
+import { BiSearch } from "react-icons/bi";
+
+import { base_url } from "@/utils/url";
+import { formatNumbers } from "@/utils";
+import { Empty, Loader, Page, ShiftModal } from "@/components";
 
 const getShifts = `${base_url}/get-country-wise-shifts/`;
 const bookmark = `${base_url}/book-marked-shifts`;
@@ -199,7 +198,7 @@ const RecentJob = (data) => {
             {data.facility?.profile_image ? (
               <img
                 src={data.facility?.profile_image}
-                className="rounded-md w-11 h-11"
+                className="rounded-md w-11 h-11 aspect-square object-cover"
                 alt="facility profile"
               />
             ) : (
