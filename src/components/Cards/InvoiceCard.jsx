@@ -21,7 +21,7 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
   const color = isPaid ? "text-green-600" : isUnpaid ? "text-red-600" : "";
 
   const isByAdmin = invoice?.invoice_by === "Admin";
-  const fcData = invoice?.[user.isAdmin ? "user" : "facility"];
+  const fcData = invoice?.facility;
   const profileImage = fcData?.profile_image;
   console.log("data invoice card", invoice);
 

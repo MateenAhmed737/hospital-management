@@ -238,7 +238,7 @@ const InvoiceDetailsModal = ({ invoiceModal, setInvoiceModal }) => {
       </div>
 
       {/* Invoice */}
-      <div className="absolute translate-y-full mt-32">
+      <div className="absolute opacity-0 pointer-events-none mt-32">
         <div
           className="w-full p-6 mx-2 my-6 bg-white border rounded shadow-sm"
           id="invoice"

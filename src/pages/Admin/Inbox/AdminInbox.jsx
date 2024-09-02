@@ -104,7 +104,7 @@ function InboxChatCard({
         user_massage,
         created_at,
       }}
-      className="flex items-start space-x-2 w-full p-1.5 hover:bg-gray-50 rounded-lg"
+      className="flex items-start space-x-2 w-full p-1.5 hover:bg-gray-50 border border-gray-200 rounded-lg"
     >
       <ProfileImage src={profile_picture} />
 
@@ -127,7 +127,7 @@ function InboxChatCard({
 function ProfileImage({ src, className }) {
   if (!src) {
     return (
-      <div className="size-14 min-w-12 rounded-lg bg-gray-100 flex justify-center items-center text-gray-300 text-3xl">
+      <div className="size-14 min-w-12 rounded-lg bg-gray-100 aspect-square flex justify-center items-center text-gray-300 text-3xl">
         <FaUser />
       </div>
     );

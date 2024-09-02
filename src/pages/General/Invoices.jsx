@@ -96,6 +96,8 @@ const Invoices = () => {
     setReload,
   };
 
+  console.log('data', data)
+
   useEffect(() => {
     const fetchInvoices = () => {
       setLoading(true);
