@@ -64,9 +64,11 @@ const AppliedShifts = () => {
           <div className="flex flex-col pb-5 space-y-2">
             {data.map((item) => (
               <AppliedShiftCard
+              key={item.id}
                 {...item}
                 user={user}
                 {...item?.facility?.shift}
+                description={item.description}
                 isBookmarked={userBookmarks.includes(Number(item?.shift_id))}
                 setUserBookmarks={setUserBookmarks}
                 enableBookmarks

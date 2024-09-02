@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import { ShiftModal } from "../../Modals";
-import { convertTime } from "../../../utils";
-import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
+import { useState } from "react";
+
+// Icons
 import { HiMiniBuildingOffice } from "react-icons/hi2";
 import { FaBookmark, FaRegBookmark } from "react-icons/fa";
-import toast from "react-hot-toast";
-import { base_url } from "../../../utils/url";
+
+import { ShiftModal } from "@/components/Modals";
+import { convertTime } from "@/utils";
+import { base_url } from "@/utils/url";
 
 const bookmark = `${base_url}/book-marked-shifts`;
 
 const AppliedShiftCard = (data) => {
-  const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
+
+  console.log("data", data);
 
   const handleBookmark = () => {
     setBookmarking(true);
@@ -75,37 +78,29 @@ const AppliedShiftCard = (data) => {
             )}
 
             <p className="flex flex-col items-start ml-2">
-              <span className="text-sm font-semibold">{data.title}</span>
+              <span className="font-semibold">{data.title}</span>
+              <span className="text-xs font-medium text-gray-600">
+                {data.facility.facility_name}, {data.state}, {data.country}
+              </span>
             </p>
           </div>
-          <div className="flex flex-col items-end text-sm font-semibold text-primary-500">
-            <span>${Number(data?.total_service_amount || 0).toFixed(2)}</span>
-            <sub>EST AMT</sub>
+          <div className="flex flex-col items-end text-sm font-semibold text-gray-500 pt-2">
+            <span>USD {Number(data?.service_amount || 0)}/hr</span>
           </div>
         </div>
         <div className="w-full h-px my-1 bg-gray-300" />
-        <div className="">
-          <span className="text-xs">{data.description}</span>
+        <div className="text-xs">
+          <span>{data.description}</span>
 
-          <div className="flex items-center justify-between mt-3">
-            <span className="text-xs">Shift Date: {data.opening_date}</span>
-            <button
-              onClick={() => setShiftModal(true)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Details
-            </button>
-          </div>
           <div className="flex items-center justify-between">
-            <span className="text-xs">
-              Shift Timing: {convertTime(data.start_time)}
-            </span>
-            <button
-              onClick={() => navigate("/messages/" + data.facility.id)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Chat
-            </button>
+            <div className="flex flex-col items-start justify-between mt-3">
+              <span>Shift Date: {data.opening_date}</span>
+              <span>
+                Shift Timing: {convertTime(data.start_time)} to{" "}
+                {convertTime(data.end_time)}
+              </span>
+            </div>
+            <button className="text-sm font-semibold text-primary-400 hover:text-primary-500" onClick={() => setShiftModal(true)}>Details</button>
           </div>
         </div>
       </div>

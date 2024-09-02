@@ -1,17 +1,20 @@
 import { useCallback, useEffect, useState } from "react";
-import { Loader, Page, Empty } from "../../components";
-import { fetchData, formatNumbers } from "../../utils";
-import { base_url } from "../../utils/url";
 import { useSelector } from "react-redux";
-import CompletedShiftImg from "../../assets/images/DashboardIcons/pending.png";
-import MonthIncomeImg from "../../assets/images/DashboardIcons/income.png";
-import UpcomingImg from "../../assets/images/DashboardIcons/upcoming.png";
-import RecentImg from "../../assets/images/DashboardIcons/recent.png";
 import { Link } from "react-router-dom";
-import { ShiftCard } from "../../components/Cards/Facility";
+
+import CompletedShiftImg from "@/assets/images/DashboardIcons/pending.png";
+import MonthIncomeImg from "@/assets/images/DashboardIcons/income.png";
+import UpcomingImg from "@/assets/images/DashboardIcons/upcoming.png";
+import RecentImg from "@/assets/images/DashboardIcons/recent.png";
+
+import { ShiftCard } from "@/components/Cards/Facility";
+import { Loader, Page, Empty } from "@/components";
+import { fetchData, formatNumbers } from "@/utils";
+import { base_url } from "@/utils/url";
 
 const getAnalytics = `${base_url}/facility-dashboard/`;
 const getShifts = `${base_url}/get-shift/`;
+
 const Dashboard = () => {
   const user = useSelector((state) => state.user);
   const [isLoading, setIsLoading] = useState(false);

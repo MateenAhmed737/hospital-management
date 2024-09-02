@@ -1,11 +1,14 @@
-import React, { useEffect, useMemo, useState } from "react";
-import { base_url } from "../../../utils/url";
-import { useSelector } from "react-redux";
-import { Empty, Loader, Page } from "../../../components";
-import { BiSearch } from "react-icons/bi";
-import { useNavigate } from "react-router-dom";
-import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
 import moment from "moment";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+
+import { BiSearch } from "react-icons/bi";
+import { IoCheckmark, IoCheckmarkDone } from "react-icons/io5";
+
+import { Empty, Loader, Page } from "@/components";
+import { base_url } from "@/utils/url";
+import { cn } from "@/lib/utils";
 
 const showInbox = `${base_url}/inbox/`;
 
@@ -17,13 +20,11 @@ const Inbox = () => {
 
   console.log("data", data);
 
-  const filteredData = useMemo(() => {
-    const str = searchText.trim();
+  const foundChats = useMemo(() => {
+    const str = searchText.trim().toLowerCase();
 
     if (str) {
-      return data.filter((item) =>
-        item.name?.toLowerCase()?.includes(str?.toLowerCase())
-      );
+      return data.filter((item) => item.name?.toLowerCase()?.includes(str));
     }
     return data;
   }, [data, searchText]);
@@ -45,7 +46,7 @@ const Inbox = () => {
       <label htmlFor="table-search" className="sr-only">
         Search
       </label>
-      <div className={`relative !ml-0 w-full xs:w-auto`}>
+      <div className="relative !ml-0 w-full xs:w-auto">
         <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
           <BiSearch />
         </div>
@@ -61,37 +62,46 @@ const Inbox = () => {
       </div>
 
       <main
-        className={`relative min-h-[80vh] pt-5 space-y-1 ${
-          loading ? "flex justify-center items-center" : ""
-        }`}
+        className={cn("relative min-h-[80vh] pt-5 space-y-1", {
+          "flex justify-center items-center": loading,
+        })}
       >
-        {loading ? (
-          <Loader />
-        ) : data?.length ? (
-          filteredData.map((item) => <Chat {...item} />)
-        ) : (
-          <Empty title="No chats found!" />
-        )}
+        <ChatList chats={foundChats} loading={loading} />
       </main>
     </Page>
   );
 };
 
-const Chat = ({ name_user_id, profile_image, status, created_at, name }) => {
+function ChatList({ loading, chats }) {
+  if (loading) {
+    return <Loader />;
+  }
+
+  if (!chats?.length) {
+    return <Empty title="No chats found!" />;
+  }
+
+  return chats.map((item) => <Chat key={item.id} {...item} />);
+}
+
+function Chat({ name_user_id, profile_image, status, created_at, name, message }) {
   const navigate = useNavigate();
   const isUnread = status === "unread";
   const Icon = isUnread ? IoCheckmark : IoCheckmarkDone;
 
+  const handleClick = () => navigate("/messages/" + name_user_id);
+
   return (
     <button
-      onClick={() => navigate("/messages/" + name_user_id)}
+      onClick={handleClick}
       className="flex items-center w-full px-2 py-2 space-x-3 bg-gray-100 border rounded-md hover:bg-gray-200"
     >
-      <img className="rounded-md size-14" src={profile_image} alt="profile" />
+      <img className="rounded-md size-14 aspect-square" src={profile_image} alt="profile" />
 
-      <div className="w-full space-y-2 text-left">
+      <div className="flex flex-col w-full text-left overflow-hidden">
         <span className="font-semibold">{name}</span>
-        <div className="flex items-center justify-between text-xs ">
+        <span className="text-xs text-gray-500 mb-2 truncate">{message}</span>
+        <div className="flex items-center justify-between text-xs">
           <span>{moment(created_at).format("DD-MMMM-YYYY")}</span>
 
           <span className={isUnread ? "text-gray-600" : "text-primary-500"}>
@@ -102,6 +112,6 @@ const Chat = ({ name_user_id, profile_image, status, created_at, name }) => {
       </div>
     </button>
   );
-};
+}
 
 export default Inbox;

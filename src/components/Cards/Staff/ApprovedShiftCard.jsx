@@ -53,7 +53,7 @@ const ApprovedShiftCard = (data) => {
 
           <div className="flex flex-col mt-3 text-xs">
             <span>Shift Date: {data.opening_date}</span>
-            <span>Shift Timing: {convertTime(data.start_time)}</span>
+            <span>Shift Timing: {convertTime(data.start_time)} to {convertTime(data.end_time)}</span>
           </div>
         </div>
       </button>

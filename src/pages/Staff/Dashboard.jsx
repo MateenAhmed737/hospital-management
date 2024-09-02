@@ -135,6 +135,7 @@ const Dashboard = () => {
                     shift={item.facility.shift}
                     setTodayJob={setTodayJob}
                     isTodaysShift
+                    modalTitle="Today's Shift"
                   />
                 ))}
               </div>

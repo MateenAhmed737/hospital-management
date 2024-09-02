@@ -23,6 +23,7 @@ const ShiftModal = ({
   disableBids,
   isTodaysShift,
   setTodayJob,
+  modalTitle,
   reload,
 }) => {
   const user = useSelector((state) => state.user);
@@ -33,9 +34,27 @@ const ShiftModal = ({
   const [loading, setLoading] = useState(false);
   const [shift, setShift] = useState(null);
   const [shiftLoading, setShiftLoading] = useState(true);
+  const [breakLoading, setBreakLoading] = useState(false);
   const facility = data.facility;
 
-  console.log("data ===========>", data);
+  const breakStatus = useMemo(
+    () =>
+      data.job_status === "CheckIn" && data.break_status == 0
+        ? "Break_in"
+        : "Break_out",
+    [data.job_status, data.break_status]
+  );
+
+  const isBreakIn = useMemo(
+    () => data.job_status === "CheckIn" && data.break_status == 0,
+    [data.job_status, data.break_status]
+  );
+  const isBreakOut = useMemo(
+    () => data.job_status === "CheckIn" && data.break_status > 0,
+    [data.job_status, data.break_status]
+  );
+
+  console.log('data.job_status', data.job_status)
 
   const close = () => setShiftModal(false);
 
@@ -52,7 +71,7 @@ const ShiftModal = ({
       base: "p-4 overflow-y-auto max-h-[70vh]",
       grid: `grid grid-cols-1 gap-4`,
     },
-    footer: "flex py-3 px-4 border-t justify-evenly space-x-3",
+    footer: "flex py-3 px-4 border-t justify-evenly",
     closeButton:
       "text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-base p-1.5 ml-auto inline-flex items-center",
     input:
@@ -97,6 +116,34 @@ const ShiftModal = ({
     }
   };
 
+  const handleBreak = async () => {
+    setBreakLoading(true);
+
+    console.log(user.id, data.id, facility.id, breakStatus);
+
+    try {
+      const res = await shiftService.break_in_out(
+        user.id,
+        data.id,
+        facility.id,
+        breakStatus
+      );
+      console.log("break_in_out res ==>", res);
+      if (res.success) {
+        toast.success(isBreakIn ? "Break started!" : "Break ended!");
+        setTodayJob((prev) => ({ ...prev, reload: true }));
+        close();
+      } else {
+        toast.error("Try again later!");
+      }
+    } catch (error) {
+      toast.error("Server side Error");
+      console.error("start_break catch error", error);
+    } finally {
+      setBreakLoading(false);
+    }
+  };
+
   const handleBackdropClick = (e) => {
     if (e.target === e.currentTarget) {
       close();
@@ -116,9 +163,8 @@ const ShiftModal = ({
     shiftService
       .get_shift(data.id)
       .then((res) => {
-        console.log('shift res =>>', res)
-        // setShift(res);
-        // setShiftLoading(false);
+        console.log("shift res =>>", res);
+        setShift(res.success?.data || {});
       })
       .finally(() => setShiftLoading(false));
   }, [data.id]);
@@ -129,12 +175,14 @@ const ShiftModal = ({
       onClick={handleBackdropClick}
     >
       <div className={styles.content}>
-        <div className={styles.header}>
-          <h2 className="text-lg font-semibold">Shift Details</h2>
+        <header className={styles.header}>
+          <h2 className="text-lg font-semibold">
+            {modalTitle || "Shift Details"}
+          </h2>
           <button onClick={close} className={styles.closeButton}>
             <VscClose />
           </button>
-        </div>
+        </header>
         <div
           className={`${styles.main.base} ${styles.main.grid} ${styles.main.gap} text-center`}
         >
@@ -149,25 +197,47 @@ const ShiftModal = ({
             <div>
               <PiMapPinDuotone className="inline text-gray-800" />
               <span className="text-xs font-normal text-gray-600">
-                {facility.country}
+                {facility.state}, {facility.country}
               </span>
             </div>
           </p>
 
-          <Tabs tab={tab} setTab={setTab} data={data} />
+          <Tabs tab={tab} setTab={setTab} data={shift} loading={shiftLoading} />
         </div>
-        <div className={styles.footer}>
+        <footer className={styles.footer}>
           {isTodaysShift ? (
-            <Button
-              title={(() => {
-                const sp = status.split("");
-                sp.splice(5, 0, " ");
-                return sp;
-              })()}
-              loading={loading}
-              handleClick={handleCheck}
-              extraStyles={styles.footerCloseButton}
-            />
+            <>
+              <Button
+                loading={breakLoading}
+                handleClick={handleBreak}
+                extraStyles={cn(
+                  styles.footerCloseButton,
+                  !isBreakIn && "hidden"
+                )}
+              >
+                Take your break!
+              </Button>
+              <Button
+                loading={breakLoading}
+                handleClick={handleBreak}
+                extraStyles={cn(
+                  styles.footerCloseButton,
+                  !isBreakOut && "hidden"
+                )}
+              >
+                I am back
+              </Button>
+              <Button
+                loading={loading}
+                handleClick={handleCheck}
+                extraStyles={cn(
+                  styles.footerCloseButton,
+                  (isBreakIn || isBreakOut) && "ml-3"
+                )}
+              >
+                {status.replace(/([A-Z])/g, " $1")}
+              </Button>
+            </>
           ) : disableBids ? (
             <Button
               title="Close"
@@ -180,16 +250,16 @@ const ShiftModal = ({
                 onClick={() => setViewOtherBids(true)}
                 className="mx-auto text-xs text-gray-600 hover:underline"
               >
-                View other bids
+                View other&apos;s Request
               </button>
               <Button
-                title="Place Bids"
+                title="Request For Shift"
                 handleClick={() => setPlaceBidsModal(true)}
                 extraStyles={styles.createButton}
               />
             </>
           )}
-        </div>
+        </footer>
       </div>
 
       <PlaceBidsModal
@@ -210,25 +280,34 @@ const ShiftModal = ({
 };
 
 const Tabs = ({ tab, setTab, data, loading }) => {
-  const buttonClassName = cn(
-    "w-1/2 py-3 text-xs font-medium border-b-2",
-    tab === 0 ? "text-primary-600 border-primary-600" : "text-gray-500"
-  );
-
   return (
     <>
       {/* Tabs */}
       <div className="flex w-full">
-        <button onClick={() => setTab(0)} className={buttonClassName}>
+        <button
+          onClick={() => setTab(0)}
+          className={cn(
+            "w-1/2 py-3 text-xs font-medium border-b-2",
+            tab === 0 ? "text-primary-600 border-primary-600" : "text-gray-500"
+          )}
+        >
           Shift Details
         </button>
-        <button onClick={() => setTab(1)} className={buttonClassName}>
+        <button
+          onClick={() => setTab(1)}
+          className={cn(
+            "w-1/2 py-3 text-xs font-medium border-b-2",
+            tab === 1 ? "text-primary-600 border-primary-600" : "text-gray-500"
+          )}
+        >
           Job Detail
         </button>
       </div>
 
       {/* Tab Content */}
-      <TabContent tab={tab} data={data} loading={loading} />
+      <div className="relative w-full min-h-20">
+        <TabContent tab={tab} data={data} loading={loading} />
+      </div>
     </>
   );
 };
@@ -251,35 +330,35 @@ const TabContent = ({ tab, data, loading }) => {
             <th className="px-2 py-1.5 font-medium text-gray-600">
               Start time:
             </th>
-            <td className="text-gray-700">{convertTime(data.start_time)}</td>
+            <td className="text-gray-700">{convertTime(data?.start_time)}</td>
           </tr>
           <tr className="bg-gray-50 hover:bg-gray-200">
             <th className="px-2 py-1.5 font-medium text-gray-600">End time:</th>
-            <td className="text-gray-700">{convertTime(data.end_time)}</td>
+            <td className="text-gray-700">{convertTime(data?.end_time)}</td>
           </tr>
           <tr className="bg-gray-50 hover:bg-gray-200">
             <th className="px-2 py-1.5 font-medium text-gray-600">
               Opening date:
             </th>
-            <td className="text-gray-700">{data.opening_date}</td>
+            <td className="text-gray-700">{data?.opening_date}</td>
           </tr>
           <tr className="bg-gray-50 hover:bg-gray-200">
             <th className="px-2 py-1.5 font-medium text-gray-600">
               Job created date:
             </th>
             <td className="text-gray-700">
-              {new Date(data.created_at).toLocaleString()}
+              {new Date(data?.created_at).toLocaleString()}
             </td>
           </tr>
           <tr
             className={cn("bg-gray-50 hover:bg-gray-200", {
-              hidden: !data.service_type,
+              hidden: !data?.service_type,
             })}
           >
             <th className="px-2 py-1.5 font-medium text-gray-600">
               Service type:
             </th>
-            <td className="text-gray-700">{data.service_type || "-"}</td>
+            <td className="text-gray-700">{data?.service_type || "-"}</td>
           </tr>
         </tbody>
       </table>
@@ -319,7 +398,6 @@ const PlaceBidsModal = ({
   reload,
 }) => {
   const user = useSelector((state) => state.user);
-  // const [bid, setBid] = useState(0.0);
   const [description, setDescription] = useState("");
   const [loading, setLoading] = useState(false);
   const facility = data.facility;
@@ -329,7 +407,6 @@ const PlaceBidsModal = ({
     setLoading(true);
 
     const formdata = new FormData();
-    // formdata.append("price", bid);
     formdata.append("description", description);
 
     const requestOptions = {
@@ -346,15 +423,13 @@ const PlaceBidsModal = ({
       .then((json) => {
         console.log("json", json);
         if (json.success) {
-          toast.success("Bid placed successfully!");
-          // setBid(0.0);
+          toast.success("Shift requested successfully!");
           setDescription("");
           setPlaceBidsModal(false);
           closeShiftModal();
           reload && reload();
         } else if (json?.message?.includes("Bit already exists")) {
-          toast.error("Bid already exists!");
-          // setBid(0.0);
+          toast.error("Already requested!");
           setDescription("");
           setPlaceBidsModal(false);
           closeShiftModal();
@@ -403,7 +478,7 @@ const PlaceBidsModal = ({
     >
       <form onSubmit={handleSubmit} className={styles.content}>
         <div className={styles.header}>
-          <h2 className="text-lg font-semibold">Place Your Bid</h2>
+          <h2 className="text-lg font-semibold">Place Your Request</h2>
           <button onClick={close} className={styles.closeButton}>
             <VscClose />
           </button>
@@ -422,22 +497,10 @@ const PlaceBidsModal = ({
             <div>
               <PiMapPinDuotone className="inline text-gray-800" />
               <span className="text-xs font-normal text-gray-600">
-                {facility.country}
+              {facility.state}, {facility.country}
               </span>
             </div>
           </p>
-
-          {/* <b>${bid}</b>
-          <input
-            type="range"
-            min={0}
-            max={100}
-            step={0.1}
-            value={bid}
-            onChange={(e) => setBid(e.target.value)}
-            className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer"
-            required
-          /> */}
 
           <div className="flex flex-col items-start mt-2">
             <label
@@ -461,7 +524,7 @@ const PlaceBidsModal = ({
         <div className={styles.footer}>
           <Button
             type="submit"
-            title="Bid This Job"
+            title="Request This Shift"
             extraStyles={styles.createButton}
             loading={loading}
           />
@@ -538,7 +601,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
     >
       <form onSubmit={handleSubmit} className={styles.content}>
         <div className={styles.header}>
-          <h2 className="text-lg font-semibold">View other bids</h2>
+          <h2 className="text-lg font-semibold">Other&apos;s request</h2>
           <button onClick={close} className={styles.closeButton}>
             <VscClose />
           </button>
@@ -564,7 +627,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
 
           <div className="flex justify-between w-full mt-2 text-sm">
             <span>All results</span>
-            <span>{bids.length} bits found</span>
+            <span>{bids.length} requets found</span>
           </div>
           <div
             className={
@@ -606,7 +669,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
                 </div>
               ))
             ) : (
-              <Empty title="No bids found!" noMargin />
+              <Empty title="No requets found!" noMargin />
             )}
           </div>
         </div>

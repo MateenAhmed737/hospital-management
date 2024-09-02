@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Empty, Loader, Page } from "../../components";
 import { useSelector } from "react-redux";
-import { base_url } from "../../utils/url";
-import { AppliedShiftCard } from "../../components/Cards/Staff";
+
+import { Empty, Loader, Page } from "@/components";
+import { AppliedShiftCard } from "@/components/Cards/Staff";
+import { base_url } from "@/utils/url";
 
 const getShifts = `${base_url}/get-book-marked-shifts/`;
 
@@ -14,6 +15,8 @@ const FavJobs = () => {
   console.log("data", data);
 
   useEffect(() => {
+    if (!user) return;
+
     const fetchShifts = async () => {
       setLoading(true);
       try {
@@ -38,7 +41,7 @@ const FavJobs = () => {
     <Page title="Favourite Jobs" enableHeader>
       <div className="flex items-center justify-between mt-2 text-xs">
         <span className="ml-1 font-medium">All Result</span>
-        <span>{data?.length} jobs found</span>
+        <span>{data?.length} job{data?.length > 1 && "s"} found</span>
       </div>
 
       <main

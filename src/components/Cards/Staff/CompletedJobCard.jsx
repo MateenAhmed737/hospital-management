@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import { ShiftModal } from "../../Modals";
-import { convertTime } from "../../../utils";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+
+import { ShiftModal } from "@/components/Modals";
+import { convertTime } from "@/utils";
 
 const CompletedJobCard = (data) => {
-  const navigate = useNavigate();
   const [shiftModal, setShiftModal] = useState(false);
 
   return (
@@ -19,14 +18,9 @@ const CompletedJobCard = (data) => {
             />
 
             <p className="flex flex-col items-start ml-2">
-              <span className="text-sm font-semibold">{data.title}</span>
+              <span className="font-semibold">{data.title}</span>
+              <span className="text-xs font-medium text-gray-600">{data.facility.facility_name}</span>
             </p>
-          </div>
-          <div className="flex flex-col items-end text-sm font-semibold text-primary-500">
-            <span>
-              ${Number(data?.total_service_amount || 0).toFixed(2)}
-            </span>
-            <sub>AMT</sub>
           </div>
         </div>
         <div className="w-full h-px my-1 bg-gray-300" />
@@ -44,14 +38,8 @@ const CompletedJobCard = (data) => {
           </div>
           <div className="flex items-center justify-between">
             <span className="text-xs">
-              Shift Timing: {convertTime(data.start_time)}
+              Shift Timing: {convertTime(data.start_time)} {convertTime(data.end_time)}
             </span>
-            <button
-              onClick={() => navigate("/messages/" + data.facility.id)}
-              className="text-sm font-semibold text-primary-500 hover:text-primary-700"
-            >
-              Chat
-            </button>
           </div>
         </div>
       </div>

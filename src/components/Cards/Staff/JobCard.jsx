@@ -1,17 +1,19 @@
 import { useState } from "react";
 import { ShiftModal } from "../../Modals";
-import { convertTime } from "../../../utils";
+import moment from "moment";
 
 const JobCard = ({
   data,
-  title,
   shift,
   facility,
   disableBids = false,
   isTodaysShift = false,
   setTodayJob,
+  modalTitle
 }) => {
   const [shiftModal, setShiftModal] = useState(false);
+
+  console.log('data >>>>', data)
 
   return (
     <>
@@ -27,12 +29,12 @@ const JobCard = ({
           />
 
           <p className="flex flex-col items-start ml-2">
-            <span className="text-sm font-semibold">{title}</span>
-            <span className="mt-1 text-xs">{data?.shift?.opening_date}</span>
+            <span className="text-sm font-semibold">{facility?.facility_name}</span>
+            <span className="mt-1 text-xs">{shift?.state}, {shift?.country}</span>
           </p>
         </div>
         <span className="text-xs">
-          {convertTime(new Date(data?.shift?.created_at).toTimeString())}
+          {moment(shift?.created_at).format("LT")}
         </span>
       </button>
       {shiftModal && (
@@ -40,14 +42,15 @@ const JobCard = ({
           shiftModal={shiftModal}
           setShiftModal={setShiftModal}
           data={{
-            ...shift,
-            ...data,
             facility,
-            id: data?.shift_id
+            id: data?.shift_id,
+            job_status: data?.job_status,
+            break_status: data?.break_status,
           }}
           disableBids={disableBids}
           isTodaysShift={isTodaysShift}
           setTodayJob={setTodayJob}
+          modalTitle={modalTitle}
         />
       )}
     </>

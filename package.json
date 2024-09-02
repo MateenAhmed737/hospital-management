@@ -8,7 +8,7 @@
     "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "build:deploy": "react-scripts --max_old_space_size=4096 build && firebase deploy --only hosting",
+    "build:deploy": "vite build && firebase deploy --only hosting",
     "deploy": "firebase deploy --only hosting"
   },
   "dependencies": {
