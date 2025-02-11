@@ -14,7 +14,7 @@ export default function MediaSlider({ media, index = 0 }) {
 
   const extractFileName = (str) => str.slice(str.lastIndexOf("/") + 1);
   const downloadFile = (url, fileName = "download") => {
-    console.log("url ==>", url);
+    // console.log("url ==>", url);
     fetch(url)
       .then((response) => response.blob())
       .then((blob) => {

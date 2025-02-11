@@ -10,7 +10,7 @@ import toast from "react-hot-toast";
 const EditProfile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [staffTypes, setStaffTypes] = useState([])
+  const [staffTypes, setStaffTypes] = useState([]);
   const [state, setState] = useState({
     about: "",
     ...user,
@@ -34,11 +34,14 @@ const EditProfile = () => {
         .filter((e) => e !== "role")
         .forEach((key) => {
           if (key === "country") {
-            formdata.append("country", Country.getCountryByCode(state[key]).name);
-            console.log("country", Country.getCountryByCode(state[key]).name);
+            formdata.append(
+              "country",
+              Country.getCountryByCode(state[key]).name
+            );
+            // console.log("country", Country.getCountryByCode(state[key]).name);
           } else {
             formdata.append(key, state[key]);
-            console.log(key, state[key]);
+            // console.log(key, state[key]);
           }
         });
 
@@ -54,7 +57,7 @@ const EditProfile = () => {
       const res = await fetch(url, requestOptions);
       const json = await res.json();
 
-      console.log("json", json);
+      // console.log("json", json);
       if (json.success) {
         let data = json.success.data;
         data.role = roles[data.role_id];
@@ -63,7 +66,7 @@ const EditProfile = () => {
         data.isFacility = data.role_id === "3";
 
         dispatch(userActions.set(data));
-        console.log("Response =============>", data);
+        // console.log("Response =============>", data);
         toast.success("Profile updated successfully!");
       } else {
         toast.error(json?.message || json?.error?.message);
@@ -100,7 +103,7 @@ const EditProfile = () => {
       fetch(`${base_url}/get-services`, requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          console.log("data", data);
+          // console.log("data", data);
           if (data.success) {
             setStaffTypes(data.success.data);
           } else {
@@ -113,7 +116,7 @@ const EditProfile = () => {
     fetchStaffTypes();
   }, []);
 
-  console.log('state', state)
+  // console.log('state', state)
 
   return (
     <Page title="Edit Profile" enableHeader>

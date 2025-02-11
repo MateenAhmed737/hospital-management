@@ -23,7 +23,7 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
   const isByAdmin = invoice?.invoice_by === "Admin";
   const fcData = invoice?.facility;
   const profileImage = fcData?.profile_image;
-  console.log("data invoice card", invoice);
+  // console.log("data invoice card", invoice);
 
   return (
     <>
@@ -47,8 +47,12 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
             <span className="text-sm font-medium">
               {isByAdmin ? invoice?.company : fcData?.facility_name}
             </span>
-            <span className="text-[11px] text-gray-400">{invoice.due_date}</span>
-            <span className="text-xs text-gray-400">{fcData?.state + ", " + fcData?.country}</span>
+            <span className="text-[11px] text-gray-400">
+              {invoice.due_date}
+            </span>
+            <span className="text-xs text-gray-400">
+              {fcData?.state + ", " + fcData?.country}
+            </span>
           </p>
         </div>
 
@@ -78,7 +82,10 @@ const InvoiceCard = ({ invoice, onClick, reload }) => {
             <span className="text-xs">{invoice.status}</span>
           </div>
           <span className="text-sm">
-            {formatNumbers(invoice.total_amount || invoice?.amount || 0, "currency")}
+            {formatNumbers(
+              invoice.total_amount || invoice?.amount || 0,
+              "currency"
+            )}
           </span>
         </p>
       </button>

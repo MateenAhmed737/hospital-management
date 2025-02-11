@@ -67,7 +67,6 @@ const ManageAdmins = () => {
     // setData(newState);
     // setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    // console.log("response ===>", resData);
     setReload(!reload);
   };
 
@@ -102,11 +101,11 @@ const ManageAdmins = () => {
         if (state?.constructor === FileList) {
           Object.keys(state).forEach((item) => {
             formdata.append(`${key}[${item}]`, state);
-            console.log(`${key}[${item}]`, state);
+            // console.log(`${key}[${item}]`, state);
           });
         } else {
           formdata.append(`${key}`, state);
-          console.log(`${key}`, state);
+          // console.log(`${key}`, state);
         }
       },
     },
@@ -196,7 +195,7 @@ const ManageAdmins = () => {
         if (json.success) {
           const data = json.success.data;
           setRoles(data);
-          console.log("roles data ==>", data);
+          // console.log("roles data ==>", data);
         }
       } catch (error) {
         console.error(error);

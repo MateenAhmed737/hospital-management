@@ -27,17 +27,6 @@ const NotificationModal = ({
     e.preventDefault();
     setLoading(true);
 
-    isBulk
-      ? console.log(
-          "first",
-          JSON.stringify(
-            paginatedData.items
-              .filter((e) => selected.includes(e.id))
-              .map((e) => e._device_token)
-          )
-        )
-      : console.log("single notify", notificationModal.data._device_token);
-
     try {
       let formdata = new FormData();
       formdata.append("title", title);
@@ -67,7 +56,7 @@ const NotificationModal = ({
       if (json.success) {
         close();
         toast.success("Notification sent!");
-        console.log("NotificationModal =============>", json);
+        // console.log("NotificationModal =============>", json);
         setLoading(false);
       } else {
         setLoading(false);

@@ -51,7 +51,7 @@ const ForgotPassword = () => {
       if (json.success) {
         const data = json.success;
 
-        console.log("data", data);
+        // console.log("data", data);
         dispatch(appActions.set({ otpData: data }));
 
         navigate("/email-verification");

@@ -65,7 +65,7 @@ function AdminSupportChat() {
     return <Navigate to="/admin-inbox" />;
   }
 
-  console.log("data.chats", data.chats);
+  // console.log("data.chats", data.chats);
 
   return (
     <Page title={profile?.name || "Chat"} containerStyles="!p-0 flex flex-col">

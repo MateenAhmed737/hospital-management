@@ -19,7 +19,7 @@ function Pagination({ paginatedData, setPaginatedData }) {
     const endOffset = itemsPerPageState;
     const curItems = paginatedData.items.slice(0, endOffset);
     setPageCount(Math.ceil(paginatedData.items.length / itemsPerPageState));
-    console.log(`Loading items from ${0} to ${endOffset}`);
+    // console.log(`Loading items from ${0} to ${endOffset}`);
     setItemOffset(0);
     setPaginatedData((prev) => ({ ...prev, curItems }));
   }, [paginatedData.items, itemsPerPageState]);
@@ -28,18 +28,18 @@ function Pagination({ paginatedData, setPaginatedData }) {
     const endOffset = itemOffset + itemsPerPageState;
     const curItems = paginatedData.items.slice(itemOffset, endOffset);
     setPageCount(Math.ceil(paginatedData.items.length / itemsPerPageState));
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
+    // console.log(`Loading items from ${itemOffset} to ${endOffset}`);
     setPaginatedData((prev) => ({ ...prev, curItems }));
   }, [itemOffset]);
 
   const handlePageClick = (event) => {
-    console.log("event", event);
+    // console.log("event", event);
     const newOffset =
       (event.selected * itemsPerPageState) % paginatedData.items.length;
     setItemOffset(newOffset);
-    console.log(
-      `User requested page number ${event.selected}, which is offset ${newOffset}`
-    );
+    // console.log(
+    //   `User requested page number ${event.selected}, which is offset ${newOffset}`
+    // );
   };
 
   const handleSelect = (e) => {

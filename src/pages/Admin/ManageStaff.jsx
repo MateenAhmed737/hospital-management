@@ -76,7 +76,7 @@ const ManageStaff = () => {
     setData(newState);
     setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
   const createCallback = (res) => {
     const resData = modifyData(res?.success?.data, neededProps, true);
@@ -84,7 +84,7 @@ const ManageStaff = () => {
     setData(newState);
     setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
 
   const uploadFields = [
@@ -132,21 +132,21 @@ const ManageStaff = () => {
         if (state?.constructor === FileList) {
           Object.keys(state).forEach((item) => {
             formdata.append(`${key}[${item}]`, state);
-            console.log(`${key}[${item}]`, state);
+            // console.log(`${key}[${item}]`, state);
           });
         } else {
           formdata.append(`${key}`, state);
-          console.log(`${key}`, state);
+          // console.log(`${key}`, state);
         }
         formdata.append("role_id", "1");
-        console.log("role_id", "1");
+        // console.log("role_id", "1");
       },
     },
     {
       key: "country",
       appendFunc: (key, value, formdata) => {
         formdata.append(`${key}`, Country.getCountryByCode(value).name);
-        console.log(`${key}`, Country.getCountryByCode(value).name);
+        // console.log(`${key}`, Country.getCountryByCode(value).name);
       },
     },
   ];
@@ -251,7 +251,7 @@ const ManageStaff = () => {
       fetch(`${base_url}/get-services`, requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          console.log("data", data);
+          // console.log("data", data);
           if (data.success) {
             setStaffTypes(data.success.data);
           } else {

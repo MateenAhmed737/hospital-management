@@ -9,11 +9,11 @@ const JobCard = ({
   disableBids = false,
   isTodaysShift = false,
   setTodayJob,
-  modalTitle
+  modalTitle,
 }) => {
   const [shiftModal, setShiftModal] = useState(false);
 
-  console.log('data >>>>', data)
+  // console.log('data >>>>', data)
 
   return (
     <>
@@ -29,8 +29,12 @@ const JobCard = ({
           />
 
           <p className="flex flex-col items-start ml-2">
-            <span className="text-sm font-semibold">{facility?.facility_name}</span>
-            <span className="mt-1 text-xs">{shift?.state}, {shift?.country}</span>
+            <span className="text-sm font-semibold">
+              {facility?.facility_name}
+            </span>
+            <span className="mt-1 text-xs">
+              {shift?.state}, {shift?.country}
+            </span>
           </p>
         </div>
         <span className="text-xs">

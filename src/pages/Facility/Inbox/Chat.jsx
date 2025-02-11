@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
 import moment from "moment";
-import { useSelector } from "react-redux";
-import { Button, Loader, Page } from "../../../components";
-import { base_url } from "../../../utils/url";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import { FaUser } from "react-icons/fa";
 import { IoMdArrowRoundBack, IoMdSend } from "react-icons/io";
 import { MdImage } from "react-icons/md";
+import { useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { Button, Loader, Page } from "../../../components";
+import { base_url } from "../../../utils/url";
 
 const getChats = `${base_url}/get-chats/`;
 const getChatDetails = `${base_url}/get-chat-detail/`;
@@ -45,11 +45,11 @@ const Chat = () => {
       },
     };
 
-    console.log("value", value);
+    // console.log("value", value);
     fetch(sendChat, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.success) {
           const data = res.success.data;
           const media = isMedia ? JSON.parse(data.media) : null;
@@ -57,7 +57,7 @@ const Chat = () => {
             ? { ...data, media, message_type: media[0].type }
             : data;
 
-          console.log("newMessage", newMessage);
+          // console.log("newMessage", newMessage);
 
           setData((prev) => ({
             ...prev,
@@ -66,7 +66,7 @@ const Chat = () => {
           if (!isMedia) setMessage("");
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.error(err))
       .finally(() => setSending(false));
   };
 
@@ -85,7 +85,7 @@ const Chat = () => {
               .reverse(),
           }))
         )
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
         .finally(() => setData((prev) => ({ ...prev, loading: false })));
     };
     const fetchChatsTemp = () => {
@@ -100,7 +100,7 @@ const Chat = () => {
               .reverse(),
           }))
         )
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     };
 
     const fetchProfile = () => {
@@ -111,7 +111,7 @@ const Chat = () => {
         .then((data) =>
           setProfile((prev) => ({ ...prev, data: data.success.data }))
         )
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
         .finally(() => setProfile((prev) => ({ ...prev, loading: false })));
     };
 
@@ -134,8 +134,6 @@ const Chat = () => {
         elem.scrollTo({ behavior: "smooth", top: elem.scrollHeight });
     }, 500);
   }, [data.chats]);
-
-  // console.log("profile.data", profile.data);
 
   return (
     <Page

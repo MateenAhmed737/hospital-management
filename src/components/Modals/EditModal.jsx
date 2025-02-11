@@ -42,7 +42,7 @@ const EditModal = ({
   const multiSelectKeys = multiSelectFields.map((e) => e.key);
   const inputKeys = inputFields.map((e) => e.key);
 
-  console.log("state", state);
+  // console.log("state", state);
 
   const keys =
     template && Object.keys(template).filter((e) => !excludeFields.includes(e));
@@ -68,7 +68,7 @@ const EditModal = ({
           data?.appendFunc(key, state[item], formdata, state);
         } else {
           formdata.append(key, state[item]);
-          console.log(key, state[item]);
+          // console.log(key, state[item]);
         }
       });
 
@@ -87,7 +87,7 @@ const EditModal = ({
       );
       const json = await res.json();
 
-      console.log("json", json);
+      // console.log("json", json);
 
       if (json.success) {
         successCallback && successCallback(json);

@@ -77,7 +77,7 @@ const ManageFacility = () => {
     setData(newState);
     setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
 
   const createCallback = (res) => {
@@ -86,7 +86,7 @@ const ManageFacility = () => {
     setData(newState);
     setPaginatedData((prev) => ({ ...prev, items: newState }));
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
 
   const uploadFields = [
@@ -127,11 +127,11 @@ const ManageFacility = () => {
         if (state?.constructor === FileList) {
           Object.keys(state).forEach((item) => {
             formdata.append(`${key}[${item}]`, state);
-            console.log(`${key}[${item}]`, state);
+            // console.log(`${key}[${item}]`, state);
           });
         } else {
           formdata.append(`${key}`, state);
-          console.log(`${key}`, state);
+          // console.log(`${key}`, state);
         }
       },
     },
@@ -145,7 +145,7 @@ const ManageFacility = () => {
       key: "country",
       appendFunc: (key, value, formdata) => {
         formdata.append(`${key}`, Country.getCountryByCode(value).name);
-        console.log(`${key}`, Country.getCountryByCode(value).name);
+        // console.log(`${key}`, Country.getCountryByCode(value).name);
       },
     },
   ];
@@ -220,7 +220,13 @@ const ManageFacility = () => {
       successCallback: editCallback,
     },
     viewModalProps: {
-      excludeFields: ["_created_at", "_updated_at", "_role_id", "_password", "_hourly_rate"],
+      excludeFields: [
+        "_created_at",
+        "_updated_at",
+        "_role_id",
+        "_password",
+        "_hourly_rate",
+      ],
       longFields: ["_about"],
       imageFields: ["profile_image"],
     },

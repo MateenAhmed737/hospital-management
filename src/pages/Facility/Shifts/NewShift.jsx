@@ -38,7 +38,7 @@ const NewShift = () => {
     setState((prev) => ({ ...prev, [name]: value }));
   };
 
-  console.log('state', state)
+  // console.log('state', state)
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -61,7 +61,7 @@ const NewShift = () => {
     Object.keys(state).forEach((key) => {
       if (key === "job_details") {
         formdata.append("job_details", JSON.stringify(state[key]));
-        console.log("job_details", JSON.stringify(state[key]));
+        // console.log("job_details", JSON.stringify(state[key]));
       } else if (key === "staff_type") {
         formdata.append("staff", state[key]);
         formdata.append("type_id", state[key]);
@@ -69,18 +69,17 @@ const NewShift = () => {
         formdata.append("state", user?.state);
         formdata.append("boost_status", "No");
 
-        console.log("staff", state[key]);
-        console.log("service_type", state[key]);
-        console.log("state", user?.state);
-        console.log("country", user?.country);
-        console.log("boost_status", "No");
-        
+        // console.log("staff", state[key]);
+        // console.log("service_type", state[key]);
+        // console.log("state", user?.state);
+        // console.log("country", user?.country);
+        // console.log("boost_status", "No");
       } else if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
-        console.log(key, moment(state[key]).format("YYYY-MM-DD"));
+        // console.log(key, moment(state[key]).format("YYYY-MM-DD"));
       } else {
         formdata.append(key, state[key]);
-        console.log(key, state[key]);
+        // console.log(key, state[key]);
       }
     });
 
@@ -96,7 +95,7 @@ const NewShift = () => {
     fetch(createUrl + user.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log("res ==>", res);
+        // console.log("res ==>", res);
         if (res.success) {
           toast.success("Shift created successfully!", { duration: 2000 });
           setState(initialState);
@@ -123,7 +122,7 @@ const NewShift = () => {
       fetch(`${base_url}/get-services`, requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          console.log("data", data);
+          // console.log("data", data);
           if (data.success) {
             setStaffTypes(data.success.data);
           } else {

@@ -14,7 +14,7 @@ const EditProfile = () => {
 
   const { profile_image } = state;
 
-  console.log("user ==>", user);
+  // console.log("user ==>", user);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ const EditProfile = () => {
         .filter((e) => e !== "role")
         .forEach((key) => {
           formdata.append(key, state[key]);
-          console.log(key, state[key]);
+          // console.log(key, state[key]);
         });
 
       let requestOptions = {
@@ -43,7 +43,7 @@ const EditProfile = () => {
       const res = await fetch(url, requestOptions);
       const json = await res.json();
 
-      console.log("json", json);
+      // console.log("json", json);
       if (json.success) {
         let data = json.success.data;
         data.role = roles[data.role_id];
@@ -52,7 +52,7 @@ const EditProfile = () => {
         data.isFacility = data.role_id === "3";
 
         dispatch(userActions.set(data));
-        console.log("Response =============>", data);
+        // console.log("Response =============>", data);
         toast.success("Profile updated successfully!");
       } else {
         toast.error(json?.message || json?.error?.message);

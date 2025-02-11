@@ -57,8 +57,8 @@ const ChangePassword = () => {
     }
   };
 
-  console.log("user", user);
-  console.log("app", app);
+  // console.log("user", user);
+  // console.log("app", app);
 
   const togglePassword = () =>
     setPassword((prev) => ({ ...prev, isVisible: !prev.isVisible }));
@@ -101,7 +101,7 @@ const ChangePassword = () => {
 
       const res = await fetch(url, requestOptions);
       const json = await res.json();
-      console.log("data =============>", json);
+      // console.log("data =============>", json);
 
       if (json.success) {
         toast.success("Password changed successfully!");

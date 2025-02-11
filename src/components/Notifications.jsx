@@ -12,7 +12,6 @@ const Notifications = ({
 }) => {
   // const handleReadAll = async () => {
   //   const url = `${base_url}/read-admin-notification/${userId}`;
-  //   console.log(`${base_url}/read-admin-notification/${userId}`);
 
   //   try {
   //     const formdata = new FormData();
@@ -27,7 +26,6 @@ const Notifications = ({
 
   //     const res = await fetch(url, requestOptions);
   //     const json = await res.json();
-  //     console.log("json", json);
 
   //     if (res.status === 200) {
   //       setNotifications([]);
@@ -96,7 +94,7 @@ const Notifications = ({
                         };
                         const res = await fetch(url, requestOptions);
                         const json = await res.json();
-                        console.log("json", json);
+                        // console.log("json", json);
 
                         if (json.success) {
                           setNotifications((prev) =>
@@ -196,7 +194,7 @@ const Notifications = ({
                           };
                           const res = await fetch(url, requestOptions);
                           const json = await res.json();
-                          console.log("json", json);
+                          // console.log("json", json);
 
                           if (json.success) {
                             setNotifications((prev) =>

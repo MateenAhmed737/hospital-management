@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 
 const Image = ({ url, alt, className = "", index }) => {
   const [dimensions, setDimensions] = useState({});
@@ -11,16 +11,6 @@ const Image = ({ url, alt, className = "", index }) => {
       width: e.target.naturalWidth,
       height: e.target.naturalHeight,
     });
-    console.log(
-      "onLoad ==>",
-      parentId,
-      {
-        width: e.target.naturalWidth,
-        height: e.target.naturalHeight,
-      },
-      dimensions?.height < element?.clientHeight &&
-        dimensions?.width > dimensions?.height
-    );
   };
 
   // const getDimensions = () => {

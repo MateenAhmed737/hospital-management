@@ -13,7 +13,7 @@ const AddNewModal = ({ addNewModal, setAddNewModal, addNew }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Do something with the form data
-    console.log(state);
+    // console.log(state);
 
     setIsLoading(true);
     setTimeout(() => {
@@ -92,7 +92,6 @@ const AddNewModal = ({ addNewModal, setAddNewModal, addNew }) => {
           <Button
             type="submit"
             title={isLoading ? "Adding" : "Add"}
-            // handleClick={() => console.log("click")}
             extraStyles={styles.createButton}
             isLoading={isLoading}
           />

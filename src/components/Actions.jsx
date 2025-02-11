@@ -81,7 +81,6 @@ const Actions = ({
       const res = await fetch(
         ...(isFunction ? blockUrl(data) : [`${blockUrl}/${id}`, requestOptions])
       );
-      console.log("res status =======>", res.status);
 
       if (res.status === 200) {
         setBlockUser(!blockUser);
@@ -136,7 +135,7 @@ const Actions = ({
         requestOptions
       );
       const json = await res.json();
-      console.log("json", json);
+      // console.log("json", json);
 
       if (json.success) {
         const newState = modifyData(json.success.data, neededProps, true);

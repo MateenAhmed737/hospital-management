@@ -15,7 +15,7 @@ const AppliedShiftCard = (data) => {
   const [shiftModal, setShiftModal] = useState(false);
   const [bookmarking, setBookmarking] = useState(false);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const handleBookmark = () => {
     setBookmarking(true);
@@ -28,7 +28,7 @@ const AppliedShiftCard = (data) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.status === 200) {
           data.setUserBookmarks &&
             data.setUserBookmarks((prev) =>
@@ -100,7 +100,12 @@ const AppliedShiftCard = (data) => {
                 {convertTime(data.end_time)}
               </span>
             </div>
-            <button className="text-sm font-semibold text-primary-400 hover:text-primary-500" onClick={() => setShiftModal(true)}>Details</button>
+            <button
+              className="text-sm font-semibold text-primary-400 hover:text-primary-500"
+              onClick={() => setShiftModal(true)}
+            >
+              Details
+            </button>
           </div>
         </div>
       </div>

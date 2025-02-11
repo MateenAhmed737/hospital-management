@@ -23,7 +23,7 @@ const Chat = () => {
   const id = params.id;
   const isOnline = profile.data && profile.data.status === "Active";
 
-  const handleSend = (e) => {    
+  const handleSend = (e) => {
     const name = e.target.name;
     const isMedia = name === "media";
     const value = isMedia ? e.target.files[0] : e.target.value;
@@ -32,7 +32,7 @@ const Chat = () => {
       setMessage("");
       return;
     }
-    
+
     setSending(true);
 
     const formdata = new FormData();
@@ -50,11 +50,11 @@ const Chat = () => {
       },
     };
 
-    console.log("value", value);
+    // console.log("value", value);
     fetch(sendChat, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.success) {
           const data = res.success.data;
           const media = isMedia ? JSON.parse(data.media) : null;
@@ -62,7 +62,7 @@ const Chat = () => {
             ? { ...data, media, message_type: media[0].type }
             : data;
 
-          console.log("newMessage", newMessage);
+          // console.log("newMessage", newMessage);
 
           setData((prev) => ({
             ...prev,
@@ -71,7 +71,7 @@ const Chat = () => {
           if (!isMedia) setMessage("");
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.error(err))
       .finally(() => setSending(false));
   };
 
@@ -90,7 +90,7 @@ const Chat = () => {
               .reverse(),
           }))
         )
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
         .finally(() => setData((prev) => ({ ...prev, loading: false })));
     };
     const fetchChatsTemp = () => {
@@ -105,7 +105,7 @@ const Chat = () => {
               .reverse(),
           }))
         )
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     };
 
     const fetchProfile = () => {
@@ -116,7 +116,7 @@ const Chat = () => {
         .then((data) =>
           setProfile((prev) => ({ ...prev, data: data.success.data }))
         )
-        .catch((err) => console.log(err))
+        .catch((err) => console.error(err))
         .finally(() => setProfile((prev) => ({ ...prev, loading: false })));
     };
 
@@ -139,8 +139,6 @@ const Chat = () => {
         elem.scrollTo({ behavior: "smooth", top: elem.scrollHeight });
     }, 500);
   }, [data.chats]);
-
-  // console.log("profile.data", profile.data);
 
   return (
     <Page

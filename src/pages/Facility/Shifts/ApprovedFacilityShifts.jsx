@@ -11,7 +11,7 @@ const ApprovedFacilityShifts = () => {
   const user = useSelector((state) => state.user);
   const [shifts, setShifts] = useState({ loading: true, data: [] });
 
-  console.log(shifts);
+  // console.log(shifts);
 
   useEffect(() => {
     const fetchShifts = () => {
@@ -20,7 +20,7 @@ const ApprovedFacilityShifts = () => {
       fetch(getShifts + user?.id)
         .then((res) => res.json())
         .then((res) => {
-          console.log("res", res);
+          // console.log("res", res);
           const data = res.success.data || [];
           setShifts({ loading: false, data });
         })
@@ -64,7 +64,9 @@ const ApprovedFacilityShifts = () => {
               </div>
               <div className="w-full h-px my-1 bg-gray-300" />
               <div className="text-gray-600">
-                <p className="mb-2 text-xs font-medium text-gray-800">{item.shift.description}</p>
+                <p className="mb-2 text-xs font-medium text-gray-800">
+                  {item.shift.description}
+                </p>
                 <div className="flex items-center justify-between mt-3">
                   <span className="text-xs">
                     Shift Date: {item?.shift?.opening_date}

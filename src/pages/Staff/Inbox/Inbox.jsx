@@ -18,7 +18,7 @@ const Inbox = () => {
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState(null);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const foundChats = useMemo(() => {
     const str = searchText.trim().toLowerCase();
@@ -84,7 +84,14 @@ function ChatList({ loading, chats }) {
   return chats.map((item) => <Chat key={item.id} {...item} />);
 }
 
-function Chat({ name_user_id, profile_image, status, created_at, name, message }) {
+function Chat({
+  name_user_id,
+  profile_image,
+  status,
+  created_at,
+  name,
+  message,
+}) {
   const navigate = useNavigate();
   const isUnread = status === "unread";
   const Icon = isUnread ? IoCheckmark : IoCheckmarkDone;
@@ -96,7 +103,11 @@ function Chat({ name_user_id, profile_image, status, created_at, name, message }
       onClick={handleClick}
       className="flex items-center w-full px-2 py-2 space-x-3 bg-gray-100 border rounded-md hover:bg-gray-200"
     >
-      <img className="rounded-md size-14 aspect-square" src={profile_image} alt="profile" />
+      <img
+        className="rounded-md size-14 aspect-square"
+        src={profile_image}
+        alt="profile"
+      />
 
       <div className="flex flex-col w-full text-left overflow-hidden">
         <span className="font-semibold">{name}</span>

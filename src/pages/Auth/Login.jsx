@@ -19,7 +19,7 @@ const Login = () => {
     value: "12345678",
   });
 
-  console.log("user", user);
+  // console.log("user", user);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;
@@ -62,7 +62,7 @@ const Login = () => {
       const res = await fetch(`${base_url}/user-login`, requestOptions);
       json = await res.json();
 
-      console.log(json);
+      // console.log(json);
 
       if (json.success) {
         let data = json.success.data;

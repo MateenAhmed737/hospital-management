@@ -10,10 +10,6 @@ const MediaModal = ({ mediaModal, setMediaModal }) => {
   media = typeof media === "string" ? parseJson(media) : media;
   media = media.map((e) => ({ ...e, url: image_base_url + e?.url }));
 
-  console.log("media", media);
-
-  // console.log("initialMedia", initialMedia);
-
   // if media is array of strings
   //   initialMedia =
   //     initialMedia && typeof initialMedia[0] === "string"
@@ -32,8 +28,6 @@ const MediaModal = ({ mediaModal, setMediaModal }) => {
   //       }
   //     });
   const close = () => setMediaModal((prev) => ({ ...prev, isOpen: false }));
-
-  // console.log("media =>", media);
 
   useLayoutEffect(() => {
     if (!media?.length) {

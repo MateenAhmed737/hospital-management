@@ -24,7 +24,7 @@ const AllJobs = () => {
   const [reload, setReload] = useState(false);
   const [userBookmarks, setUserBookmarks] = useState([]);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const filteredData = useMemo(() => {
     const query = searchText.trim().toLowerCase();
@@ -94,7 +94,7 @@ const AllJobs = () => {
     fetchUserBookmarks();
   }, [user, reload]);
 
-  console.log("userBookmarks", userBookmarks);
+  // console.log("userBookmarks", userBookmarks);
 
   return (
     <Page title="All Jobs" enableHeader>
@@ -162,7 +162,7 @@ const RecentJob = (data) => {
     })
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.status === 200) {
           data.setUserBookmarks((prev) =>
             data.isBookmarked
@@ -207,10 +207,16 @@ const RecentJob = (data) => {
               </div>
             )}
 
-            <p className="text-sm ml-2 mb-5 font-semibold w-full text-start">{data.title}</p>
+            <p className="text-sm ml-2 mb-5 font-semibold w-full text-start">
+              {data.title}
+            </p>
             <div className="text-sm flex flex-col text-nowrap text-start justify-end">
-              <p className="text-sm font-semibold text-primary-500">{formatNumbers(data.total_service_amount, "currency")}</p>
-              <p className="text-xs font-semibold text-primary-500">Est Amount</p>
+              <p className="text-sm font-semibold text-primary-500">
+                {formatNumbers(data.total_service_amount, "currency")}
+              </p>
+              <p className="text-xs font-semibold text-primary-500">
+                Est Amount
+              </p>
             </div>
           </div>
         </div>
@@ -224,7 +230,8 @@ const RecentJob = (data) => {
               {moment(data.created_at).format("YYYY-MM-DD")}
             </span>
             <span>
-              <strong className="font-medium">Shift Timing:</strong> {data.start_time} to {data.end_time}
+              <strong className="font-medium">Shift Timing:</strong>{" "}
+              {data.start_time} to {data.end_time}
             </span>
           </div>
         </div>

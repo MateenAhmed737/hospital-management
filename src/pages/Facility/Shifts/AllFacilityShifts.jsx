@@ -10,7 +10,7 @@ const AllFacilityShifts = () => {
   const user = useSelector((state) => state.user);
   const [shifts, setShifts] = useState({ loading: true, data: [] });
 
-  console.log(shifts)
+  // console.log(shifts)
 
   useEffect(() => {
     const fetchShifts = () => {
@@ -41,7 +41,12 @@ const AllFacilityShifts = () => {
             .slice()
             .reverse()
             .map((shift) => (
-              <AllShiftCard enableBoost {...shift} data={shift} setData={setShifts} />
+              <AllShiftCard
+                enableBoost
+                {...shift}
+                data={shift}
+                setData={setShifts}
+              />
             ))
         ) : (
           <Empty title="No shifts found!" noMargin />

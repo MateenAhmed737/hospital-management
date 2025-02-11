@@ -11,7 +11,7 @@ const storeReview = `${base_url}/store-review`;
 const CheckDetailsModal = ({ checkModal, setCheckModal, data, setData }) => {
   const [reviewModal, setReviewModal] = useState(false);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const close = () => setCheckModal(false);
 
@@ -147,7 +147,7 @@ const ReviewModal = ({ reviewModal, setReviewModal, setData, data }) => {
   const [rating, setRating] = useState(0);
 
   const userName = `${data.user.first_name} ${data.user.last_name}`;
-  console.log("data", data);
+  // console.log("data", data);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,7 +171,7 @@ const ReviewModal = ({ reviewModal, setReviewModal, setData, data }) => {
     fetch(`${storeReview}/${data.user.id}`, requestOptions)
       .then((res) => res.json())
       .then((json) => {
-        console.log("res", json);
+        // console.log("res", json);
         if (json.success) {
           toast.success("Review submited!");
           setData((prev) =>

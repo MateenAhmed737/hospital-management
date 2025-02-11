@@ -1,20 +1,19 @@
-import { toast } from "react-hot-toast";
-import { useEffect, useState } from "react";
-import { VscClose } from "react-icons/vsc";
-import Button from "../../Buttons/Button";
-import { PiMapPinDuotone } from "react-icons/pi";
-import { parseJson } from "../../../utils";
-import { base_url } from "../../../utils/url";
-import { Loader } from "../../Loaders";
-import Empty from "../../Empty";
-import { useSelector } from "react-redux";
-import { MdChat, MdEdit } from "react-icons/md";
-import { ImBin } from "react-icons/im";
-import { DropdownField } from "../../Fields";
-import { formatNumbers } from "../../../utils";
 import moment from "moment";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { FaRegStar, FaStar } from "react-icons/fa";
+import { ImBin } from "react-icons/im";
+import { MdChat, MdEdit } from "react-icons/md";
+import { PiMapPinDuotone } from "react-icons/pi";
+import { VscClose } from "react-icons/vsc";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { formatNumbers, parseJson } from "../../../utils";
+import { base_url } from "../../../utils/url";
+import Button from "../../Buttons/Button";
+import Empty from "../../Empty";
+import { DropdownField } from "../../Fields";
+import { Loader } from "../../Loaders";
 import ProfileViewModal from "../ProfileViewModal";
 
 const getShift = `${base_url}/get-single-shift`;
@@ -47,7 +46,7 @@ const FacilityShiftModal = ({
 
   const isApproved = shift.data?.status === "Approved";
 
-  console.log("shift data ==>", shift.data);
+  // console.log("shift data ==>", shift.data);
 
   const close = () => setShiftModal(false);
 
@@ -87,7 +86,7 @@ const FacilityShiftModal = ({
     })
       .then((res) => res.json())
       .then((json) => {
-        console.log("json", json);
+        // console.log("json", json);
         if (json.success) {
           toast.success(json.success.message);
           setData((prev) => ({
@@ -114,7 +113,7 @@ const FacilityShiftModal = ({
         .then((json) => {
           if (json.success) {
             const data = json.success.data || [];
-            console.log("shift data", data);
+            // console.log("shift data", data);
             setShift({ loading: false, data });
           }
         })
@@ -129,7 +128,7 @@ const FacilityShiftModal = ({
         .then((json) => {
           if (json.success) {
             const data = json.success.data || [];
-            console.log("data", data);
+            // console.log("data", data);
             setBids((prev) => ({ ...prev, data }));
           }
         })
@@ -372,7 +371,7 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
   const user = useSelector((state) => state.user);
   const [loading, setLoading] = useState(false);
   const data = bidsModal.data;
-  console.log("data bidsModal", data);
+  // console.log("data bidsModal", data);
 
   const handleAccept = async (e) => {
     e.preventDefault();
@@ -552,7 +551,7 @@ export const BoostShiftModal = ({
     fetch(shiftBoost + data.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.success) {
           setData((prev) => ({
             ...prev,
@@ -564,7 +563,7 @@ export const BoostShiftModal = ({
           setBoostModal(false);
         }
       })
-      .catch((err) => console.log(err))
+      .catch((err) => console.error(err))
       .finally(() => setLoading(false));
   };
 
@@ -713,13 +712,13 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
     ].forEach((key) => {
       if (key === "opening_date") {
         formdata.append(key, moment(state[key]).format("YYYY-MM-DD"));
-        console.log(key, moment(state[key]).format("YYYY-MM-DD"));
+        // console.log(key, moment(state[key]).format("YYYY-MM-DD"));
       } else if (key === "staff_type") {
         formdata.append(key, state.staff);
-        console.log(key, state.staff);
+        // console.log(key, state.staff);
       } else {
         formdata.append(key, state[key]);
-        console.log(key, state[key]);
+        // console.log(key, state[key]);
       }
     });
 
@@ -735,7 +734,7 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
     fetch(editShift + data.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        console.log("res", res);
+        // console.log("res", res);
         if (res.success) {
           const updatedData = res.success.data;
           setData((prev) => ({
@@ -794,12 +793,12 @@ const EditModal = ({ editModal, setEditModal, data, setData }) => {
       fetch(getServiceTypes)
         .then((res) => res.json())
         .then((res) => {
-          console.log("res", res);
+          // console.log("res", res);
           if (res.success) {
             setServiceTypes(res.success.data);
           }
         })
-        .catch((err) => console.log(err));
+        .catch((err) => console.error(err));
     };
 
     fetchServiceTypes();

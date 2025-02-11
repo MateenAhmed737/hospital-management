@@ -70,11 +70,11 @@ const Roles = () => {
       key: "view",
       appendFunc: (key, value, formdata, state) => {
         const permissions = {
-          add: state._add.map(e => e.label),
-          update: state._update.map(e => e.label),
-          view: state._view.map(e => e.label),
+          add: state._add.map((e) => e.label),
+          update: state._update.map((e) => e.label),
+          view: state._view.map((e) => e.label),
         };
-        console.log("permission", JSON.stringify(permissions));
+        // console.log("permission", JSON.stringify(permissions));
         formdata.append("permission", JSON.stringify(permissions));
       },
     },

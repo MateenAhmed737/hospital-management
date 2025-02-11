@@ -12,7 +12,7 @@ const FavJobs = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   useEffect(() => {
     if (!user) return;
@@ -41,7 +41,9 @@ const FavJobs = () => {
     <Page title="Favourite Jobs" enableHeader>
       <div className="flex items-center justify-between mt-2 text-xs">
         <span className="ml-1 font-medium">All Result</span>
-        <span>{data?.length} job{data?.length > 1 && "s"} found</span>
+        <span>
+          {data?.length} job{data?.length > 1 && "s"} found
+        </span>
       </div>
 
       <main

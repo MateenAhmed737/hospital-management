@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { base_url } from "../../../utils/url";
 import { Button, ConfirmationCodeFeilds } from "../../../components";
 import { FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
+import { Country, State } from "country-state-city";
 
 const VerifyOTP = ({ data, roles, otp, setStep }) => {
   const navigate = useNavigate();
@@ -26,15 +27,28 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
     }
 
     try {
-      const formdata = new FormData();
+      const formData = new FormData();
+      if (data.role_id === "3") {
+        formData.append("address_1", data.Address_line_1);
+        formData.append("phone_number", data.phone);
+        formData.append("facility_email", data.email);
+        formData.append(
+          "facility_name",
+          data.first_name + " " + data.last_name
+        );
+        formData.append("latitude", "0");
+        formData.append("longitude", "0");
+      }
       Object.keys(data).forEach((key) => {
         if (key === "password" || key === "confirm_password") {
-          formdata.append(key, data[key].value);
+          formData.append(key, data[key].value);
         } else if (key === "type_of_staff" && data.role_id !== "1") {
         } else if (key === "country") {
-          formdata.append("country", data[key]);
+          formData.append("country", Country.getCountryByCode(data[key])?.name);
+        } else if (key === "state") {
+          formData.append("state", State.getStateByCode(data[key])?.name);
         } else {
-          formdata.append(key, data[key]);
+          formData.append(key, data[key]);
         }
       });
 
@@ -43,14 +57,14 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
           Accept: "application/json",
         },
         method: "POST",
-        body: formdata,
+        body: formData,
         redirect: "follow",
       };
 
       const res = await fetch(`${base_url}/user-registration`, requestOptions);
       json = await res.json();
 
-      console.log(json);
+      // console.log(json);
 
       if (json.success) {
         let data = json.success.data;
@@ -86,8 +100,6 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
     onChange,
   };
 
-  console.log('otp', otp)
-
   return (
     <>
       <form
@@ -109,7 +121,7 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
         <Button
           title={
             <>
-              <FaArrowLeft className="mr-2"/>
+              <FaArrowLeft className="mr-2" />
               Back
             </>
           }

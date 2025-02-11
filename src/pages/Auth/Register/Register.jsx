@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { Button, DropdownField, Page } from "../../../components";
 import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import VerifyOTP from "./VerifyOTP";
-import { Country, State } from "country-state-city";
+import { Country, State, City } from "country-state-city";
 
 const roles = {
   1: "Staff",
@@ -35,6 +35,7 @@ const initialState = {
   Address_line_2: "",
   country: "",
   state: "",
+  city: "",
   zip_code: "",
 };
 
@@ -69,11 +70,11 @@ const Register = () => {
   };
 
   const togglePassword = (e) => {
-    const name = e.target.id;
+    const name = e.currentTarget.id;
     handleChange({
       target: {
         name,
-        value: { isVisible: !state[name].isVisible, ...state[name] },
+        value: { ...state[name], isVisible: !state[name].isVisible },
       },
     });
   };
@@ -95,6 +96,7 @@ const Register = () => {
     try {
       const formdata = new FormData();
       formdata.append("email", state.email);
+      formdata.append("phone", state.phone);
 
       const requestOptions = {
         headers: {
@@ -108,7 +110,7 @@ const Register = () => {
       const res = await fetch(`${base_url}/auth`, requestOptions);
       json = await res.json();
 
-      console.log(json);
+      // console.log(json);
 
       if (json.success) {
         toast.success("OTP has been sent to your email!", { duration: 2000 });
@@ -142,7 +144,7 @@ const Register = () => {
       fetch(`${base_url}/get-services`, requestOptions)
         .then((response) => response.json())
         .then((data) => {
-          console.log("data", data);
+          // console.log("data", data);
           if (data.success) {
             setStaffTypes(data.success.data);
           } else {
@@ -200,9 +202,6 @@ const Register = () => {
                     </button>
                   </div>
                   <div className="p-6 pb-4 space-y-4 md:space-y-6">
-                    {/* <h1 className="text-xl font-bold leading-tight text-center text-gray-800">
-                  Register
-                </h1> */}
                     <form
                       className="grid grid-cols-1 space-y-2 gap-x-2 !text-sm sm:grid-cols-2"
                       onSubmit={handleSubmit}
@@ -300,7 +299,15 @@ const Register = () => {
                           type={password.isVisible ? "text" : "password"}
                           name="password"
                           id="password"
-                          onChange={handleChange}
+                          onChange={(e) =>
+                            setState((prev) => ({
+                              ...prev,
+                              password: {
+                                ...state.password,
+                                value: e.target.value,
+                              },
+                            }))
+                          }
                           value={password.value}
                           className="w-full px-4 py-3 text-gray-900 bg-gray-100 outline-none caret-primary-400"
                           placeholder="Password"
@@ -329,7 +336,15 @@ const Register = () => {
                           }
                           id="confirm_password"
                           name="confirm_password"
-                          onChange={handleChange}
+                          onChange={(e) =>
+                            setState((prev) => ({
+                              ...prev,
+                              confirm_password: {
+                                ...state.confirm_password,
+                                value: e.target.value,
+                              },
+                            }))
+                          }
                           value={confirm_password.value}
                           className="w-full px-4 py-3 text-gray-900 bg-gray-100 outline-none caret-primary-400"
                           placeholder="Confirm Password"
@@ -411,12 +426,37 @@ const Register = () => {
                             state.country ? "state" : "country to select state"
                           }
                           label={false}
-                          arr={state.country ? State.getStatesOfCountry(state.country) : []}
+                          arr={
+                            state.country
+                              ? State.getStatesOfCountry(state.country)
+                              : []
+                          }
                           state={state.state}
                           setState={(e) => setState({ ...state, state: e })}
                           getOption={(val) => val.name}
+                          getValue={(val) => val.isoCode}
                           styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
                           disabled={!state.country}
+                          required
+                        />
+                      </div>
+                      <div className="col-span-2 sm:col-span-1">
+                        <DropdownField
+                          title={state.state ? "city" : "state to select city"}
+                          label={false}
+                          arr={
+                            state.state
+                              ? City.getCitiesOfState(
+                                  state.country,
+                                  state.state
+                                )
+                              : []
+                          }
+                          state={state.city}
+                          setState={(e) => setState({ ...state, city: e })}
+                          getOption={(val) => val.name}
+                          styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
+                          disabled={!state.state}
                           required
                         />
                       </div>

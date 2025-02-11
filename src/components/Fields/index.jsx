@@ -156,7 +156,7 @@ export const MultiSelectField = ({
   title,
   ...props
 }) => {
-  console.log("state", state);
+  // console.log("state", state);
   return (
     <div>
       <label

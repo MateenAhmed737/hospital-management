@@ -84,8 +84,8 @@ const Dashboard = () => {
     }
   }, [todayJob.reload, fetchTodayJob]);
 
-  console.log("todayJob", todayJob.data);
-  console.log("upcomingShifts.data", upcomingShifts.data);
+  // console.log("todayJob", todayJob.data);
+  // console.log("upcomingShifts.data", upcomingShifts.data);
 
   return (
     <Page title="Dashboard" enableHeader headerStyles="!mb-4">

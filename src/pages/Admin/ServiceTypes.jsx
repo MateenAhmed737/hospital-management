@@ -53,7 +53,7 @@ const ServiceTypes = () => {
     setPaginatedData((prev) => ({ ...prev, items: newState }));
     toast.success("Service Type Updated Successfully");
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
 
   const createCallback = (res) => {
@@ -63,7 +63,7 @@ const ServiceTypes = () => {
     setPaginatedData((prev) => ({ ...prev, items: newState }));
     toast.success("Service Type Created Successfully");
 
-    console.log("response ===>", resData);
+    // console.log("response ===>", resData);
   };
 
   const uploadFields = [
@@ -103,7 +103,7 @@ const ServiceTypes = () => {
     template,
     isLoading,
     actions: {
-      hasEditAccess
+      hasEditAccess,
     },
     search: {
       type: "text",

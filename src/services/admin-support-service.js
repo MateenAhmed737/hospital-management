@@ -64,7 +64,7 @@ export const get_inbox = async (id) => {
     .then((res) => res.data)
     .then((res) => {
       if (res?.success) {
-        console.log("res", res);
+        // console.log("res", res);
         return res;
       } else {
         throw res;

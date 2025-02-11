@@ -20,7 +20,7 @@ const AppliedShifts = () => {
         const res = await fetch(getShifts + user?.id);
         const json = await res.json();
 
-        console.log("json", json);
+        // console.log("json", json);
         if (json.success) {
           const data = json.success.data || [];
           setData(data.slice().reverse());
@@ -52,8 +52,8 @@ const AppliedShifts = () => {
     fetchUserBookmarks();
   }, [user]);
 
-  console.log("userBookmarks", userBookmarks);
-  console.log("data", data);
+  // console.log("userBookmarks", userBookmarks);
+  // console.log("data", data);
 
   return (
     <Page title="Applied Shifts" enableHeader>
@@ -64,7 +64,7 @@ const AppliedShifts = () => {
           <div className="flex flex-col pb-5 space-y-2">
             {data.map((item) => (
               <AppliedShiftCard
-              key={item.id}
+                key={item.id}
                 {...item}
                 user={user}
                 {...item?.facility?.shift}

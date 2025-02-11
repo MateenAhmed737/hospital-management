@@ -33,11 +33,11 @@ const PrivacyPolicy = () => {
       const res = await fetch(edit_url, requestOptions);
       const json = await res.json();
 
-      console.log("json ===>", json);
+      // console.log("json ===>", json);
 
       if (json.success) {
         const data = json.success.data;
-        console.log(data);
+        // console.log(data);
         setState({ value: data.description });
       }
     } catch (error) {
@@ -63,7 +63,7 @@ const PrivacyPolicy = () => {
       })
         .then((res) => res.json())
         .then((data) => {
-          console.log("data", data);
+          // console.log("data", data);
           if (data.success) {
             const description = data.success.data?.description;
             setState({ loading: false, value: description });

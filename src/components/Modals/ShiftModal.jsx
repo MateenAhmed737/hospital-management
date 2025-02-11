@@ -54,7 +54,7 @@ const ShiftModal = ({
     [data.job_status, data.break_status]
   );
 
-  console.log('data.job_status', data.job_status)
+  // console.log('data.job_status', data.job_status)
 
   const close = () => setShiftModal(false);
 
@@ -88,8 +88,8 @@ const ShiftModal = ({
       formdata.append("status", status);
       formdata.append("shift_id", data.id);
 
-      console.log("status", status);
-      console.log("shift_id", data.id);
+      // console.log("status", status);
+      // console.log("shift_id", data.id);
 
       const res = await fetch(url, {
         method: "POST",
@@ -100,7 +100,7 @@ const ShiftModal = ({
         redirect: "follow",
       });
       const result = await res.json();
-      console.log("result =====>", result);
+      // console.log("result =====>", result);
       if (result.success) {
         setTodayJob((prev) => ({ ...prev, reload: true }));
         toast.success("Check in successful!");
@@ -119,7 +119,7 @@ const ShiftModal = ({
   const handleBreak = async () => {
     setBreakLoading(true);
 
-    console.log(user.id, data.id, facility.id, breakStatus);
+    // console.log(user.id, data.id, facility.id, breakStatus);
 
     try {
       const res = await shiftService.break_in_out(
@@ -128,7 +128,7 @@ const ShiftModal = ({
         facility.id,
         breakStatus
       );
-      console.log("break_in_out res ==>", res);
+      // console.log("break_in_out res ==>", res);
       if (res.success) {
         toast.success(isBreakIn ? "Break started!" : "Break ended!");
         setTodayJob((prev) => ({ ...prev, reload: true }));
@@ -163,7 +163,7 @@ const ShiftModal = ({
     shiftService
       .get_shift(data.id)
       .then((res) => {
-        console.log("shift res =>>", res);
+        // console.log("shift res =>>", res);
         setShift(res.success?.data || {});
       })
       .finally(() => setShiftLoading(false));
@@ -421,7 +421,7 @@ const PlaceBidsModal = ({
     fetch(`${storeBid}/${user.id}/${data.id}`, requestOptions)
       .then((res) => res.json())
       .then((json) => {
-        console.log("json", json);
+        // console.log("json", json);
         if (json.success) {
           toast.success("Shift requested successfully!");
           setDescription("");
@@ -497,7 +497,7 @@ const PlaceBidsModal = ({
             <div>
               <PiMapPinDuotone className="inline text-gray-800" />
               <span className="text-xs font-normal text-gray-600">
-              {facility.state}, {facility.country}
+                {facility.state}, {facility.country}
               </span>
             </div>
           </p>
@@ -582,7 +582,7 @@ const ViewOtherBidsModal = ({ viewOtherBids, setViewOtherBids, data }) => {
           .then((json) => {
             if (json.success) {
               const data = json.success.data || [];
-              console.log("data", data);
+              // console.log("data", data);
               setBids(data);
             }
           })

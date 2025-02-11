@@ -11,11 +11,14 @@ const ApprovedShiftCard = (data) => {
 
   const facility = data.facility;
 
-  console.log("data", data);
+  // console.log("data", data);
 
   return (
     <>
-      <button onClick={() => setShiftModal(true)} className="relative w-full p-2 bg-gray-50 hover:bg-gray-100/90 transition border rounded-md">
+      <button
+        onClick={() => setShiftModal(true)}
+        className="relative w-full p-2 bg-gray-50 hover:bg-gray-100/90 transition border rounded-md"
+      >
         {/* Shift Info */}
         <div className="flex items-center justify-between p-1">
           <div className="flex items-center">
@@ -38,22 +41,27 @@ const ApprovedShiftCard = (data) => {
             </p>
           </div>
         </div>
-        <hr className="my-3"/>
+        <hr className="my-3" />
         <div className="text-gray-600 text-start">
           <div className="flex items-center justify-between text-xs">
             <div>
-              <FaLocationDot className="inline mr-1 text-base"/>
-              <span>{data.state}, {data.country}</span>
+              <FaLocationDot className="inline mr-1 text-base" />
+              <span>
+                {data.state}, {data.country}
+              </span>
             </div>
             <div>
-              <CiClock1 className="inline mr-1 text-base"/>
+              <CiClock1 className="inline mr-1 text-base" />
               <span>{new Date(data.created_at).toLocaleString()}</span>
             </div>
           </div>
 
           <div className="flex flex-col mt-3 text-xs">
             <span>Shift Date: {data.opening_date}</span>
-            <span>Shift Timing: {convertTime(data.start_time)} to {convertTime(data.end_time)}</span>
+            <span>
+              Shift Timing: {convertTime(data.start_time)} to{" "}
+              {convertTime(data.end_time)}
+            </span>
           </div>
         </div>
       </button>

@@ -13,7 +13,7 @@ const ApprovedShifts = () => {
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
 
-  console.log("data", data);
+  // console.log("data", data);
 
   useEffect(() => {
     const fetchShifts = async () => {

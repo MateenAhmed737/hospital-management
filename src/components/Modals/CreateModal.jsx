@@ -1,7 +1,12 @@
 import React, { useState } from "react";
 import { VscClose } from "react-icons/vsc";
 import { getInputType } from "../../utils";
-import { DropdownField, MultiSelectField, TextArea, UploadField } from "../Fields";
+import {
+  DropdownField,
+  MultiSelectField,
+  TextArea,
+  UploadField,
+} from "../Fields";
 
 import Button from "../Buttons/Button";
 import toast from "react-hot-toast";
@@ -28,7 +33,7 @@ const CreateModal = ({
   const [state, setState] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
-  console.log("state", state);
+  // console.log("state", state);
 
   const uploadKeys = uploadFields.map((e) => e.key);
   const dropdownKeys = dropdownFields.map((e) => e.key);
@@ -53,13 +58,12 @@ const CreateModal = ({
         );
         key = typeof key === "object" ? key.from : key.replace(/^_/, "");
 
-        
         if (appendableKeys.includes(key)) {
           const data = appendableFields?.[appendableKeys.indexOf(key)];
           data?.appendFunc(key, state[item], formdata, state);
         } else {
-        formdata.append(key, state[item]);
-          console.log(key, state[item]);
+          formdata.append(key, state[item]);
+          // console.log(key, state[item]);
         }
       });
 
@@ -75,7 +79,7 @@ const CreateModal = ({
       const res = await fetch(createUrl, requestOptions);
       const json = await res.json();
 
-      console.log("json", json);
+      // console.log("json", json);
 
       if (json?.error?.status === 400) {
         toast.error(json.error.message);

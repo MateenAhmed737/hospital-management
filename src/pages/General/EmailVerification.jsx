@@ -7,8 +7,8 @@ import { useSelector } from "react-redux";
 
 const EmailVerification = () => {
   const navigate = useNavigate();
-  const user = useSelector(state => state.user);
-  const appData = useSelector(state => state.app);
+  const user = useSelector((state) => state.user);
+  const appData = useSelector((state) => state.app);
   const [state, setState] = useState(null);
   const [counter, setCounter] = useState(600);
   const [toggleBtn, setToggleBtn] = useState(false);
@@ -45,7 +45,7 @@ const EmailVerification = () => {
       if (json.success) {
         const data = json.success;
 
-        console.log("data", data);
+        // console.log("data", data);
 
         navigate("/email-verification");
       } else {
@@ -67,7 +67,7 @@ const EmailVerification = () => {
     e.preventDefault();
     setToggleBtn(true);
 
-    console.log("state", state);
+    // console.log("state", state);
 
     if (appData.otpData.OTP == state) {
       toast.success("Email verification completed!", { duration: 2000 });

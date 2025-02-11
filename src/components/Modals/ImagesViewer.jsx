@@ -9,7 +9,7 @@ const ImagesViewer = ({ imagesViewer, setImagesViewer }) => {
   let data = parseJson(imagesViewer?.images) || [];
   data = data.map((e) => ({ url: image_base_url + e, type: "image" }));
 
-  console.log("data", data);
+  // console.log("data", data);
 
   const close = () => {
     setImagesViewer({ ...imagesViewer, isOpen: false });

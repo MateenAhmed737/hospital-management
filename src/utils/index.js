@@ -11,7 +11,7 @@ const formattingPresets = {
     maximumFractionDigits: 2,
   },
   default: {},
-}
+};
 
 export function formatNumbers(numbers, preset = "default", options = {}) {
   return Intl.NumberFormat("en-US", {
@@ -122,7 +122,7 @@ export const fetchData = async ({
     const res = await fetch(url, requestOptions || undefined);
     const json = await res.json();
 
-    console.log("response =>", json);
+    // console.log("response =>", json);
     if (json.success) {
       let data = json.success.data.length
         ? modifyData(json.success.data, neededProps)

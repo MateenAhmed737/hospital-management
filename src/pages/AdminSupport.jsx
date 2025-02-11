@@ -66,7 +66,7 @@ function AdminSupport() {
     return () => clearInterval(interval);
   }, [user]);
 
-  console.log("data.chats", data.chats);
+  // console.log("data.chats", data.chats);
 
   return (
     <Page title="Admin Support" containerStyles="!p-0 flex flex-col">
