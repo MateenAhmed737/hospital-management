@@ -12,14 +12,12 @@ const Login = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
-  const [email, setEmail] = useState("frzamn64ml@gmail.com");
+  const [email, setEmail] = useState("");
   const [toggleBtn, setToggleBtn] = useState(false);
   const [password, setPassword] = useState({
     isVisible: false,
-    value: "12345678",
+    value: "",
   });
-
-  // console.log("user", user);
 
   if (user) {
     return <Navigate to="/dashboard" replace />;

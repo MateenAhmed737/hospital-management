@@ -1,13 +1,12 @@
-import { useEffect } from "react";
-import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
-import { useState } from "react";
-import { Link, Navigate } from "react-router-dom";
-import { base_url } from "../../../utils/url";
-import { Button, DropdownField, Page } from "../../../components";
+import { City, State } from "country-state-city";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import { useSelector } from "react-redux";
+import { Link, Navigate } from "react-router-dom";
+import { Button, DropdownField, Page } from "../../../components";
+import { base_url } from "../../../utils/url";
 import VerifyOTP from "./VerifyOTP";
-import { Country, State, City } from "country-state-city";
 
 const roles = {
   1: "Staff",
@@ -33,7 +32,7 @@ const initialState = {
   type_of_staff: "",
   Address_line_1: "",
   Address_line_2: "",
-  country: "",
+  country: "US",
   state: "",
   city: "",
   zip_code: "",
@@ -254,22 +253,28 @@ const Register = () => {
                           onChange={handleChange}
                           value={state.first_name}
                           className="relative top-0 w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
-                          placeholder="First Name"
+                          placeholder={
+                            state.role_id === "3"
+                              ? "Facility Name"
+                              : "First Name"
+                          }
                           required={true}
                         />
                       </div>
-                      <div className="col-span-2 sm:col-span-1">
-                        <input
-                          type="text"
-                          name="last_name"
-                          id="last_name"
-                          onChange={handleChange}
-                          value={state.last_name}
-                          className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
-                          placeholder="Last Name"
-                          required={true}
-                        />
-                      </div>
+                      {state.role_id !== "3" && (
+                        <div className="col-span-2 sm:col-span-1">
+                          <input
+                            type="text"
+                            name="last_name"
+                            id="last_name"
+                            onChange={handleChange}
+                            value={state.last_name}
+                            className="block w-full px-4 py-3 text-xs font-medium text-gray-900 bg-gray-100 rounded-md outline-none focus:ring-primary-500 focus:border-primary-500 caret-primary-400"
+                            placeholder="Last Name"
+                            required={true}
+                          />
+                        </div>
+                      )}
                       <div className="col-span-2 sm:col-span-1">
                         <input
                           type="email"
@@ -409,34 +414,14 @@ const Register = () => {
                       )}
                       <div className="col-span-2 sm:col-span-1">
                         <DropdownField
-                          title="country"
+                          title="state"
                           label={false}
-                          arr={Country.getAllCountries()}
-                          state={state.country}
-                          setState={(e) => setState({ ...state, country: e })}
-                          getOption={(val) => val.name}
-                          getValue={(val) => val.isoCode}
-                          styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
-                          required
-                        />
-                      </div>
-                      <div className="col-span-2 sm:col-span-1">
-                        <DropdownField
-                          title={
-                            state.country ? "state" : "country to select state"
-                          }
-                          label={false}
-                          arr={
-                            state.country
-                              ? State.getStatesOfCountry(state.country)
-                              : []
-                          }
+                          arr={State.getStatesOfCountry("US")}
                           state={state.state}
                           setState={(e) => setState({ ...state, state: e })}
                           getOption={(val) => val.name}
                           getValue={(val) => val.isoCode}
                           styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"
-                          disabled={!state.country}
                           required
                         />
                       </div>
@@ -446,10 +431,7 @@ const Register = () => {
                           label={false}
                           arr={
                             state.state
-                              ? City.getCitiesOfState(
-                                  state.country,
-                                  state.state
-                                )
+                              ? City.getCitiesOfState("US", state.state)
                               : []
                           }
                           state={state.city}

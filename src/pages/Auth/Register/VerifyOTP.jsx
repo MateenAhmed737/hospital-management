@@ -1,10 +1,11 @@
+import { State } from "country-state-city";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { base_url } from "../../../utils/url";
-import { Button, ConfirmationCodeFeilds } from "../../../components";
-import { FaArrowLeft } from "react-icons/fa";
 import toast from "react-hot-toast";
-import { Country, State } from "country-state-city";
+import { FaArrowLeft } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
+
+import { Button, ConfirmationCodeFeilds } from "../../../components";
+import { base_url } from "../../../utils/url";
 
 const VerifyOTP = ({ data, roles, otp, setStep }) => {
   const navigate = useNavigate();
@@ -28,14 +29,13 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
 
     try {
       const formData = new FormData();
+      formData.append("country", "United States");
+
       if (data.role_id === "3") {
         formData.append("address_1", data.Address_line_1);
         formData.append("phone_number", data.phone);
         formData.append("facility_email", data.email);
-        formData.append(
-          "facility_name",
-          data.first_name + " " + data.last_name
-        );
+        formData.append("facility_name", data.first_name);
         formData.append("latitude", "0");
         formData.append("longitude", "0");
       }
@@ -44,7 +44,6 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
           formData.append(key, data[key].value);
         } else if (key === "type_of_staff" && data.role_id !== "1") {
         } else if (key === "country") {
-          formData.append("country", Country.getCountryByCode(data[key])?.name);
         } else if (key === "state") {
           formData.append("state", State.getStateByCode(data[key])?.name);
         } else {
