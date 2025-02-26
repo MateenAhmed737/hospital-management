@@ -112,19 +112,16 @@ const CheckDetailsModal = ({ checkModal, setCheckModal, data, setData }) => {
           </div>
         </div>
         <div className={styles.footer}>
-          {data.job_status === null && data.review === null ? (
-            <Button
-              title="Write Review"
-              handleClick={() => setReviewModal(true)}
-              extraStyles={styles.footerCloseButton}
-            />
-          ) : (
-            <Button
-              title="Close"
-              handleClick={close}
-              extraStyles={styles.footerCloseButton}
-            />
-          )}
+          <Button
+            title="Write Review"
+            handleClick={() => setReviewModal(true)}
+            extraStyles={styles.footerCloseButton}
+          />
+          <Button
+            title="Close"
+            handleClick={close}
+            extraStyles={styles.footerCloseButton}
+          />
         </div>
       </div>
 
@@ -174,9 +171,10 @@ const ReviewModal = ({ reviewModal, setReviewModal, setData, data }) => {
         // console.log("res", json);
         if (json.success) {
           toast.success("Review submited!");
-          setData((prev) =>
-            prev.map((e) => (e.id === data.id ? { ...e, review: true } : e))
-          );
+          setData &&
+            setData((prev) =>
+              prev.map((e) => (e.id === data.id ? { ...e, review: true } : e))
+            );
           close();
         } else if (json?.errors || json?.error) {
           toast.error(json?.errors?.[0] || json?.error?.message);

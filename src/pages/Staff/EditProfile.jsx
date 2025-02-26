@@ -1,22 +1,30 @@
-import React, { useEffect, useState } from "react";
-import { Button, DropdownField, Page } from "../../components";
-import { base_url } from "../../utils/url";
+import { City, Country, State } from "country-state-city";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
+import { Button, DropdownField, Page } from "../../components";
 import { roles } from "../../constants/data";
 import { userActions } from "../../store/slices/userSlice";
-import { Country, State } from "country-state-city";
-import toast from "react-hot-toast";
+import { base_url } from "../../utils/url";
 
 const EditProfile = () => {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
   const [staffTypes, setStaffTypes] = useState([]);
-  const [state, setState] = useState({
-    about: "",
-    ...user,
-    country: Country.getAllCountries().find(
+  const [state, setState] = useState(() => {
+    const currentCountryCode = Country.getAllCountries().find(
       (country) => user.country === country.name
-    )?.isoCode,
+    )?.isoCode;
+    const currentStateCode = State.getStatesOfCountry("US").find(
+      (state) => user.state === state.name
+    )?.isoCode;
+
+    return {
+      ...user,
+      country: currentCountryCode,
+      state: currentStateCode,
+      about: user.about || "",
+    };
   });
   const [loading, setLoading] = useState(false);
 
@@ -38,10 +46,13 @@ const EditProfile = () => {
               "country",
               Country.getCountryByCode(state[key]).name
             );
-            // console.log("country", Country.getCountryByCode(state[key]).name);
+          } else if (key === "state") {
+            formdata.append(
+              "state",
+              State.getStateByCodeAndCountry(state[key], "US").name
+            );
           } else {
             formdata.append(key, state[key]);
-            // console.log(key, state[key]);
           }
         });
 
@@ -238,6 +249,7 @@ const EditProfile = () => {
               getOption={(val) => val.name}
               getValue={(val) => val.isoCode}
               styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+              disabled
             />
           </div>
           <div className="col-span-2 sm:col-span-1">
@@ -248,8 +260,21 @@ const EditProfile = () => {
               state={state.state}
               setState={(e) => setState({ ...state, state: e })}
               getOption={(val) => val.name}
+              getValue={(val) => val.isoCode}
               styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
               disabled={!state.country}
+            />
+          </div>
+          <div className="col-span-2 sm:col-span-1">
+            <DropdownField
+              title={state.country ? "city" : "country to select city"}
+              label={false}
+              arr={City.getCitiesOfState("US", state.state)}
+              state={state.city}
+              setState={(e) => setState({ ...state, city: e })}
+              getOption={(val) => val.name}
+              styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none disabled:!text-gray-500"
+              disabled={!state.state}
             />
           </div>
           <div className="col-span-2 sm:col-span-1">

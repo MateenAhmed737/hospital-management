@@ -492,11 +492,11 @@ const BidsModal = ({ bidsModal, setBidsModal, close: closeShiftModal }) => {
               <MdChat />
             </Link>
           </div>
-          <div className="flex items-center justify-end">
+          {/* <div className="flex items-center justify-end">
             <span className="text-sm font-semibold">
               {formatNumbers(data?.price || 0, "currency")}/hr
             </span>
-          </div>
+          </div> */}
 
           <p className="text-sm font-medium">Personal Description</p>
           <p className="text-xs">{data?.description}</p>

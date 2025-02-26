@@ -29,7 +29,7 @@ const initialState = {
     isVisible: false,
     value: "",
   },
-  type_of_staff: "",
+  type_id: "",
   Address_line_1: "",
   Address_line_2: "",
   country: "US",
@@ -401,10 +401,8 @@ const Register = () => {
                             title="type of staff"
                             label={false}
                             arr={staffTypes}
-                            state={state.type_of_staff}
-                            setState={(e) =>
-                              setState({ ...state, type_of_staff: e })
-                            }
+                            state={state.type_id}
+                            setState={(e) => setState({ ...state, type_id: e })}
                             getOption={(val) => val.service_name}
                             getValue={(val) => val.id}
                             styles="!shadow-none !rounded-md !bg-gray-100 !border-none !py-3 !outline-none !text-gray-500"

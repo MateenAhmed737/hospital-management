@@ -45,7 +45,10 @@ const VerifyOTP = ({ data, roles, otp, setStep }) => {
         } else if (key === "type_of_staff" && data.role_id !== "1") {
         } else if (key === "country") {
         } else if (key === "state") {
-          formData.append("state", State.getStateByCode(data[key])?.name);
+          formData.append(
+            "state",
+            State.getStateByCodeAndCountry(data[key], "US")?.name
+          );
         } else {
           formData.append(key, data[key]);
         }

@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { VscClose } from "react-icons/vsc";
-import { base_url } from "../../utils/url";
-import { Loader } from "../Loaders";
 import {
   FaBuilding,
   FaInfoCircle,
@@ -10,13 +8,19 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import Rating from "../Cards/Rating";
+
+import { base_url } from "@/utils/url";
+import { Loader } from "@/components/Loaders";
+import { Rating } from "@/components/Cards";
 
 const getProfile = `${base_url}/get-user/`;
 
 const ProfileViewModal = ({ profileModal, setProfileModal }) => {
-  const [profileInfo, setProfileInfo] = useState({ data: null, loading: true });
-  const [tab, setTab] = useState(0);
+  const [profileInfo, setProfileInfo] = React.useState({
+    data: null,
+    loading: true,
+  });
+  const [tab, setTab] = React.useState(0);
   const user_id = profileModal.user_id;
   const role_id = profileModal.role_id;
 
@@ -28,7 +32,7 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
       role_id: null,
     }));
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (user_id && role_id) {
       const fetchProfileInfo = () => {
         setProfileInfo((prev) => ({ ...prev, loading: true }));
@@ -215,7 +219,10 @@ const ProfileViewModal = ({ profileModal, setProfileModal }) => {
                   >
                     {tab === 1 && profileInfo.data?.review?.length
                       ? profileInfo.data.review.map((review) => (
-                          <div className="w-full px-3 py-2 space-y-1 border rounded-md">
+                          <div
+                            key={review.id}
+                            className="w-full px-3 py-2 space-y-1 border rounded-md"
+                          >
                             <div className="flex items-center justify-between text-sm">
                               <b>{review?.hospital}</b>
 

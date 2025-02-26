@@ -185,6 +185,7 @@ const ManageStaff = () => {
         "role_id",
         "_device_name",
         "_device_token",
+        "_Address_line_2",
       ],
       dropdownFields,
       hideFields: [""],

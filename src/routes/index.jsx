@@ -36,6 +36,7 @@ import {
   EditProfile as FacilityEditProfile,
   Inbox as FacilityInbox,
   Chat as FacilityChat,
+  SearchUsers,
 } from "../pages/Facility";
 import {
   ManageAdmins,
@@ -128,10 +129,7 @@ const Router = () => {
                 />
               </Route>
               <Route path="/admin-support">
-                <Route
-                  index
-                  element={privateRoute(AdminSupport)}
-                />
+                <Route index element={privateRoute(AdminSupport)} />
               </Route>
             </Route>
 
@@ -150,7 +148,10 @@ const Router = () => {
                 />
               </Route>
               <Route path="/all-jobs" element={privateRoute(AllJobs)} />
-              <Route path="/approved-shifts" element={privateRoute(ApprovedShifts)} />
+              <Route
+                path="/approved-shifts"
+                element={privateRoute(ApprovedShifts)}
+              />
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
               <Route path="/messages">
                 <Route
@@ -190,8 +191,15 @@ const Router = () => {
               <Route path="/invoices" element={privateRoute(Invoices)} />
               <Route path="/manage-roles" element={privateRoute(Roles)} />
               <Route path="/admin-inbox">
-                <Route index path="/admin-inbox" element={privateRoute(AdminInbox)} />
-                <Route path="/admin-inbox/:id" element={privateRoute(AdminSupportChat)} />
+                <Route
+                  index
+                  path="/admin-inbox"
+                  element={privateRoute(AdminInbox)}
+                />
+                <Route
+                  path="/admin-inbox/:id"
+                  element={privateRoute(AdminSupportChat)}
+                />
               </Route>
             </Route>
 
@@ -215,6 +223,7 @@ const Router = () => {
               />
               {/* <Route path="/recent-jobs" element={privateRoute(RecentJobs)} /> */}
               <Route path="/favourite-jobs" element={privateRoute(FavJobs)} />
+              <Route path="/search-users" element={privateRoute(SearchUsers)} />
             </Route>
           </Route>
 

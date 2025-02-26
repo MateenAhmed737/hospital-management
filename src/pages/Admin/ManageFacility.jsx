@@ -27,7 +27,7 @@ const neededProps = [
   "_country",
   "_state",
   "zip_code",
-  "status",
+  "account_status",
   "_hourly_rate",
   // "created_at",
   // "updated_at",
@@ -99,8 +99,8 @@ const ManageFacility = () => {
 
   const dropdownFields = [
     {
-      key: "status",
-      title: "status",
+      key: "account_status",
+      title: "Account Status",
       arr: ["Active", "Inactive"],
       getOption: (val) => val,
     },

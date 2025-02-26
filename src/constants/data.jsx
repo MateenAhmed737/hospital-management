@@ -1,4 +1,5 @@
-import { GiSandsOfTime } from "react-icons/gi";
+import { BiSupport } from "react-icons/bi";
+import { BsPersonBadgeFill } from "react-icons/bs";
 import {
   FaBookOpen,
   FaBriefcaseMedical,
@@ -10,10 +11,16 @@ import {
   FaUser,
   FaUserTie,
 } from "react-icons/fa";
-import { GoHomeFill } from "react-icons/go";
-import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
 import { FaListCheck, FaPersonDigging } from "react-icons/fa6";
-import { BsPersonBadgeFill } from "react-icons/bs";
+import { GiSandsOfTime } from "react-icons/gi";
+import { GoHomeFill } from "react-icons/go";
+import { HiMiniBuildingOffice } from "react-icons/hi2";
+import { IoIosNotifications, IoMdBriefcase } from "react-icons/io";
+import {
+  IoCheckmarkDoneCircleOutline,
+  IoClipboardOutline,
+  IoSearch,
+} from "react-icons/io5";
 import {
   MdCoPresent,
   MdLock,
@@ -22,12 +29,6 @@ import {
   MdPrivacyTip,
 } from "react-icons/md";
 import { RxLapTimer } from "react-icons/rx";
-import {
-  IoCheckmarkDoneCircleOutline,
-  IoClipboardOutline,
-} from "react-icons/io5";
-import { HiMiniBuildingOffice } from "react-icons/hi2";
-import { BiSupport } from "react-icons/bi";
 
 // Roles
 export const roles = {
@@ -169,6 +170,12 @@ export const navLinks = {
       icon: <BiSupport className="text-lg" />,
       title: "admin_support",
       path: "/admin-support",
+    },
+    {
+      id: 7,
+      icon: <IoSearch className="text-lg" />,
+      title: "search_users",
+      path: "/search-users",
     },
   ],
   Staff: [

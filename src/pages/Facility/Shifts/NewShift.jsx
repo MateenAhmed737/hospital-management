@@ -95,7 +95,7 @@ const NewShift = () => {
     fetch(createUrl + user.id, requestOptions)
       .then((res) => res.json())
       .then((res) => {
-        // console.log("res ==>", res);
+        console.log("res ==>", res);
         if (res.success) {
           toast.success("Shift created successfully!", { duration: 2000 });
           setState(initialState);
